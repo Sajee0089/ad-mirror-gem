@@ -47,6 +47,16 @@ export default {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
+        nav: {
+          DEFAULT: "hsl(var(--nav-background))",
+          foreground: "hsl(var(--nav-foreground))",
+        },
+        badge: {
+          super: "hsl(var(--badge-super))",
+          vip: "hsl(var(--badge-vip))",
+          nra: "hsl(var(--badge-nra))",
+          cashback: "hsl(var(--badge-cashback))",
+        },
         sidebar: {
           DEFAULT: "hsl(var(--sidebar-background))",
           foreground: "hsl(var(--sidebar-foreground))",
