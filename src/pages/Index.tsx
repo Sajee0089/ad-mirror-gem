@@ -31,8 +31,8 @@ const Index = () => {
     fetchAds();
   }, []);
 
-  const dbAdCards = dbAds.map((ad) => ({
-    id: ad.id,
+  const dbAdCards = dbAds.map((ad, idx) => ({
+    id: 1000 + idx,
     title: ad.title,
     description: ad.description,
     image: ad.image_url || "https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=300&h=200&fit=crop",
