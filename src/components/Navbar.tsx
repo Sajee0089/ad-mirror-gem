@@ -1,4 +1,4 @@
-import { RefreshCw, LogIn, LogOut, PlusCircle } from "lucide-react";
+import { RefreshCw, LogIn, LogOut, PlusCircle, List, Shield } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
@@ -8,16 +8,29 @@ import { toast } from "sonner";
 const Navbar = () => {
   const navigate = useNavigate();
   const [user, setUser] = useState<any>(null);
+  const [isAdmin, setIsAdmin] = useState(false);
 
   useEffect(() => {
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_, session) => {
       setUser(session?.user ?? null);
+      if (session?.user) checkAdmin(session.user.id);
+      else setIsAdmin(false);
     });
     supabase.auth.getSession().then(({ data: { session } }) => {
       setUser(session?.user ?? null);
+      if (session?.user) checkAdmin(session.user.id);
     });
     return () => subscription.unsubscribe();
   }, []);
+
+  const checkAdmin = async (uid: string) => {
+    const { data } = await supabase
+      .from("user_roles")
+      .select("role")
+      .eq("user_id", uid)
+      .eq("role", "admin");
+    setIsAdmin(!!data && data.length > 0);
+  };
 
   const handleLogout = async () => {
     await supabase.auth.signOut();
@@ -44,6 +57,16 @@ const Navbar = () => {
               <PlusCircle className="w-4 h-4 mr-1" />
               Post Ad
             </Button>
+            <Button variant="outline" size="sm" className="border-nav-foreground/30 text-nav-foreground hover:bg-nav-foreground/10 bg-transparent" onClick={() => navigate("/my-ads")}>
+              <List className="w-4 h-4 mr-1" />
+              My Ads
+            </Button>
+            {isAdmin && (
+              <Button variant="outline" size="sm" className="border-nav-foreground/30 text-nav-foreground hover:bg-nav-foreground/10 bg-transparent" onClick={() => navigate("/admin/ads")}>
+                <Shield className="w-4 h-4 mr-1" />
+                Admin
+              </Button>
+            )}
             <Button variant="outline" size="sm" className="border-nav-foreground/30 text-nav-foreground hover:bg-nav-foreground/10 bg-transparent" onClick={handleLogout}>
               <LogOut className="w-4 h-4 mr-1" />
               Logout
