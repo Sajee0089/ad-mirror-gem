@@ -13,6 +13,7 @@ export type AdType = {
   category?: string;
   contact_phone?: string;
   dbId?: string; // actual DB uuid for tracking
+  additionalImages?: string[];
 };
 
 const badgeStyles: Record<string, string> = {
