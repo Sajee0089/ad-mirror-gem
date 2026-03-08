@@ -44,30 +44,6 @@ const Sidebar = ({ selectedCategory, onCategorySelect, selectedDistrict, onDistr
         <p className="text-xs opacity-80 mt-1">දැන්වීම් පලකරන පියවරක්?</p>
       </div>
 
-      {/* Email Subscription */}
-      <div className="bg-card rounded-lg p-4 shadow-sm border border-border">
-        <h3 className="font-bold text-sm mb-2 flex items-center gap-2">
-          <Mail className="w-4 h-4 text-primary" />
-          Get New Ad Alerts
-        </h3>
-        <p className="text-xs text-muted-foreground mb-3">
-          Subscribe to receive email notifications about new ads.
-        </p>
-        <div className="flex gap-2">
-          <Input
-            placeholder="Your email..."
-            className="text-sm"
-            type="email"
-            value={subEmail}
-            onChange={(e) => setSubEmail(e.target.value)}
-            onKeyDown={(e) => e.key === "Enter" && handleSubscribe()}
-          />
-          <Button size="sm" onClick={handleSubscribe} disabled={subLoading}>
-            {subLoading ? "..." : "Subscribe"}
-          </Button>
-        </div>
-      </div>
-
       {/* District Filter */}
       <div className="bg-card rounded-lg shadow-sm border border-border overflow-hidden">
         {selectedDistrict ? (
