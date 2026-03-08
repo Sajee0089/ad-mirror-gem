@@ -59,6 +59,7 @@ const AdminAds = () => {
   const [postTitle, setPostTitle] = useState("");
   const [postDesc, setPostDesc] = useState("");
   const [postCategory, setPostCategory] = useState("");
+  const [postContactPhone, setPostContactPhone] = useState("");
   const [postImageFile, setPostImageFile] = useState<File | null>(null);
   const [postImagePreview, setPostImagePreview] = useState<string | null>(null);
   const [posting, setPosting] = useState(false);
