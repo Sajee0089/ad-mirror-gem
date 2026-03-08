@@ -309,7 +309,7 @@ const AdminAds = () => {
                           <div className="flex flex-wrap items-center gap-2 mt-3">
                             {ad.status === "pending" && (
                               <>
-                                <Button size="sm" onClick={() => handleApprove(ad.id)}>
+                                <Button size="sm" onClick={() => { setApproveId(ad.id); setApproveBadge(ad.badge || "nra"); setApproveCashback(false); }}>
                                   <CheckCircle className="w-3 h-3 mr-1" /> Approve
                                 </Button>
                                 <Button variant="outline" size="sm" className="text-destructive hover:text-destructive" onClick={() => setRejectId(ad.id)}>
