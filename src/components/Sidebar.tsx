@@ -26,6 +26,8 @@ interface SidebarProps {
   onCategorySelect: (category: string | null) => void;
   selectedDistrict?: string | null;
   onDistrictSelect?: (district: string | null) => void;
+  searchQuery?: string;
+  onSearchChange?: (query: string) => void;
 }
 
 const Sidebar = ({ selectedCategory, onCategorySelect, selectedDistrict, onDistrictSelect }: SidebarProps) => {
