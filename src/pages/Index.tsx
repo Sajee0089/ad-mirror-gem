@@ -38,7 +38,7 @@ const Index = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [isAdmin, setIsAdmin] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
-  const ADS_PER_PAGE = 8;
+  const ADS_PER_PAGE = 12;
 
   useEffect(() => {
     const checkAdmin = async () => {
