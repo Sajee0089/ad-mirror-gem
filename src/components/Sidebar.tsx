@@ -47,7 +47,7 @@ const Sidebar = ({ selectedCategory, onCategorySelect }: SidebarProps) => {
     }
     setSubLoading(true);
     try {
-      const { error } = await supabase
+      const { error } = await (supabase as any)
         .from("email_subscriptions")
         .insert({ email: subEmail.trim().toLowerCase() });
       if (error) {
