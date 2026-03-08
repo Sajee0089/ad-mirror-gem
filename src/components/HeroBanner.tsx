@@ -14,6 +14,7 @@ import {
 
 const HeroBanner = () => {
   const [verifyOpen, setVerifyOpen] = useState(false);
+  const [disclaimerOpen, setDisclaimerOpen] = useState(false);
 
   const handleVerifyOk = () => {
     const message = encodeURIComponent("Become a Verified member");
