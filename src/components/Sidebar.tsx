@@ -10,16 +10,14 @@ import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/component
 import { districts } from "@/data/districts";
 
 const categories = [
-  { label: "Lanka Ads", icon: "🌸" },
-  { label: "Girls Personal", icon: "🌸" },
-  { label: "Boys Personal", icon: "🌸" },
-  { label: "Shemale Personal", icon: "🌸" },
-  { label: "Marriage Proposals", icon: "🌸" },
-  { label: "Live Cam", icon: "🌸" },
-  { label: "Spa & Wellness Services", icon: "🌸" },
-  { label: "Rooms", icon: "🌸" },
-  { label: "Sales", icon: "🌸" },
-  { label: "Toys & Accessories", icon: "🌸" },
+  { label: "Spa", icon: "💆" },
+  { label: "Live Cam", icon: "📹" },
+  { label: "Girls Personal", icon: "👩" },
+  { label: "Boys Personal", icon: "👨" },
+  { label: "Shemale Personal", icon: "🌈" },
+  { label: "Marriage Proposals", icon: "💍" },
+  { label: "Rooms", icon: "🏠" },
+  { label: "Toys & Accessories", icon: "🎁" },
 ];
 
 interface SidebarProps {
