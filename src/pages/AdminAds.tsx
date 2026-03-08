@@ -11,6 +11,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toast } from "sonner";
 import { ArrowLeft, CheckCircle, XCircle, Clock, Trash2, Users, Send, ImagePlus, ShieldBan, ShieldCheck } from "lucide-react";
+import MultiImageUpload from "@/components/MultiImageUpload";
 
 type Ad = {
   id: string;
