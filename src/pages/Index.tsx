@@ -21,6 +21,7 @@ type DbAd = {
   view_count: number;
   favorite_count: number;
   contact_phone: string | null;
+  location: string | null;
 };
 
 const Index = () => {
@@ -28,12 +29,13 @@ const Index = () => {
   const [selectedAd, setSelectedAd] = useState<AdType | null>(null);
   const [modalOpen, setModalOpen] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+  const [selectedDistrict, setSelectedDistrict] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchAds = async () => {
       const { data } = await supabase
         .from("ads")
-        .select("id, title, description, image_url, additional_image_urls, badge, cashback, category, created_at, view_count, favorite_count, contact_phone")
+        .select("id, title, description, image_url, additional_image_urls, badge, cashback, category, created_at, view_count, favorite_count, contact_phone, location")
         .eq("status", "approved")
         .order("created_at", { ascending: false });
       if (data) setDbAds(data as DbAd[]);
@@ -55,12 +57,15 @@ const Index = () => {
     category: ad.category,
     contact_phone: ad.contact_phone || undefined,
     additionalImages: ad.additional_image_urls || [],
+    location: ad.location || undefined,
   }));
 
   const allAds = [...dbAdCards, ...sampleAds];
-  const filteredAds = selectedCategory
-    ? allAds.filter((ad) => ad.category === selectedCategory)
-    : allAds;
+  const filteredAds = allAds.filter((ad) => {
+    if (selectedCategory && ad.category !== selectedCategory) return false;
+    if (selectedDistrict && (ad as any).location !== selectedDistrict) return false;
+    return true;
+  });
 
   const handleAdClick = (ad: AdType) => {
     setSelectedAd(ad);
@@ -76,6 +81,8 @@ const Index = () => {
             <Sidebar
               selectedCategory={selectedCategory}
               onCategorySelect={setSelectedCategory}
+              selectedDistrict={selectedDistrict}
+              onDistrictSelect={setSelectedDistrict}
             />
           </div>
           <main className="flex-1 min-w-0">
@@ -84,19 +91,28 @@ const Index = () => {
               <Sidebar
                 selectedCategory={selectedCategory}
                 onCategorySelect={setSelectedCategory}
+                selectedDistrict={selectedDistrict}
+                onDistrictSelect={setSelectedDistrict}
               />
             </div>
 
-            {selectedCategory && (
-              <div className="flex items-center gap-2 mb-4">
-                <span className="text-sm font-medium text-foreground">
-                  Showing: <span className="text-primary">{selectedCategory}</span>
-                </span>
+            {(selectedCategory || selectedDistrict) && (
+              <div className="flex items-center gap-2 mb-4 flex-wrap">
+                {selectedCategory && (
+                  <span className="text-sm font-medium text-foreground">
+                    Category: <span className="text-primary">{selectedCategory}</span>
+                  </span>
+                )}
+                {selectedDistrict && (
+                  <span className="text-sm font-medium text-foreground">
+                    District: <span className="text-primary">{selectedDistrict}</span>
+                  </span>
+                )}
                 <button
-                  onClick={() => setSelectedCategory(null)}
+                  onClick={() => { setSelectedCategory(null); setSelectedDistrict(null); }}
                   className="text-xs text-muted-foreground hover:text-foreground underline"
                 >
-                  Show All
+                  Clear Filters
                 </button>
               </div>
             )}

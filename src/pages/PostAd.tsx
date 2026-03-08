@@ -10,6 +10,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { toast } from "sonner";
 import { ArrowLeft, Send, AlertCircle } from "lucide-react";
 import MultiImageUpload from "@/components/MultiImageUpload";
+import { districts } from "@/data/districts";
 
 const categories = [
   "Lanka Ads",
@@ -29,6 +30,7 @@ const PostAd = () => {
   const [description, setDescription] = useState("");
   const [category, setCategory] = useState("");
   const [contactPhone, setContactPhone] = useState("");
+  const [location, setLocation] = useState("");
   const [images, setImages] = useState<{ file: File; preview: string }[]>([]);
   const [mainImageIndex, setMainImageIndex] = useState(0);
   const [loading, setLoading] = useState(false);
@@ -67,8 +69,8 @@ const PostAd = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!title.trim() || !description.trim() || !category || !contactPhone.trim()) {
-      toast.error("Please fill in all fields");
+    if (!title.trim() || !description.trim() || !category || !contactPhone.trim() || !location) {
+      toast.error("Please fill in all fields including location");
       return;
     }
     if (images.length === 0) {
@@ -106,6 +108,7 @@ const PostAd = () => {
         image_url: mainImageUrl,
         additional_image_urls: additionalUrls,
         contact_phone: contactPhone.trim() || null,
+        location,
         status: "pending",
       });
       if (error) throw error;
@@ -207,6 +210,19 @@ const PostAd = () => {
                   maxLength={15}
                   required
                 />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="location">Location / District *</Label>
+                <Select value={location} onValueChange={setLocation}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select your district" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {districts.map((d) => (
+                      <SelectItem key={d} value={d}>{d}</SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
               </div>
               <MultiImageUpload
                 images={images}

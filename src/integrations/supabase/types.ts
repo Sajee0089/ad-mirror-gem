@@ -88,6 +88,7 @@ export type Database = {
           favorite_count: number
           id: string
           image_url: string | null
+          location: string | null
           rejection_reason: string | null
           status: string
           title: string
@@ -107,6 +108,7 @@ export type Database = {
           favorite_count?: number
           id?: string
           image_url?: string | null
+          location?: string | null
           rejection_reason?: string | null
           status?: string
           title: string
@@ -126,6 +128,7 @@ export type Database = {
           favorite_count?: number
           id?: string
           image_url?: string | null
+          location?: string | null
           rejection_reason?: string | null
           status?: string
           title?: string
