@@ -81,19 +81,16 @@ const PostAd = () => {
 
     setLoading(true);
     try {
-      let imageUrl: string | null = null;
+      let mainImageUrl: string | null = null;
+      const additionalUrls: string[] = [];
 
-      if (imageFile) {
-        const ext = imageFile.name.split(".").pop();
-        const path = `${userId}/${Date.now()}.${ext}`;
-        const { error: uploadError } = await supabase.storage
-          .from("ad-images")
-          .upload(path, imageFile);
-        if (uploadError) throw uploadError;
-        const { data: urlData } = supabase.storage
-          .from("ad-images")
-          .getPublicUrl(path);
-        imageUrl = urlData.publicUrl;
+      if (images.length > 0) {
+        // Upload all images
+        const urls = await Promise.all(images.map((img) => uploadImage(img.file)));
+        mainImageUrl = urls[mainImageIndex];
+        urls.forEach((url, i) => {
+          if (i !== mainImageIndex) additionalUrls.push(url);
+        });
       }
 
       const { error } = await supabase.from("ads").insert({
