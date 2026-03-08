@@ -1,11 +1,10 @@
-import { Search, Mail, MapPin, ChevronDown } from "lucide-react";
+import { Search, MapPin, ChevronDown } from "lucide-react";
 import { useRef } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { toast } from "sonner";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { districts } from "@/data/districts";
 
@@ -33,45 +32,6 @@ const Sidebar = ({ selectedCategory, onCategorySelect, selectedDistrict, onDistr
   const navigate = useNavigate();
   const searchInputRef = useRef<HTMLInputElement>(null);
   const [user, setUser] = useState<any>(null);
-  const [subEmail, setSubEmail] = useState("");
-  const [subLoading, setSubLoading] = useState(false);
-
-  useEffect(() => {
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setUser(session?.user ?? null);
-    });
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_, session) => {
-      setUser(session?.user ?? null);
-    });
-    return () => subscription.unsubscribe();
-  }, []);
-
-  const handleSubscribe = async () => {
-    if (!subEmail.trim() || !subEmail.includes("@")) {
-      toast.error("Please enter a valid email");
-      return;
-    }
-    setSubLoading(true);
-    try {
-      const { error } = await (supabase as any)
-        .from("email_subscriptions")
-        .insert({ email: subEmail.trim().toLowerCase() });
-      if (error) {
-        if (error.code === "23505") {
-          toast.info("You're already subscribed!");
-        } else {
-          throw error;
-        }
-      } else {
-        toast.success("Subscribed! You'll receive new ad notifications.");
-        setSubEmail("");
-      }
-    } catch (err: any) {
-      toast.error(err.message || "Failed to subscribe");
-    } finally {
-      setSubLoading(false);
-    }
-  };
 
   return (
     <aside className="w-full md:w-64 lg:w-72 shrink-0 space-y-4">
@@ -82,30 +42,6 @@ const Sidebar = ({ selectedCategory, onCategorySelect, selectedDistrict, onDistr
       >
         <p className="font-semibold text-sm">How to publish Ads?</p>
         <p className="text-xs opacity-80 mt-1">දැන්වීම් පලකරන පියවරක්?</p>
-      </div>
-
-      {/* Email Subscription */}
-      <div className="bg-card rounded-lg p-4 shadow-sm border border-border">
-        <h3 className="font-bold text-sm mb-2 flex items-center gap-2">
-          <Mail className="w-4 h-4 text-primary" />
-          Get New Ad Alerts
-        </h3>
-        <p className="text-xs text-muted-foreground mb-3">
-          Subscribe to receive email notifications about new ads.
-        </p>
-        <div className="flex gap-2">
-          <Input
-            placeholder="Your email..."
-            className="text-sm"
-            type="email"
-            value={subEmail}
-            onChange={(e) => setSubEmail(e.target.value)}
-            onKeyDown={(e) => e.key === "Enter" && handleSubscribe()}
-          />
-          <Button size="sm" onClick={handleSubscribe} disabled={subLoading}>
-            {subLoading ? "..." : "Subscribe"}
-          </Button>
-        </div>
       </div>
 
       {/* District Filter */}

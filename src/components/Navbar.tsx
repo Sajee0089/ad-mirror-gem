@@ -1,4 +1,4 @@
-import { RefreshCw, LogIn, LogOut, PlusCircle, List, Shield, Menu, Users, Heart, UserCircle } from "lucide-react";
+import { RefreshCw, LogIn, LogOut, PlusCircle, List, Shield, Menu, Users, Heart, UserCircle, Bell } from "lucide-react";
 import logoImg from "@/assets/logo.png";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger, SheetTitle, SheetDescription } from "@/components/ui/sheet";
@@ -7,12 +7,42 @@ import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { useIsMobile } from "@/hooks/use-mobile";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
 
 const Navbar = () => {
   const navigate = useNavigate();
   const [user, setUser] = useState<any>(null);
   const [isAdmin, setIsAdmin] = useState(false);
   const isMobile = useIsMobile();
+  const [alertsOpen, setAlertsOpen] = useState(false);
+  const [subEmail, setSubEmail] = useState("");
+  const [subLoading, setSubLoading] = useState(false);
+
+  const handleSubscribe = async () => {
+    if (!subEmail.trim() || !subEmail.includes("@")) {
+      toast.error("Please enter a valid email");
+      return;
+    }
+    setSubLoading(true);
+    try {
+      const { error } = await (supabase as any)
+        .from("email_subscriptions")
+        .insert({ email: subEmail.trim().toLowerCase() });
+      if (error) {
+        if (error.code === "23505") toast.info("You're already subscribed!");
+        else throw error;
+      } else {
+        toast.success("Subscribed! You'll receive new ad notifications.");
+        setSubEmail("");
+        setAlertsOpen(false);
+      }
+    } catch (err: any) {
+      toast.error(err.message || "Failed to subscribe");
+    } finally {
+      setSubLoading(false);
+    }
+  };
 
   useEffect(() => {
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_, session) => {
@@ -56,6 +86,10 @@ const Navbar = () => {
         <Heart className="w-4 h-4 mr-1" />
         My Saved Ads
       </Button>
+      <Button variant="outline" size="sm" className="border-nav-foreground/30 text-nav-foreground hover:bg-nav-foreground/10 bg-transparent w-full sm:w-auto justify-start sm:justify-center" onClick={() => setAlertsOpen(true)}>
+        <Bell className="w-4 h-4 mr-1" />
+        Ad Alerts
+      </Button>
       {user ? (
         <>
           <Button variant="outline" size="sm" className="border-nav-foreground/30 text-nav-foreground hover:bg-nav-foreground/10 bg-transparent w-full sm:w-auto justify-start sm:justify-center" onClick={() => navigate("/my-ads")}>
@@ -97,7 +131,7 @@ const Navbar = () => {
         <Sheet>
           <SheetTrigger asChild>
             <Button variant="ghost" size="sm" className="text-nav-foreground p-1">
-              <Menu className="w-6 h-6" />
+              <Menu className="w-7 h-7" />
             </Button>
           </SheetTrigger>
           <SheetContent side="right" className="bg-nav border-nav-foreground/20 w-64">
@@ -113,6 +147,32 @@ const Navbar = () => {
           <NavButtons />
         </div>
       )}
+
+      <Dialog open={alertsOpen} onOpenChange={setAlertsOpen}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              <Bell className="w-5 h-5 text-primary" />
+              Get New Ad Alerts
+            </DialogTitle>
+            <DialogDescription>
+              Subscribe to receive email notifications about new ads.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="flex gap-2">
+            <Input
+              placeholder="Your email..."
+              type="email"
+              value={subEmail}
+              onChange={(e) => setSubEmail(e.target.value)}
+              onKeyDown={(e) => e.key === "Enter" && handleSubscribe()}
+            />
+            <Button onClick={handleSubscribe} disabled={subLoading}>
+              {subLoading ? "..." : "Subscribe"}
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
     </nav>
   );
 };
