@@ -67,8 +67,12 @@ const PostAd = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!title.trim() || !description.trim() || !category) {
-      toast.error("Please fill in all required fields");
+    if (!title.trim() || !description.trim() || !category || !contactPhone.trim()) {
+      toast.error("Please fill in all fields");
+      return;
+    }
+    if (images.length === 0) {
+      toast.error("Please upload at least 1 image");
       return;
     }
     if (!userId) {
