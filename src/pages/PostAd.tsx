@@ -116,6 +116,22 @@ const PostAd = () => {
         <Button variant="ghost" onClick={() => navigate("/")} className="mb-6">
           <ArrowLeft className="w-4 h-4 mr-2" /> Back to Home
         </Button>
+
+        {/* Agent WhatsApp Contact */}
+        <div className="mb-4 rounded-lg border border-border bg-card p-4 flex items-center gap-3">
+          <span className="text-2xl">📱</span>
+          <div>
+            <p className="text-sm font-medium text-foreground">Need help posting? Contact our agent</p>
+            <a
+              href="https://wa.me/94789663179"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-sm text-primary hover:underline font-semibold"
+            >
+              WhatsApp: 0789663179
+            </a>
+          </div>
+        </div>
         <Card className="border-border shadow-lg">
           <CardHeader>
             <CardTitle className="text-2xl flex items-center gap-2">
