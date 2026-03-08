@@ -47,15 +47,23 @@ const Navbar = () => {
         <RefreshCw className="w-4 h-4 mr-1" />
         Refresh
       </Button>
+      <Button variant="outline" size="sm" className="border-nav-foreground/30 text-nav-foreground hover:bg-nav-foreground/10 bg-transparent w-full sm:w-auto justify-start sm:justify-center" onClick={() => window.open("https://wa.me/94789663179", "_blank")}>
+        <Users className="w-4 h-4 mr-1" />
+        Agents
+      </Button>
+      <Button variant="outline" size="sm" className="border-nav-foreground/30 text-nav-foreground hover:bg-nav-foreground/10 bg-transparent w-full sm:w-auto justify-start sm:justify-center" onClick={() => navigate("/saved-ads")}>
+        <Heart className="w-4 h-4 mr-1" />
+        My Saved Ads
+      </Button>
       {user ? (
         <>
+          <Button variant="outline" size="sm" className="border-nav-foreground/30 text-nav-foreground hover:bg-nav-foreground/10 bg-transparent w-full sm:w-auto justify-start sm:justify-center" onClick={() => navigate("/my-ads")}>
+            <UserCircle className="w-4 h-4 mr-1" />
+            My Account
+          </Button>
           <Button size="sm" className="bg-primary text-primary-foreground hover:bg-primary/90 w-full sm:w-auto justify-start sm:justify-center" onClick={() => navigate("/post-ad")}>
             <PlusCircle className="w-4 h-4 mr-1" />
             Post Ad
-          </Button>
-          <Button variant="outline" size="sm" className="border-nav-foreground/30 text-nav-foreground hover:bg-nav-foreground/10 bg-transparent w-full sm:w-auto justify-start sm:justify-center" onClick={() => navigate("/my-ads")}>
-            <List className="w-4 h-4 mr-1" />
-            My Ads
           </Button>
           {isAdmin && (
             <Button variant="outline" size="sm" className="border-nav-foreground/30 text-nav-foreground hover:bg-nav-foreground/10 bg-transparent w-full sm:w-auto justify-start sm:justify-center" onClick={() => navigate("/admin/ads")}>

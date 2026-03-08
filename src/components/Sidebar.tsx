@@ -74,37 +74,18 @@ const Sidebar = ({ selectedCategory, onCategorySelect, selectedDistrict, onDistr
     }
   };
 
-  const actionButtons = [
-    { label: "Agents", icon: Users, onClick: () => window.open("https://wa.me/94789663179", "_blank") },
-    { label: "My Saved Ads", icon: Heart, onClick: () => navigate("/saved-ads") },
-    { label: user ? "My Account" : "Login", icon: UserCircle, onClick: () => navigate(user ? "/my-ads" : "/auth") },
-  ];
-
   return (
     <aside className="w-full md:w-64 lg:w-72 shrink-0 space-y-4">
       {/* How to publish */}
       <div
         className="bg-primary text-primary-foreground rounded-lg p-4 text-center cursor-pointer hover:bg-primary/90 transition-colors"
-        onClick={() => navigate(user ? "/post-ad" : "/auth")}
+        onClick={() => {
+          const nav = document.querySelector('[data-nav]') as any;
+          window.location.href = user ? "/post-ad" : "/auth";
+        }}
       >
         <p className="font-semibold text-sm">How to publish Ads?</p>
         <p className="text-xs opacity-80 mt-1">දැන්වීම් පලකරන පියවරක්?</p>
-      </div>
-
-      {/* Action Buttons */}
-      <div className="bg-card rounded-lg p-3 shadow-sm border border-border space-y-2">
-        {actionButtons.map((btn) => (
-          <Button
-            key={btn.label}
-            variant="default"
-            className="w-full justify-center gap-2 font-medium"
-            size="sm"
-            onClick={btn.onClick}
-          >
-            <btn.icon className="w-4 h-4" />
-            {btn.label}
-          </Button>
-        ))}
       </div>
 
       {/* Email Subscription */}
