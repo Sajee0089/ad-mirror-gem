@@ -73,6 +73,15 @@ const SavedAds = () => {
     fetchSavedAds();
   }, [navigate]);
 
+  const handleUnsave = async (dbId: string) => {
+    const { data: { session } } = await supabase.auth.getSession();
+    if (!session) return;
+    const { error } = await supabase.from("ad_favorites").delete().eq("ad_id", dbId).eq("user_id", session.user.id);
+    if (error) { toast.error(error.message); return; }
+    setAds((prev) => prev.filter((a) => a.dbId !== dbId));
+    toast.success("Ad removed from saved");
+  };
+
   return (
     <div className="min-h-screen bg-background p-4">
       <div className="max-w-3xl mx-auto">
