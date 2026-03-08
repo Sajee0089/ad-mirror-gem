@@ -92,36 +92,6 @@ const Sidebar = ({ selectedCategory, onCategorySelect, selectedDistrict, onDistr
         <p className="text-xs opacity-80 mt-1">දැන්වීම් පලකරන පියවරක්?</p>
       </div>
 
-      {/* Search */}
-      <div className="bg-card rounded-lg p-3 shadow-sm border border-border">
-        <div className="flex gap-2">
-          <Input
-            ref={searchInputRef}
-            placeholder="Search Ads ..."
-            className="text-sm"
-            value={searchQuery}
-            onChange={(e) => onSearchChange?.(e.target.value)}
-            onKeyDown={(e) => {
-              if (e.key === "Enter") {
-                searchInputRef.current?.blur();
-              }
-            }}
-          />
-          {searchQuery ? (
-            <Button size="sm" variant="secondary" onClick={() => { onSearchChange?.(""); searchInputRef.current?.focus(); }}>
-              ✕
-            </Button>
-          ) : null}
-          <Button
-            size="sm"
-            onClick={() => searchInputRef.current?.blur()}
-            className="shrink-0"
-          >
-            <Search className="w-4 h-4" />
-          </Button>
-        </div>
-      </div>
-
       {/* Action Buttons */}
       <div className="bg-card rounded-lg p-3 shadow-sm border border-border space-y-2">
         {actionButtons.map((btn) => (
@@ -207,16 +177,16 @@ const Sidebar = ({ selectedCategory, onCategorySelect, selectedDistrict, onDistr
       </div>
 
       {/* Categories */}
-      <div className="bg-card rounded-lg p-4 shadow-sm border border-border">
-        <h3 className="font-bold text-base mb-3">Top Categories</h3>
-        <ul className="space-y-2">
+      <div className="bg-card rounded-lg p-3 shadow-sm border border-border">
+        <h3 className="font-bold text-sm mb-1.5">Top Categories</h3>
+        <ul className="space-y-0.5">
           {categories.map((cat) => (
             <li key={cat.label}>
               <button
                 onClick={() =>
                   onCategorySelect(selectedCategory === cat.label ? null : cat.label)
                 }
-                className={`flex items-center gap-2 text-sm w-full text-left transition-colors rounded px-2 py-1 ${
+                className={`flex items-center gap-1.5 text-sm w-full text-left transition-colors rounded px-2 py-0.5 ${
                   selectedCategory === cat.label
                     ? "bg-primary/10 text-primary font-semibold"
                     : "text-foreground/80 hover:text-primary"
@@ -228,6 +198,36 @@ const Sidebar = ({ selectedCategory, onCategorySelect, selectedDistrict, onDistr
             </li>
           ))}
         </ul>
+      </div>
+
+      {/* Search - below categories */}
+      <div className="bg-card rounded-lg p-3 shadow-sm border border-border">
+        <div className="flex gap-2">
+          <Input
+            ref={searchInputRef}
+            placeholder="Search Ads ..."
+            className="text-sm"
+            value={searchQuery}
+            onChange={(e) => onSearchChange?.(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                searchInputRef.current?.blur();
+              }
+            }}
+          />
+          {searchQuery ? (
+            <Button size="sm" variant="secondary" onClick={() => { onSearchChange?.(""); searchInputRef.current?.focus(); }}>
+              ✕
+            </Button>
+          ) : null}
+          <Button
+            size="sm"
+            onClick={() => searchInputRef.current?.blur()}
+            className="shrink-0"
+          >
+            <Search className="w-4 h-4" />
+          </Button>
+        </div>
       </div>
     </aside>
   );
