@@ -1,14 +1,9 @@
-import { Search, Users, UserCircle, Heart, Camera, Home, ShoppingBag, Car, Laptop, Gamepad2, Building2, BookOpen, Newspaper } from "lucide-react";
+import { Search, Users, UserCircle, Heart, Newspaper } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-
-const actionButtons = [
-  { label: "Agents", icon: Users },
-  { label: "Fake Ads", icon: AlertIcon },
-  { label: "My Saved Ads", icon: Heart },
-  { label: "Blog", icon: Newspaper },
-  { label: "Login", icon: UserCircle },
-];
+import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { supabase } from "@/integrations/supabase/client";
 
 const categories = [
   { label: "Lanka Ads", icon: "🌸" },
@@ -19,12 +14,8 @@ const categories = [
   { label: "Live Cam", icon: "🌸" },
   { label: "Spa & Wellness Services", icon: "🌸" },
   { label: "Rooms", icon: "🌸" },
-  { label: "Rent", icon: "🌸" },
-  { label: "Real Estate", icon: "🌸" },
   { label: "Sales", icon: "🌸" },
   { label: "Toys & Accessories", icon: "🌸" },
-  { label: "Electronics", icon: "🌸" },
-  { label: "Vehicles", icon: "🌸" },
 ];
 
 function AlertIcon(props: React.SVGProps<SVGSVGElement>) {
