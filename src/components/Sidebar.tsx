@@ -1,14 +1,9 @@
-import { Search, Users, UserCircle, Heart, Camera, Home, ShoppingBag, Car, Laptop, Gamepad2, Building2, BookOpen, Newspaper } from "lucide-react";
+import { Search, Users, UserCircle, Heart, Newspaper } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-
-const actionButtons = [
-  { label: "Agents", icon: Users },
-  { label: "Fake Ads", icon: AlertIcon },
-  { label: "My Saved Ads", icon: Heart },
-  { label: "Blog", icon: Newspaper },
-  { label: "Login", icon: UserCircle },
-];
+import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { supabase } from "@/integrations/supabase/client";
 
 const categories = [
   { label: "Lanka Ads", icon: "🌸" },
@@ -19,29 +14,38 @@ const categories = [
   { label: "Live Cam", icon: "🌸" },
   { label: "Spa & Wellness Services", icon: "🌸" },
   { label: "Rooms", icon: "🌸" },
-  { label: "Rent", icon: "🌸" },
-  { label: "Real Estate", icon: "🌸" },
   { label: "Sales", icon: "🌸" },
   { label: "Toys & Accessories", icon: "🌸" },
-  { label: "Electronics", icon: "🌸" },
-  { label: "Vehicles", icon: "🌸" },
 ];
 
-function AlertIcon(props: React.SVGProps<SVGSVGElement>) {
-  return (
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" {...props}>
-      <path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z" />
-      <line x1="12" y1="9" x2="12" y2="13" />
-      <line x1="12" y1="17" x2="12.01" y2="17" />
-    </svg>
-  );
-}
-
 const Sidebar = () => {
+  const navigate = useNavigate();
+  const [user, setUser] = useState<any>(null);
+
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setUser(session?.user ?? null);
+    });
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_, session) => {
+      setUser(session?.user ?? null);
+    });
+    return () => subscription.unsubscribe();
+  }, []);
+
+  const actionButtons = [
+    { label: "Agents", icon: Users, onClick: () => {} },
+    { label: "My Saved Ads", icon: Heart, onClick: () => {} },
+    { label: "Blog", icon: Newspaper, onClick: () => {} },
+    { label: user ? "My Account" : "Login", icon: UserCircle, onClick: () => navigate(user ? "/my-ads" : "/auth") },
+  ];
+
   return (
     <aside className="w-full lg:w-72 shrink-0 space-y-4">
       {/* How to publish */}
-      <div className="bg-primary text-primary-foreground rounded-lg p-4 text-center">
+      <div
+        className="bg-primary text-primary-foreground rounded-lg p-4 text-center cursor-pointer hover:bg-primary/90 transition-colors"
+        onClick={() => navigate(user ? "/post-ad" : "/auth")}
+      >
         <p className="font-semibold text-sm">How to publish Ads?</p>
         <p className="text-xs opacity-80 mt-1">දැන්වීම් පලකරන පියවරක්?</p>
       </div>
@@ -64,6 +68,7 @@ const Sidebar = () => {
             variant="default"
             className="w-full justify-center gap-2 font-medium"
             size="sm"
+            onClick={btn.onClick}
           >
             <btn.icon className="w-4 h-4" />
             {btn.label}

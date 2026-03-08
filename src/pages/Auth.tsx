@@ -68,7 +68,7 @@ const Auth = () => {
         <Card className="border-border shadow-lg">
           <CardHeader className="text-center">
             <div className="w-12 h-12 rounded-full bg-primary mx-auto mb-3 flex items-center justify-center text-primary-foreground font-bold text-xl">
-              H
+              A
             </div>
             <CardTitle className="text-2xl">{isLogin ? "Welcome Back" : "Create Account"}</CardTitle>
             <CardDescription>
