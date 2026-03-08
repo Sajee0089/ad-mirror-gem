@@ -68,8 +68,8 @@ const Index = () => {
     <div className="min-h-screen bg-background">
       <Navbar />
       <div className="max-w-7xl mx-auto px-2 sm:px-4 py-4 sm:py-6">
-        <div className="flex flex-col lg:flex-row gap-4 sm:gap-6">
-          <div className="hidden lg:block">
+        <div className="flex flex-col md:flex-row gap-4 sm:gap-6">
+          <div className="hidden md:block">
             <Sidebar
               selectedCategory={selectedCategory}
               onCategorySelect={setSelectedCategory}
@@ -77,7 +77,7 @@ const Index = () => {
           </div>
           <main className="flex-1 min-w-0">
             <HeroBanner />
-            <div className="lg:hidden mb-4">
+            <div className="md:hidden mb-4">
               <Sidebar
                 selectedCategory={selectedCategory}
                 onCategorySelect={setSelectedCategory}
@@ -98,7 +98,7 @@ const Index = () => {
               </div>
             )}
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
               {filteredAds.map((ad) => (
                 <AdCard key={`${ad.category}-${ad.id}`} ad={ad} onClick={() => handleAdClick(ad)} />
               ))}

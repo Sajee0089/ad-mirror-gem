@@ -31,8 +31,16 @@ type Member = {
 };
 
 const categories = [
-  "Vehicles", "Property", "Electronics", "Jobs", "Services",
-  "Education", "Pets", "Fashion", "Furniture", "General",
+  "Lanka Ads",
+  "Girls Personal",
+  "Boys Personal",
+  "Shemale Personal",
+  "Marriage Proposals",
+  "Live Cam",
+  "Spa & Wellness Services",
+  "Rooms",
+  "Sales",
+  "Toys & Accessories",
 ];
 
 const AdminAds = () => {
@@ -51,6 +59,7 @@ const AdminAds = () => {
   const [postTitle, setPostTitle] = useState("");
   const [postDesc, setPostDesc] = useState("");
   const [postCategory, setPostCategory] = useState("");
+  const [postContactPhone, setPostContactPhone] = useState("");
   const [postImageFile, setPostImageFile] = useState<File | null>(null);
   const [postImagePreview, setPostImagePreview] = useState<string | null>(null);
   const [posting, setPosting] = useState(false);
@@ -210,12 +219,13 @@ const AdminAds = () => {
         title: postTitle.trim(),
         description: postDesc.trim(),
         category: postCategory,
+        contact_phone: postContactPhone.trim() || null,
         image_url: imageUrl,
         status: "approved",
       });
       if (error) throw error;
       toast.success("Ad posted and approved!");
-      setPostTitle(""); setPostDesc(""); setPostCategory(""); setPostImageFile(null); setPostImagePreview(null);
+      setPostTitle(""); setPostDesc(""); setPostCategory(""); setPostContactPhone(""); setPostImageFile(null); setPostImagePreview(null);
       fetchAds();
     } catch (err: any) {
       toast.error(err.message);
@@ -363,6 +373,11 @@ const AdminAds = () => {
                   <div className="space-y-2">
                     <Label htmlFor="admin-desc">Description *</Label>
                     <Textarea id="admin-desc" placeholder="Description..." value={postDesc} onChange={(e) => setPostDesc(e.target.value)} maxLength={2000} rows={4} required />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="admin-phone">Contact Phone</Label>
+                    <Input id="admin-phone" placeholder="e.g. 0771234567" value={postContactPhone} onChange={(e) => setPostContactPhone(e.target.value)} maxLength={15} />
+                    <p className="text-xs text-muted-foreground">This number will be shown to viewers.</p>
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="admin-image" className="flex items-center gap-1"><ImagePlus className="w-4 h-4" /> Image (optional)</Label>

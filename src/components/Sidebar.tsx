@@ -74,7 +74,7 @@ const Sidebar = ({ selectedCategory, onCategorySelect }: SidebarProps) => {
   ];
 
   return (
-    <aside className="w-full lg:w-72 shrink-0 space-y-4">
+    <aside className="w-full md:w-64 lg:w-72 shrink-0 space-y-4">
       {/* How to publish */}
       <div
         className="bg-primary text-primary-foreground rounded-lg p-4 text-center cursor-pointer hover:bg-primary/90 transition-colors"
