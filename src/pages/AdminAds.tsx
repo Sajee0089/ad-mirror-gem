@@ -175,6 +175,15 @@ const AdminAds = () => {
     }
   };
 
+  const handleToggleVerified = async (id: string, verified: boolean) => {
+    const { error } = await supabase.from("ads").update({ verified_member: verified } as any).eq("id", id);
+    if (error) toast.error(error.message);
+    else {
+      setAds((prev) => prev.map((a) => a.id === id ? { ...a, verified_member: verified } as any : a));
+      toast.success(verified ? "Marked as verified member" : "Verification removed");
+    }
+  };
+
   const handleBadge = async (id: string, badge: string) => {
     const { error } = await supabase.from("ads").update({ badge }).eq("id", id);
     if (error) toast.error(error.message);
@@ -317,6 +326,15 @@ const AdminAds = () => {
                             )}
                             <Button variant="destructive" size="sm" onClick={() => handleDelete(ad.id)}>
                               <Trash2 className="w-3 h-3 mr-1" /> Delete
+                            </Button>
+                            <Button
+                              variant={(ad as any).verified_member ? "default" : "outline"}
+                              size="sm"
+                              onClick={() => handleToggleVerified(ad.id, !(ad as any).verified_member)}
+                              className={(ad as any).verified_member ? "bg-emerald-600 hover:bg-emerald-700" : ""}
+                            >
+                              <ShieldCheck className="w-3 h-3 mr-1" />
+                              {(ad as any).verified_member ? "Verified ✓" : "Verify Member"}
                             </Button>
                             <Select value={ad.badge || "nra"} onValueChange={(v) => handleBadge(ad.id, v)}>
                               <SelectTrigger className="w-32 h-8 text-xs">

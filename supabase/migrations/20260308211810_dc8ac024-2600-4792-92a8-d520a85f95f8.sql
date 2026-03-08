@@ -1,0 +1,1 @@
+ALTER TABLE public.ads ADD COLUMN verified_member boolean NOT NULL DEFAULT false;

@@ -27,6 +27,7 @@ type DbAd = {
   favorite_count: number;
   contact_phone: string | null;
   location: string | null;
+  verified_member: boolean;
 };
 
 const Index = () => {
@@ -99,6 +100,7 @@ const Index = () => {
     contact_phone: ad.contact_phone || undefined,
     additionalImages: ad.additional_image_urls || [],
     location: ad.location || undefined,
+    verified_member: ad.verified_member || false,
   }));
 
   const allAds = [...dbAdCards, ...districtAds, ...sampleAds];
