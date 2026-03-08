@@ -28,9 +28,8 @@ const PostAd = () => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [category, setCategory] = useState("");
-  const [contactPhone, setContactPhone] = useState("");
-  const [imageFile, setImageFile] = useState<File | null>(null);
-  const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const [images, setImages] = useState<{ file: File; preview: string }[]>([]);
+  const [mainImageIndex, setMainImageIndex] = useState(0);
   const [loading, setLoading] = useState(false);
   const [userId, setUserId] = useState<string | null>(null);
   const [adsToday, setAdsToday] = useState<number>(0);
