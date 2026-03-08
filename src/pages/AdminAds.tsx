@@ -189,13 +189,13 @@ const AdminAds = () => {
     }
   };
 
-  const handlePostImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      if (file.size > 5 * 1024 * 1024) { toast.error("Image must be less than 5MB"); return; }
-      setPostImageFile(file);
-      setPostImagePreview(URL.createObjectURL(file));
-    }
+  const uploadImage = async (file: File) => {
+    const ext = file.name.split(".").pop();
+    const path = `${adminUserId}/${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`;
+    const { error: uploadError } = await supabase.storage.from("ad-images").upload(path, file);
+    if (uploadError) throw uploadError;
+    const { data: urlData } = supabase.storage.from("ad-images").getPublicUrl(path);
+    return urlData.publicUrl;
   };
 
   const handleManualPost = async (e: React.FormEvent) => {
@@ -206,27 +206,31 @@ const AdminAds = () => {
     }
     setPosting(true);
     try {
-      let imageUrl: string | null = null;
-      if (postImageFile) {
-        const ext = postImageFile.name.split(".").pop();
-        const path = `${adminUserId}/${Date.now()}.${ext}`;
-        const { error: uploadError } = await supabase.storage.from("ad-images").upload(path, postImageFile);
-        if (uploadError) throw uploadError;
-        const { data: urlData } = supabase.storage.from("ad-images").getPublicUrl(path);
-        imageUrl = urlData.publicUrl;
+      let mainImageUrl: string | null = null;
+      const additionalUrls: string[] = [];
+
+      if (postImages.length > 0) {
+        const urls = await Promise.all(postImages.map((img) => uploadImage(img.file)));
+        mainImageUrl = urls[postMainIndex];
+        urls.forEach((url, i) => {
+          if (i !== postMainIndex) additionalUrls.push(url);
+        });
       }
+
       const { error } = await supabase.from("ads").insert({
         user_id: adminUserId,
         title: postTitle.trim(),
         description: postDesc.trim(),
         category: postCategory,
         contact_phone: postContactPhone.trim() || null,
-        image_url: imageUrl,
+        image_url: mainImageUrl,
+        additional_image_urls: additionalUrls,
         status: "approved",
       });
       if (error) throw error;
       toast.success("Ad posted and approved!");
-      setPostTitle(""); setPostDesc(""); setPostCategory(""); setPostContactPhone(""); setPostImageFile(null); setPostImagePreview(null);
+      setPostTitle(""); setPostDesc(""); setPostCategory(""); setPostContactPhone("");
+      setPostImages([]); setPostMainIndex(0);
       fetchAds();
     } catch (err: any) {
       toast.error(err.message);
