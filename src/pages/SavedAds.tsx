@@ -105,7 +105,30 @@ const SavedAds = () => {
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             {ads.map((ad) => (
-              <AdCard key={ad.dbId} ad={ad} onClick={() => { setSelectedAd(ad); setModalOpen(true); }} />
+              <div key={ad.dbId} className="relative">
+                <AdCard ad={ad} onClick={() => { setSelectedAd(ad); setModalOpen(true); }} />
+                <AlertDialog>
+                  <AlertDialogTrigger asChild>
+                    <Button
+                      size="icon"
+                      variant="destructive"
+                      className="absolute top-2 right-2 w-7 h-7 rounded-full opacity-80 hover:opacity-100 z-10"
+                    >
+                      <HeartOff className="w-3.5 h-3.5" />
+                    </Button>
+                  </AlertDialogTrigger>
+                  <AlertDialogContent>
+                    <AlertDialogHeader>
+                      <AlertDialogTitle>Remove from saved?</AlertDialogTitle>
+                      <AlertDialogDescription>This ad will be removed from your saved list.</AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                      <AlertDialogCancel>Cancel</AlertDialogCancel>
+                      <AlertDialogAction onClick={() => handleUnsave(ad.dbId!)}>Remove</AlertDialogAction>
+                    </AlertDialogFooter>
+                  </AlertDialogContent>
+                </AlertDialog>
+              </div>
             ))}
           </div>
         )}
