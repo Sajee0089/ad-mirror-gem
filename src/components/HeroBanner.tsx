@@ -93,11 +93,6 @@ const HeroBanner = () => {
                 <p>මෙය නිදහස් Classified Ads වෙබ් අඩවියක් වන අතර, අප විසින් සපයන්නේ දැන්වීම් පළ කිරීමට සහ සෙවීමට හැකි වේදිකාවක් පමණි. පරිශීලකයන් අතර සිදුවන ගනුදෙනු සඳහා අප වගකිවයුතු නොවේ.</p>
                 <p>Cam Services භාවිතා කිරීමේදී වැඩි විශ්වාසනීයත්වයක් සඳහා Verified Ads ලෙස සලකුණු කර ඇති සේවාවන් තෝරාගන්න.</p>
                 <hr className="border-border" />
-                <p className="font-semibold text-foreground">Website Disclaimer</p>
-                <p>Ads SL accepts responsibility only for services marked as Verified on our platform. For any other advertisements or services published on the website, our company is not responsible for any payments, agreements, meetings, or transactions made before or after meeting the service provider.</p>
-                <p>If you are planning to obtain a Full Service, please do not make any payment or deposit before meeting in person.</p>
-                <p>This is a free classified ads website that only provides a platform for users to post and browse advertisements. We are not responsible for any transactions between users.</p>
-                <p>For Cam Services, we recommend choosing Verified Ads to ensure more reliable and trusted service providers.</p>
               </div>
             </AlertDialogDescription>
           </AlertDialogHeader>

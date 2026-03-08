@@ -15,6 +15,34 @@ const Navbar = () => {
   const [user, setUser] = useState<any>(null);
   const [isAdmin, setIsAdmin] = useState(false);
   const isMobile = useIsMobile();
+  const [alertsOpen, setAlertsOpen] = useState(false);
+  const [subEmail, setSubEmail] = useState("");
+  const [subLoading, setSubLoading] = useState(false);
+
+  const handleSubscribe = async () => {
+    if (!subEmail.trim() || !subEmail.includes("@")) {
+      toast.error("Please enter a valid email");
+      return;
+    }
+    setSubLoading(true);
+    try {
+      const { error } = await (supabase as any)
+        .from("email_subscriptions")
+        .insert({ email: subEmail.trim().toLowerCase() });
+      if (error) {
+        if (error.code === "23505") toast.info("You're already subscribed!");
+        else throw error;
+      } else {
+        toast.success("Subscribed! You'll receive new ad notifications.");
+        setSubEmail("");
+        setAlertsOpen(false);
+      }
+    } catch (err: any) {
+      toast.error(err.message || "Failed to subscribe");
+    } finally {
+      setSubLoading(false);
+    }
+  };
 
   useEffect(() => {
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_, session) => {
