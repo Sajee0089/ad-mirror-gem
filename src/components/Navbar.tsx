@@ -86,6 +86,10 @@ const Navbar = () => {
         <Heart className="w-4 h-4 mr-1" />
         My Saved Ads
       </Button>
+      <Button variant="outline" size="sm" className="border-nav-foreground/30 text-nav-foreground hover:bg-nav-foreground/10 bg-transparent w-full sm:w-auto justify-start sm:justify-center" onClick={() => setAlertsOpen(true)}>
+        <Bell className="w-4 h-4 mr-1" />
+        Ad Alerts
+      </Button>
       {user ? (
         <>
           <Button variant="outline" size="sm" className="border-nav-foreground/30 text-nav-foreground hover:bg-nav-foreground/10 bg-transparent w-full sm:w-auto justify-start sm:justify-center" onClick={() => navigate("/my-ads")}>
