@@ -2,6 +2,8 @@ import Navbar from "@/components/Navbar";
 import HeroBanner from "@/components/HeroBanner";
 import Sidebar from "@/components/Sidebar";
 import AdCard from "@/components/AdCard";
+import type { AdType } from "@/components/AdCard";
+import AdDetailModal from "@/components/AdDetailModal";
 import { sampleAds } from "@/data/sampleAds";
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
@@ -14,53 +16,79 @@ type DbAd = {
   badge: string | null;
   category: string;
   created_at: string;
+  view_count: number;
+  favorite_count: number;
+  contact_phone: string | null;
 };
 
 const Index = () => {
   const [dbAds, setDbAds] = useState<DbAd[]>([]);
+  const [selectedAd, setSelectedAd] = useState<AdType | null>(null);
+  const [modalOpen, setModalOpen] = useState(false);
 
   useEffect(() => {
     const fetchAds = async () => {
       const { data } = await supabase
         .from("ads")
-        .select("id, title, description, image_url, badge, category, created_at")
+        .select("id, title, description, image_url, badge, category, created_at, view_count, favorite_count, contact_phone")
         .eq("status", "approved")
         .order("created_at", { ascending: false });
-      if (data) setDbAds(data);
+      if (data) setDbAds(data as DbAd[]);
     };
     fetchAds();
   }, []);
 
-  const dbAdCards = dbAds.map((ad, idx) => ({
+  const dbAdCards: AdType[] = dbAds.map((ad, idx) => ({
     id: 1000 + idx,
+    dbId: ad.id,
     title: ad.title,
     description: ad.description,
     image: ad.image_url || "https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=300&h=200&fit=crop",
     badge: (ad.badge || "nra") as "super" | "vip" | "nra",
     cashback: false,
-    likes: "0 Likes",
-    views: "0 Views",
+    likes: String(ad.favorite_count || 0),
+    views: String(ad.view_count || 0),
     timeAgo: getTimeAgo(ad.created_at),
+    category: ad.category,
+    contact_phone: ad.contact_phone || undefined,
   }));
 
   const allAds = [...dbAdCards, ...sampleAds];
 
+  const handleAdClick = (ad: AdType) => {
+    setSelectedAd(ad);
+    setModalOpen(true);
+  };
+
   return (
     <div className="min-h-screen bg-background">
       <Navbar />
-      <div className="max-w-7xl mx-auto px-4 py-6">
-        <div className="flex flex-col lg:flex-row gap-6">
-          <Sidebar />
+      <div className="max-w-7xl mx-auto px-2 sm:px-4 py-4 sm:py-6">
+        <div className="flex flex-col lg:flex-row gap-4 sm:gap-6">
+          {/* Sidebar - hidden on mobile, shown as horizontal strip or collapsible */}
+          <div className="hidden lg:block">
+            <Sidebar />
+          </div>
           <main className="flex-1 min-w-0">
             <HeroBanner />
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {/* Mobile sidebar actions */}
+            <div className="lg:hidden mb-4">
+              <Sidebar />
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4">
               {allAds.map((ad) => (
-                <AdCard key={ad.id} ad={ad} />
+                <AdCard key={ad.id} ad={ad} onClick={() => handleAdClick(ad)} />
               ))}
             </div>
           </main>
         </div>
       </div>
+
+      <AdDetailModal
+        ad={selectedAd}
+        open={modalOpen}
+        onClose={() => setModalOpen(false)}
+      />
     </div>
   );
 };
