@@ -29,6 +29,7 @@ const Index = () => {
   const [selectedAd, setSelectedAd] = useState<AdType | null>(null);
   const [modalOpen, setModalOpen] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+  const [selectedDistrict, setSelectedDistrict] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchAds = async () => {
