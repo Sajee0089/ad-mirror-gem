@@ -43,7 +43,12 @@ const AdCard = ({ ad, onClick, isAdmin, onDelete }: { ad: AdType; onClick?: () =
         </button>
       )}
       <div className="flex">
-        <div className="w-32 h-36 sm:w-36 sm:h-40 md:w-44 md:h-44 shrink-0 overflow-hidden bg-muted">
+        <div className="w-32 h-36 sm:w-36 sm:h-40 md:w-44 md:h-44 shrink-0 overflow-hidden bg-muted relative">
+          {ad.verified_member && (
+            <div className="absolute top-0 left-0 right-0 z-10 bg-gradient-to-r from-emerald-500 via-teal-500 to-cyan-500 text-white text-[8px] sm:text-[9px] font-bold text-center py-0.5 tracking-wide">
+              ✅ Verified Member
+            </div>
+          )}
           <img
             src={ad.image}
             alt={ad.title}
