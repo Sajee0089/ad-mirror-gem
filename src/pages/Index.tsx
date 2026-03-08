@@ -57,6 +57,7 @@ const Index = () => {
     category: ad.category,
     contact_phone: ad.contact_phone || undefined,
     additionalImages: ad.additional_image_urls || [],
+    location: ad.location || undefined,
   }));
 
   const allAds = [...dbAdCards, ...sampleAds];
