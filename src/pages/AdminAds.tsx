@@ -130,13 +130,30 @@ const AdminAds = () => {
     setMembers(memberList);
   };
 
-  const handleApprove = async (id: string) => {
-    const { error } = await supabase.from("ads").update({ status: "approved", rejection_reason: null }).eq("id", id);
+  // Approval dialog state
+  const [approveId, setApproveId] = useState<string | null>(null);
+  const [approveBadge, setApproveBadge] = useState<string>("nra");
+  const [approveCashback, setApproveCashback] = useState(false);
+
+  const handleApprove = async () => {
+    if (!approveId) return;
+    const now = new Date().toISOString();
+    const { error } = await supabase.from("ads").update({
+      status: "approved",
+      rejection_reason: null,
+      badge: approveBadge,
+      cashback: approveCashback,
+      approved_at: now,
+      created_at: now,
+    }).eq("id", approveId);
     if (error) toast.error(error.message);
     else {
-      setAds((prev) => prev.map((a) => a.id === id ? { ...a, status: "approved" } : a));
+      setAds((prev) => prev.map((a) => a.id === approveId ? { ...a, status: "approved", badge: approveBadge } : a));
       toast.success("Ad approved");
     }
+    setApproveId(null);
+    setApproveBadge("nra");
+    setApproveCashback(false);
   };
 
   const handleReject = async () => {
