@@ -78,7 +78,9 @@ export type Database = {
       ads: {
         Row: {
           additional_image_urls: string[] | null
+          approved_at: string | null
           badge: string | null
+          cashback: boolean
           category: string
           contact_phone: string | null
           created_at: string
@@ -95,7 +97,9 @@ export type Database = {
         }
         Insert: {
           additional_image_urls?: string[] | null
+          approved_at?: string | null
           badge?: string | null
+          cashback?: boolean
           category?: string
           contact_phone?: string | null
           created_at?: string
@@ -112,7 +116,9 @@ export type Database = {
         }
         Update: {
           additional_image_urls?: string[] | null
+          approved_at?: string | null
           badge?: string | null
+          cashback?: boolean
           category?: string
           contact_phone?: string | null
           created_at?: string
