@@ -73,7 +73,7 @@ const Sidebar = ({ selectedCategory, onCategorySelect, selectedDistrict, onDistr
 
   const actionButtons = [
     { label: "Agents", icon: Users, onClick: () => window.open("https://wa.me/94789663179", "_blank") },
-    { label: "My Saved Ads", icon: Heart, onClick: () => {} },
+    { label: "My Saved Ads", icon: Heart, onClick: () => navigate("/saved-ads") },
     { label: user ? "My Account" : "Login", icon: UserCircle, onClick: () => navigate(user ? "/my-ads" : "/auth") },
   ];
 
