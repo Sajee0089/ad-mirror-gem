@@ -44,7 +44,7 @@ const Navbar = () => {
         <div className="w-9 h-9 rounded-full bg-primary flex items-center justify-center text-primary-foreground font-bold text-lg">
           H
         </div>
-        <span className="text-lg font-bold tracking-tight">Hela Lanka Ads</span>
+        <span className="text-lg font-bold tracking-tight">Ads SL</span>
       </div>
       <div className="flex items-center gap-2">
         <Button variant="outline" size="sm" className="border-nav-foreground/30 text-nav-foreground hover:bg-nav-foreground/10 bg-transparent" onClick={() => window.location.reload()}>
