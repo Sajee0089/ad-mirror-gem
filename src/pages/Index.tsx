@@ -65,6 +65,10 @@ const Index = () => {
   const filteredAds = allAds.filter((ad) => {
     if (selectedCategory && ad.category !== selectedCategory) return false;
     if (selectedDistrict && (ad as any).location !== selectedDistrict) return false;
+    if (searchQuery.trim()) {
+      const q = searchQuery.toLowerCase();
+      if (!ad.title.toLowerCase().includes(q) && !ad.description.toLowerCase().includes(q)) return false;
+    }
     return true;
   });
 
