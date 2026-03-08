@@ -53,7 +53,11 @@ const HeroBanner = () => {
           <ShieldCheck className="w-4 h-4 mr-1" />
           Become A Verify...
         </Button>
-        <Button size="sm" className="bg-destructive text-destructive-foreground hover:bg-destructive/90">
+        <Button
+          size="sm"
+          className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+          onClick={() => setDisclaimerOpen(true)}
+        >
           <AlertTriangle className="w-4 h-4 mr-1" />
           Beware of Fake Ads
         </Button>
