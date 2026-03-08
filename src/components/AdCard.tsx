@@ -42,7 +42,7 @@ const AdCard = ({ ad, onClick, isAdmin, onDelete }: { ad: AdType; onClick?: () =
         </button>
       )}
       <div className="flex">
-        <div className="w-28 h-28 sm:w-32 sm:h-32 md:w-40 md:h-36 shrink-0 overflow-hidden bg-muted">
+        <div className="w-32 h-36 sm:w-36 sm:h-40 md:w-44 md:h-44 shrink-0 overflow-hidden bg-muted">
           <img
             src={ad.image}
             alt={ad.title}
@@ -63,10 +63,10 @@ const AdCard = ({ ad, onClick, isAdmin, onDelete }: { ad: AdType; onClick?: () =
               </span>
             )}
           </div>
-          <h3 className="font-semibold text-xs sm:text-sm leading-snug line-clamp-2 mb-0.5 sm:mb-1 pr-12 sm:pr-16">
+          <h3 className="font-semibold text-sm sm:text-base leading-snug line-clamp-2 mb-1 sm:mb-1.5 pr-12 sm:pr-16">
             {ad.title}
           </h3>
-          <p className="text-[11px] sm:text-xs text-muted-foreground line-clamp-2 mb-2 sm:mb-3">
+          <p className="text-xs sm:text-sm text-muted-foreground line-clamp-3 mb-2 sm:mb-3">
             {ad.description}
           </p>
           <div className="flex items-center justify-between text-[10px] sm:text-[11px] text-muted-foreground mt-auto">
