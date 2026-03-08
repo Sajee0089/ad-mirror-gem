@@ -6,8 +6,9 @@ import { Card, CardContent } from "@/components/ui/card";
 import AdCard from "@/components/AdCard";
 import AdDetailModal from "@/components/AdDetailModal";
 import type { AdType } from "@/components/AdCard";
-import { ArrowLeft, Heart } from "lucide-react";
+import { ArrowLeft, Heart, HeartOff } from "lucide-react";
 import { toast } from "sonner";
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
 
 function getTimeAgo(dateStr: string): string {
   const diff = Date.now() - new Date(dateStr).getTime();
