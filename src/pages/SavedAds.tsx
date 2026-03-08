@@ -6,8 +6,9 @@ import { Card, CardContent } from "@/components/ui/card";
 import AdCard from "@/components/AdCard";
 import AdDetailModal from "@/components/AdDetailModal";
 import type { AdType } from "@/components/AdCard";
-import { ArrowLeft, Heart } from "lucide-react";
+import { ArrowLeft, Heart, HeartOff } from "lucide-react";
 import { toast } from "sonner";
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
 
 function getTimeAgo(dateStr: string): string {
   const diff = Date.now() - new Date(dateStr).getTime();
@@ -72,6 +73,15 @@ const SavedAds = () => {
     fetchSavedAds();
   }, [navigate]);
 
+  const handleUnsave = async (dbId: string) => {
+    const { data: { session } } = await supabase.auth.getSession();
+    if (!session) return;
+    const { error } = await supabase.from("ad_favorites").delete().eq("ad_id", dbId).eq("user_id", session.user.id);
+    if (error) { toast.error(error.message); return; }
+    setAds((prev) => prev.filter((a) => a.dbId !== dbId));
+    toast.success("Ad removed from saved");
+  };
+
   return (
     <div className="min-h-screen bg-background p-4">
       <div className="max-w-3xl mx-auto">
@@ -95,7 +105,30 @@ const SavedAds = () => {
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             {ads.map((ad) => (
-              <AdCard key={ad.dbId} ad={ad} onClick={() => { setSelectedAd(ad); setModalOpen(true); }} />
+              <div key={ad.dbId} className="relative">
+                <AdCard ad={ad} onClick={() => { setSelectedAd(ad); setModalOpen(true); }} />
+                <AlertDialog>
+                  <AlertDialogTrigger asChild>
+                    <Button
+                      size="icon"
+                      variant="destructive"
+                      className="absolute top-2 right-2 w-7 h-7 rounded-full opacity-80 hover:opacity-100 z-10"
+                    >
+                      <HeartOff className="w-3.5 h-3.5" />
+                    </Button>
+                  </AlertDialogTrigger>
+                  <AlertDialogContent>
+                    <AlertDialogHeader>
+                      <AlertDialogTitle>Remove from saved?</AlertDialogTitle>
+                      <AlertDialogDescription>This ad will be removed from your saved list.</AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                      <AlertDialogCancel>Cancel</AlertDialogCancel>
+                      <AlertDialogAction onClick={() => handleUnsave(ad.dbId!)}>Remove</AlertDialogAction>
+                    </AlertDialogFooter>
+                  </AlertDialogContent>
+                </AlertDialog>
+              </div>
             ))}
           </div>
         )}
