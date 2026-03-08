@@ -67,8 +67,12 @@ const PostAd = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!title.trim() || !description.trim() || !category) {
-      toast.error("Please fill in all required fields");
+    if (!title.trim() || !description.trim() || !category || !contactPhone.trim()) {
+      toast.error("Please fill in all fields");
+      return;
+    }
+    if (images.length === 0) {
+      toast.error("Please upload at least 1 image");
       return;
     }
     if (!userId) {
@@ -194,17 +198,15 @@ const PostAd = () => {
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="contactPhone">Contact Phone Number</Label>
+                <Label htmlFor="contactPhone">Contact Phone Number *</Label>
                 <Input
                   id="contactPhone"
                   placeholder="e.g. 0771234567"
                   value={contactPhone}
                   onChange={(e) => setContactPhone(e.target.value)}
                   maxLength={15}
+                  required
                 />
-                <p className="text-xs text-muted-foreground">
-                  This number will be shown to people viewing your ad.
-                </p>
               </div>
               <MultiImageUpload
                 images={images}
