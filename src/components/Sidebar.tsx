@@ -10,16 +10,14 @@ import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/component
 import { districts } from "@/data/districts";
 
 const categories = [
-  { label: "Lanka Ads", icon: "🌸" },
-  { label: "Girls Personal", icon: "🌸" },
-  { label: "Boys Personal", icon: "🌸" },
-  { label: "Shemale Personal", icon: "🌸" },
-  { label: "Marriage Proposals", icon: "🌸" },
-  { label: "Live Cam", icon: "🌸" },
-  { label: "Spa & Wellness Services", icon: "🌸" },
-  { label: "Rooms", icon: "🌸" },
-  { label: "Sales", icon: "🌸" },
-  { label: "Toys & Accessories", icon: "🌸" },
+  { label: "Spa", icon: "💆" },
+  { label: "Live Cam", icon: "📹" },
+  { label: "Girls Personal", icon: "👩" },
+  { label: "Boys Personal", icon: "👨" },
+  { label: "Shemale Personal", icon: "🌈" },
+  { label: "Marriage Proposals", icon: "💍" },
+  { label: "Rooms", icon: "🏠" },
+  { label: "Toys & Accessories", icon: "🎁" },
 ];
 
 interface SidebarProps {
@@ -155,27 +153,47 @@ const Sidebar = ({ selectedCategory, onCategorySelect, selectedDistrict, onDistr
       </div>
 
       {/* Categories */}
-      <div className="bg-card rounded-lg p-3 shadow-sm border border-border">
-        <h3 className="font-bold text-sm mb-1.5">Top Categories</h3>
-        <ul className="space-y-0.5">
-          {categories.map((cat) => (
-            <li key={cat.label}>
-              <button
-                onClick={() =>
-                  onCategorySelect(selectedCategory === cat.label ? null : cat.label)
-                }
-                className={`flex items-center gap-1.5 text-sm w-full text-left transition-colors rounded px-2 py-0.5 ${
-                  selectedCategory === cat.label
-                    ? "bg-primary/10 text-primary font-semibold"
-                    : "text-foreground/80 hover:text-primary"
-                }`}
-              >
-                <span>{cat.icon}</span>
-                {cat.label}
-              </button>
-            </li>
-          ))}
-        </ul>
+      <div className="bg-card rounded-lg shadow-sm border border-border overflow-hidden">
+        {selectedCategory ? (
+          <div className="p-4 flex items-center justify-between bg-gradient-to-r from-primary/5 to-primary/10">
+            <span className="text-sm font-semibold flex items-center gap-2 text-primary">
+              {categories.find(c => c.label === selectedCategory)?.icon} {selectedCategory}
+            </span>
+            <Button
+              size="sm"
+              variant="outline"
+              className="text-xs"
+              onClick={() => onCategorySelect(null)}
+            >
+              Clear
+            </Button>
+          </div>
+        ) : (
+          <Collapsible>
+            <CollapsibleTrigger className="flex items-center justify-between w-full p-4 hover:bg-primary/5 transition-colors group">
+              <h3 className="font-bold text-base flex items-center gap-2">
+                <span className="bg-primary/10 text-primary rounded-md p-1 text-xs">📂</span>
+                Top Categories
+              </h3>
+              <ChevronDown className="w-4 h-4 text-muted-foreground transition-transform duration-200 group-data-[state=open]:rotate-180" />
+            </CollapsibleTrigger>
+            <CollapsibleContent>
+              <ul className="px-2 pb-3 space-y-0.5">
+                {categories.map((cat) => (
+                  <li key={cat.label}>
+                    <button
+                      onClick={() => onCategorySelect(cat.label)}
+                      className="flex items-center gap-2.5 text-sm w-full text-left transition-all rounded-md px-3 py-2 text-foreground/80 hover:bg-primary/10 hover:text-primary hover:translate-x-1"
+                    >
+                      <span className="text-base">{cat.icon}</span>
+                      <span>{cat.label}</span>
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            </CollapsibleContent>
+          </Collapsible>
+        )}
       </div>
 
       {/* Search - below categories */}

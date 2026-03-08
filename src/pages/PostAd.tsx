@@ -13,15 +13,13 @@ import MultiImageUpload from "@/components/MultiImageUpload";
 import { districts } from "@/data/districts";
 
 const categories = [
-  "Lanka Ads",
+  "Spa",
+  "Live Cam",
   "Girls Personal",
   "Boys Personal",
   "Shemale Personal",
   "Marriage Proposals",
-  "Live Cam",
-  "Spa & Wellness Services",
   "Rooms",
-  "Sales",
   "Toys & Accessories",
 ];
 
