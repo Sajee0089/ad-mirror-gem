@@ -9,6 +9,7 @@ import PostAd from "./pages/PostAd";
 import MyAds from "./pages/MyAds";
 import SavedAds from "./pages/SavedAds";
 import AdminAds from "./pages/AdminAds";
+import AdminRoute from "./components/AdminRoute";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -25,7 +26,7 @@ const App = () => (
           <Route path="/post-ad" element={<PostAd />} />
           <Route path="/my-ads" element={<MyAds />} />
           <Route path="/saved-ads" element={<SavedAds />} />
-          <Route path="/admin/ads" element={<AdminAds />} />
+          <Route path="/admin/ads" element={<AdminRoute><AdminAds /></AdminRoute>} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
