@@ -70,23 +70,30 @@ const AdDetailContent = ({ ad, onClose }: { ad: AdType; onClose: () => void }) =
 
   return (
     <div className="space-y-4">
-      {/* Image - clickable to expand */}
-      <div
-        className={`w-full rounded-lg overflow-hidden bg-muted cursor-pointer transition-all duration-300 ${
-          imageExpanded ? "max-h-[80vh]" : "aspect-video"
-        }`}
-        onClick={() => setImageExpanded(!imageExpanded)}
-      >
+      {/* Main Image */}
+      <div className="w-full rounded-lg overflow-hidden bg-muted aspect-video">
         <img
-          src={ad.image}
+          src={allImages[selectedImageIndex] || ad.image}
           alt={ad.title}
-          className={`w-full h-full transition-all duration-300 ${
-            imageExpanded ? "object-contain" : "object-cover"
-          }`}
+          className="w-full h-full object-cover"
         />
       </div>
-      {imageExpanded && (
-        <p className="text-xs text-muted-foreground text-center">Click image to collapse</p>
+
+      {/* Thumbnail Strip */}
+      {allImages.length > 1 && (
+        <div className="flex gap-2">
+          {allImages.map((img, i) => (
+            <button
+              key={i}
+              onClick={() => setSelectedImageIndex(i)}
+              className={`w-16 h-16 sm:w-20 sm:h-20 rounded-md overflow-hidden border-2 transition-colors flex-shrink-0 ${
+                i === selectedImageIndex ? "border-primary" : "border-border"
+              }`}
+            >
+              <img src={img} alt={`Photo ${i + 1}`} className="w-full h-full object-cover" />
+            </button>
+          ))}
+        </div>
       )}
 
       {/* Badges */}

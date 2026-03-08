@@ -53,6 +53,7 @@ const Index = () => {
     timeAgo: getTimeAgo(ad.created_at),
     category: ad.category,
     contact_phone: ad.contact_phone || undefined,
+    additionalImages: ad.additional_image_urls || [],
   }));
 
   const allAds = [...dbAdCards, ...sampleAds];
