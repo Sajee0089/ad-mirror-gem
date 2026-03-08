@@ -28,6 +28,7 @@ const PostAd = () => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [category, setCategory] = useState("");
+  const [contactPhone, setContactPhone] = useState("");
   const [images, setImages] = useState<{ file: File; preview: string }[]>([]);
   const [mainImageIndex, setMainImageIndex] = useState(0);
   const [loading, setLoading] = useState(false);
