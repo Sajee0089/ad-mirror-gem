@@ -32,7 +32,6 @@ interface SidebarProps {
 }
 
 const Sidebar = ({ selectedCategory, onCategorySelect, selectedDistrict, onDistrictSelect, searchQuery = "", onSearchChange }: SidebarProps) => {
-  const navigate = useNavigate();
   const searchInputRef = useRef<HTMLInputElement>(null);
   const [user, setUser] = useState<any>(null);
   const [subEmail, setSubEmail] = useState("");
