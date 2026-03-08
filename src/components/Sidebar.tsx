@@ -33,6 +33,12 @@ const Sidebar = ({ selectedCategory, onCategorySelect, selectedDistrict, onDistr
   const searchInputRef = useRef<HTMLInputElement>(null);
   const [user, setUser] = useState<any>(null);
 
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data: { session } }) => setUser(session?.user ?? null));
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_e, session) => setUser(session?.user ?? null));
+    return () => subscription.unsubscribe();
+  }, []);
+
   return (
     <aside className="w-full md:w-64 lg:w-72 shrink-0 space-y-4">
       {/* How to publish */}
