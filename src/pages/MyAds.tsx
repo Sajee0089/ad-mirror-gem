@@ -14,8 +14,8 @@ import { toast } from "sonner";
 import { ArrowLeft, Pencil, Trash2, Clock, CheckCircle, XCircle } from "lucide-react";
 
 const categories = [
-  "Vehicles", "Property", "Electronics", "Jobs", "Services",
-  "Education", "Pets", "Fashion", "Furniture", "General",
+  "Spa", "Live Cam", "Girls Personal", "Boys Personal",
+  "Shemale Personal", "Marriage Proposals", "Rooms", "Toys & Accessories",
 ];
 
 type Ad = {
