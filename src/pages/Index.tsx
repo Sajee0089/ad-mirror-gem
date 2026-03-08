@@ -91,6 +91,8 @@ const Index = () => {
               <Sidebar
                 selectedCategory={selectedCategory}
                 onCategorySelect={setSelectedCategory}
+                selectedDistrict={selectedDistrict}
+                onDistrictSelect={setSelectedDistrict}
               />
             </div>
 
