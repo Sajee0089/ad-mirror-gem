@@ -199,7 +199,11 @@ const Index = () => {
               </div>
             )}
 
-            <div ref={adGridRef} className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 bg-card/50 rounded-lg p-3 sm:p-4 shadow-[0_4px_24px_-6px_hsl(354_80%_55%/0.12),0_2px_8px_-2px_hsl(0_0%_0%/0.08)]" style={{ borderImage: 'linear-gradient(135deg, hsl(0 0% 10%), hsl(354 80% 55%)) 1', borderWidth: '2px', borderStyle: 'solid' }}>
+            <div ref={adGridRef} className="bg-card/50 rounded-lg shadow-[0_4px_24px_-6px_hsl(354_80%_55%/0.12),0_2px_8px_-2px_hsl(0_0%_0%/0.08)]" style={{ borderImage: 'linear-gradient(135deg, hsl(0 0% 10%), hsl(354 80% 55%)) 1', borderWidth: '2px', borderStyle: 'solid' }}>
+              {totalPages > 1 && (
+                <p className="text-center text-xs text-muted-foreground pt-2">Page {currentPage} of {totalPages}</p>
+              )}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 p-3 sm:p-4">
               {paginatedAds.map((ad) => (
                 <AdCard
                   key={`${ad.category}-${ad.id}`}
