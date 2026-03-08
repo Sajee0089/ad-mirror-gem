@@ -92,7 +92,6 @@ const HeroBanner = () => {
                 <p>ඔබ Full Service ලබා ගැනීමට යන විට හමු වීමට පෙර මුදල් ගෙවීමෙන් වලකින්න.</p>
                 <p>මෙය නිදහස් Classified Ads වෙබ් අඩවියක් වන අතර, අප විසින් සපයන්නේ දැන්වීම් පළ කිරීමට සහ සෙවීමට හැකි වේදිකාවක් පමණි. පරිශීලකයන් අතර සිදුවන ගනුදෙනු සඳහා අප වගකිවයුතු නොවේ.</p>
                 <p>Cam Services භාවිතා කිරීමේදී වැඩි විශ්වාසනීයත්වයක් සඳහා Verified Ads ලෙස සලකුණු කර ඇති සේවාවන් තෝරාගන්න.</p>
-                <hr className="border-border" />
               </div>
             </AlertDialogDescription>
           </AlertDialogHeader>
