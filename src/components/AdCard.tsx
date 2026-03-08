@@ -1,4 +1,4 @@
-import { ThumbsUp, Eye } from "lucide-react";
+import { ThumbsUp, Eye, MapPin } from "lucide-react";
 
 export type AdType = {
   id: number | string;
