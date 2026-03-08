@@ -77,6 +77,35 @@ const HeroBanner = () => {
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
+
+      <AlertDialog open={disclaimerOpen} onOpenChange={setDisclaimerOpen}>
+        <AlertDialogContent className="max-h-[80vh] overflow-y-auto">
+          <AlertDialogHeader>
+            <AlertDialogTitle className="text-destructive flex items-center gap-2">
+              <AlertTriangle className="w-5 h-5" />
+              Beware of Fake Ads
+            </AlertDialogTitle>
+            <AlertDialogDescription asChild>
+              <div className="text-sm text-muted-foreground space-y-4 mt-2">
+                <p className="font-semibold text-foreground">වෙබ් අඩවි අවවාදය (Website Disclaimer)</p>
+                <p>Ads SL විසින් Verified ලෙස සලකුණු කර ඇති සේවාවන් සම්බන්ධයෙන් පමණක් අපගේ ආයතනය වගකීමක් දරයි. එයට අමතරව වෙබ් අඩවියේ පළ කරන වෙනත් ඕනෑම දැන්වීමක් හෝ සේවාවක් සඳහා, ඔබ විසින් හමු වීමට පෙර හෝ හමු වූ පසුව සිදුකරන ගනුදෙනු, ගෙවීම් හෝ එකඟතා සම්බන්ධයෙන් අප ආයතනය වගකිවයුතු නොවේ.</p>
+                <p>ඔබ Full Service ලබා ගැනීමට යන විට හමු වීමට පෙර මුදල් ගෙවීමෙන් වලකින්න.</p>
+                <p>මෙය නිදහස් Classified Ads වෙබ් අඩවියක් වන අතර, අප විසින් සපයන්නේ දැන්වීම් පළ කිරීමට සහ සෙවීමට හැකි වේදිකාවක් පමණි. පරිශීලකයන් අතර සිදුවන ගනුදෙනු සඳහා අප වගකිවයුතු නොවේ.</p>
+                <p>Cam Services භාවිතා කිරීමේදී වැඩි විශ්වාසනීයත්වයක් සඳහා Verified Ads ලෙස සලකුණු කර ඇති සේවාවන් තෝරාගන්න.</p>
+                <hr className="border-border" />
+                <p className="font-semibold text-foreground">Website Disclaimer</p>
+                <p>Ads SL accepts responsibility only for services marked as Verified on our platform. For any other advertisements or services published on the website, our company is not responsible for any payments, agreements, meetings, or transactions made before or after meeting the service provider.</p>
+                <p>If you are planning to obtain a Full Service, please do not make any payment or deposit before meeting in person.</p>
+                <p>This is a free classified ads website that only provides a platform for users to post and browse advertisements. We are not responsible for any transactions between users.</p>
+                <p>For Cam Services, we recommend choosing Verified Ads to ensure more reliable and trusted service providers.</p>
+              </div>
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Close</AlertDialogCancel>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 };
