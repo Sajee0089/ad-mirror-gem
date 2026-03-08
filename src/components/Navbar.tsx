@@ -1,4 +1,5 @@
 import { RefreshCw, LogIn, LogOut, PlusCircle, List, Shield, Menu, Users, Heart, UserCircle } from "lucide-react";
+import logoImg from "@/assets/logo.png";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger, SheetTitle, SheetDescription } from "@/components/ui/sheet";
 import { useNavigate } from "react-router-dom";
