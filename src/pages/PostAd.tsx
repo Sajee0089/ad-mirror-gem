@@ -10,6 +10,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { toast } from "sonner";
 import { ArrowLeft, Send, AlertCircle } from "lucide-react";
 import MultiImageUpload from "@/components/MultiImageUpload";
+import { districts } from "@/data/districts";
 
 const categories = [
   "Lanka Ads",
