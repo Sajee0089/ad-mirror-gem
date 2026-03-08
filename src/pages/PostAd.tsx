@@ -98,7 +98,8 @@ const PostAd = () => {
         title: title.trim(),
         description: description.trim(),
         category,
-        image_url: imageUrl,
+        image_url: mainImageUrl,
+        additional_image_urls: additionalUrls,
         contact_phone: contactPhone.trim() || null,
         status: "pending",
       });
