@@ -61,9 +61,11 @@ const Index = () => {
   }));
 
   const allAds = [...dbAdCards, ...sampleAds];
-  const filteredAds = selectedCategory
-    ? allAds.filter((ad) => ad.category === selectedCategory)
-    : allAds;
+  const filteredAds = allAds.filter((ad) => {
+    if (selectedCategory && ad.category !== selectedCategory) return false;
+    if (selectedDistrict && (ad as any).location !== selectedDistrict) return false;
+    return true;
+  });
 
   const handleAdClick = (ad: AdType) => {
     setSelectedAd(ad);
