@@ -61,8 +61,8 @@ const AdminAds = () => {
   const [postDesc, setPostDesc] = useState("");
   const [postCategory, setPostCategory] = useState("");
   const [postContactPhone, setPostContactPhone] = useState("");
-  const [postImageFile, setPostImageFile] = useState<File | null>(null);
-  const [postImagePreview, setPostImagePreview] = useState<string | null>(null);
+  const [postImages, setPostImages] = useState<{ file: File; preview: string }[]>([]);
+  const [postMainIndex, setPostMainIndex] = useState(0);
   const [posting, setPosting] = useState(false);
 
   useEffect(() => {
