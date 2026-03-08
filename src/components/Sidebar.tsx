@@ -28,7 +28,7 @@ interface SidebarProps {
   onDistrictSelect?: (district: string | null) => void;
 }
 
-const Sidebar = ({ selectedCategory, onCategorySelect }: SidebarProps) => {
+const Sidebar = ({ selectedCategory, onCategorySelect, selectedDistrict, onDistrictSelect }: SidebarProps) => {
   const navigate = useNavigate();
   const [user, setUser] = useState<any>(null);
   const [subEmail, setSubEmail] = useState("");
