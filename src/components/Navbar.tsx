@@ -1,4 +1,5 @@
 import { RefreshCw, LogIn, LogOut, PlusCircle, List, Shield, Menu, Users, Heart, UserCircle } from "lucide-react";
+import logoImg from "@/assets/logo.png";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger, SheetTitle, SheetDescription } from "@/components/ui/sheet";
 import { useNavigate } from "react-router-dom";
@@ -88,9 +89,7 @@ const Navbar = () => {
   return (
     <nav className="bg-nav text-nav-foreground px-3 sm:px-4 py-3 flex items-center justify-between sticky top-0 z-50 shadow-md">
       <div className="flex items-center gap-2 sm:gap-3 cursor-pointer" onClick={() => navigate("/")}>
-        <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-primary flex items-center justify-center text-primary-foreground font-bold text-base sm:text-lg">
-          A
-        </div>
+        <img src={logoImg} alt="Ads SL Logo" className="w-9 h-9 sm:w-10 sm:h-10 rounded-full object-cover" />
         <span className="text-base sm:text-lg font-bold tracking-tight">Ads SL</span>
       </div>
 
