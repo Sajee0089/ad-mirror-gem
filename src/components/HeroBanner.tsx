@@ -68,7 +68,7 @@ const HeroBanner = () => {
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel>Cancel</AlertDialogCancel>
-            <AlertDialogAction onClick={handleVerifyOk}>Ok</AlertDialogAction>
+            <AlertDialogAction onClick={handleVerifyOk}>Next</AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
