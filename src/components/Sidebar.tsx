@@ -33,7 +33,7 @@ const Sidebar = () => {
   }, []);
 
   const actionButtons = [
-    { label: "Agents", icon: Users, onClick: () => {} },
+    { label: "Agents", icon: Users, onClick: () => window.open("https://wa.me/94789663179", "_blank") },
     { label: "My Saved Ads", icon: Heart, onClick: () => {} },
     { label: "Blog", icon: Newspaper, onClick: () => {} },
     { label: user ? "My Account" : "Login", icon: UserCircle, onClick: () => navigate(user ? "/my-ads" : "/auth") },
