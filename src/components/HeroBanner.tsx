@@ -22,7 +22,7 @@ const HeroBanner = () => {
   };
 
   return (
-    <div className="hero-gradient rounded-lg p-8 text-center mb-6">
+    <div className="hero-gradient rounded-lg px-8 py-5 text-center mb-6">
       <h1 className="text-2xl md:text-3xl font-bold text-primary-foreground mb-1">
         Lanka Ads by NO.1 Ads Agent
       </h1>
