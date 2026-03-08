@@ -94,6 +94,7 @@ export type Database = {
           title: string
           updated_at: string
           user_id: string
+          verified_member: boolean
           view_count: number
         }
         Insert: {
@@ -114,6 +115,7 @@ export type Database = {
           title: string
           updated_at?: string
           user_id: string
+          verified_member?: boolean
           view_count?: number
         }
         Update: {
@@ -134,6 +136,7 @@ export type Database = {
           title?: string
           updated_at?: string
           user_id?: string
+          verified_member?: boolean
           view_count?: number
         }
         Relationships: []
