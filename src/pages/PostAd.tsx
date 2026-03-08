@@ -11,14 +11,23 @@ import { toast } from "sonner";
 import { ArrowLeft, ImagePlus, Send, AlertCircle } from "lucide-react";
 
 const categories = [
-  "Vehicles", "Property", "Electronics", "Jobs", "Services",
-  "Education", "Pets", "Fashion", "Furniture", "General",
+  "Lanka Ads",
+  "Girls Personal",
+  "Boys Personal",
+  "Shemale Personal",
+  "Marriage Proposals",
+  "Live Cam",
+  "Spa & Wellness Services",
+  "Rooms",
+  "Sales",
+  "Toys & Accessories",
 ];
 
 const PostAd = () => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [category, setCategory] = useState("");
+  const [contactPhone, setContactPhone] = useState("");
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
@@ -96,6 +105,7 @@ const PostAd = () => {
         description: description.trim(),
         category,
         image_url: imageUrl,
+        contact_phone: contactPhone.trim() || null,
         status: "pending",
       });
       if (error) throw error;
@@ -117,7 +127,6 @@ const PostAd = () => {
           <ArrowLeft className="w-4 h-4 mr-2" /> Back to Home
         </Button>
 
-        {/* Agent WhatsApp Contact */}
         <div className="mb-4 rounded-lg border border-border bg-card p-4 flex items-center gap-3">
           <span className="text-2xl">📱</span>
           <div>
@@ -155,7 +164,7 @@ const PostAd = () => {
                 <Label htmlFor="title">Title *</Label>
                 <Input
                   id="title"
-                  placeholder="e.g. Toyota Aqua 2018 for Sale"
+                  placeholder="e.g. Spa Services in Colombo"
                   value={title}
                   onChange={(e) => setTitle(e.target.value)}
                   maxLength={200}
@@ -179,13 +188,26 @@ const PostAd = () => {
                 <Label htmlFor="description">Description *</Label>
                 <Textarea
                   id="description"
-                  placeholder="Describe your item or service in detail..."
+                  placeholder="Describe your service or ad in detail..."
                   value={description}
                   onChange={(e) => setDescription(e.target.value)}
                   maxLength={2000}
                   rows={5}
                   required
                 />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="contactPhone">Contact Phone Number</Label>
+                <Input
+                  id="contactPhone"
+                  placeholder="e.g. 0771234567"
+                  value={contactPhone}
+                  onChange={(e) => setContactPhone(e.target.value)}
+                  maxLength={15}
+                />
+                <p className="text-xs text-muted-foreground">
+                  This number will be shown to people viewing your ad.
+                </p>
               </div>
               <div className="space-y-2">
                 <Label htmlFor="imageFile" className="flex items-center gap-1">

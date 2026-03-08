@@ -25,6 +25,7 @@ const Index = () => {
   const [dbAds, setDbAds] = useState<DbAd[]>([]);
   const [selectedAd, setSelectedAd] = useState<AdType | null>(null);
   const [modalOpen, setModalOpen] = useState(false);
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchAds = async () => {
@@ -54,6 +55,9 @@ const Index = () => {
   }));
 
   const allAds = [...dbAdCards, ...sampleAds];
+  const filteredAds = selectedCategory
+    ? allAds.filter((ad) => ad.category === selectedCategory)
+    : allAds;
 
   const handleAdClick = (ad: AdType) => {
     setSelectedAd(ad);
@@ -65,21 +69,46 @@ const Index = () => {
       <Navbar />
       <div className="max-w-7xl mx-auto px-2 sm:px-4 py-4 sm:py-6">
         <div className="flex flex-col lg:flex-row gap-4 sm:gap-6">
-          {/* Sidebar - hidden on mobile, shown as horizontal strip or collapsible */}
           <div className="hidden lg:block">
-            <Sidebar />
+            <Sidebar
+              selectedCategory={selectedCategory}
+              onCategorySelect={setSelectedCategory}
+            />
           </div>
           <main className="flex-1 min-w-0">
             <HeroBanner />
-            {/* Mobile sidebar actions */}
             <div className="lg:hidden mb-4">
-              <Sidebar />
+              <Sidebar
+                selectedCategory={selectedCategory}
+                onCategorySelect={setSelectedCategory}
+              />
             </div>
+
+            {selectedCategory && (
+              <div className="flex items-center gap-2 mb-4">
+                <span className="text-sm font-medium text-foreground">
+                  Showing: <span className="text-primary">{selectedCategory}</span>
+                </span>
+                <button
+                  onClick={() => setSelectedCategory(null)}
+                  className="text-xs text-muted-foreground hover:text-foreground underline"
+                >
+                  Show All
+                </button>
+              </div>
+            )}
+
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4">
-              {allAds.map((ad) => (
-                <AdCard key={ad.id} ad={ad} onClick={() => handleAdClick(ad)} />
+              {filteredAds.map((ad) => (
+                <AdCard key={`${ad.category}-${ad.id}`} ad={ad} onClick={() => handleAdClick(ad)} />
               ))}
             </div>
+
+            {filteredAds.length === 0 && (
+              <div className="text-center py-12 text-muted-foreground">
+                No ads found in this category.
+              </div>
+            )}
           </main>
         </div>
       </div>

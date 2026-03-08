@@ -19,9 +19,6 @@ const HeroBanner = () => {
           Agents
         </Button>
         <Button size="sm" variant="secondary" className="font-medium">
-          Blog
-        </Button>
-        <Button size="sm" variant="secondary" className="font-medium">
           Browse
         </Button>
       </div>
@@ -31,9 +28,9 @@ const HeroBanner = () => {
           <Send className="w-4 h-4 mr-1" />
           Subscribe
         </Button>
-        <Button size="sm" className="bg-primary text-primary-foreground hover:bg-primary/90">
+        <Button size="sm" className="bg-destructive text-destructive-foreground hover:bg-destructive/90">
           <AlertTriangle className="w-4 h-4 mr-1" />
-          Browse Fake Ads
+          Beware of Fake Ads
         </Button>
       </div>
     </div>
