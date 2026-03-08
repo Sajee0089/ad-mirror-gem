@@ -318,6 +318,15 @@ const AdminAds = () => {
                             <Button variant="destructive" size="sm" onClick={() => handleDelete(ad.id)}>
                               <Trash2 className="w-3 h-3 mr-1" /> Delete
                             </Button>
+                            <Button
+                              variant={(ad as any).verified_member ? "default" : "outline"}
+                              size="sm"
+                              onClick={() => handleToggleVerified(ad.id, !(ad as any).verified_member)}
+                              className={(ad as any).verified_member ? "bg-emerald-600 hover:bg-emerald-700" : ""}
+                            >
+                              <ShieldCheck className="w-3 h-3 mr-1" />
+                              {(ad as any).verified_member ? "Verified ✓" : "Verify Member"}
+                            </Button>
                             <Select value={ad.badge || "nra"} onValueChange={(v) => handleBadge(ad.id, v)}>
                               <SelectTrigger className="w-32 h-8 text-xs">
                                 <SelectValue />
