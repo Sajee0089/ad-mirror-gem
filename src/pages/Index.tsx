@@ -115,6 +115,11 @@ const Index = () => {
   const totalPages = Math.ceil(filteredAds.length / ADS_PER_PAGE);
   const paginatedAds = filteredAds.slice((currentPage - 1) * ADS_PER_PAGE, currentPage * ADS_PER_PAGE);
 
+  // Scroll to top when page changes
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, [currentPage]);
+
   // Reset page when filters change
   useEffect(() => {
     setCurrentPage(1);
