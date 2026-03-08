@@ -32,7 +32,7 @@ const Index = () => {
     const fetchAds = async () => {
       const { data } = await supabase
         .from("ads")
-        .select("id, title, description, image_url, badge, category, created_at, view_count, favorite_count, contact_phone")
+        .select("id, title, description, image_url, additional_image_urls, badge, category, created_at, view_count, favorite_count, contact_phone")
         .eq("status", "approved")
         .order("created_at", { ascending: false });
       if (data) setDbAds(data as DbAd[]);
