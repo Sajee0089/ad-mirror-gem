@@ -199,7 +199,7 @@ const Index = () => {
               </div>
             )}
 
-            <div ref={adGridRef} className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
+            <div ref={adGridRef} className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 border-2 border-foreground/80 rounded-lg p-3 sm:p-4" style={{ borderImage: 'linear-gradient(135deg, hsl(0 0% 10%), hsl(354 80% 55%)) 1' }}>
               {paginatedAds.map((ad) => (
                 <AdCard
                   key={`${ad.category}-${ad.id}`}
