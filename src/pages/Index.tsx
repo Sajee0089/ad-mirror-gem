@@ -22,6 +22,7 @@ type DbAd = {
   cashback: boolean;
   category: string;
   created_at: string;
+  approved_at: string | null;
   view_count: number;
   favorite_count: number;
   contact_phone: string | null;
@@ -61,9 +62,9 @@ const Index = () => {
   const fetchAds = async () => {
     const { data } = await supabase
       .from("ads")
-      .select("id, title, description, image_url, additional_image_urls, badge, cashback, category, created_at, view_count, favorite_count, contact_phone, location")
+      .select("id, title, description, image_url, additional_image_urls, badge, cashback, category, created_at, approved_at, view_count, favorite_count, contact_phone, location")
       .eq("status", "approved")
-      .order("created_at", { ascending: false });
+      .order("approved_at", { ascending: false, nullsFirst: false });
     if (data) setDbAds(data as DbAd[]);
   };
 
@@ -93,7 +94,7 @@ const Index = () => {
     cashback: ad.cashback || false,
     likes: String(ad.favorite_count || 0),
     views: String(ad.view_count || 0),
-    timeAgo: getTimeAgo(ad.created_at),
+    timeAgo: getTimeAgo(ad.approved_at || ad.created_at),
     category: ad.category,
     contact_phone: ad.contact_phone || undefined,
     additionalImages: ad.additional_image_urls || [],
