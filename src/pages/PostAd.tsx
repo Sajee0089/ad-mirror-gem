@@ -204,23 +204,12 @@ const PostAd = () => {
                   This number will be shown to people viewing your ad.
                 </p>
               </div>
-              <div className="space-y-2">
-                <Label htmlFor="imageFile" className="flex items-center gap-1">
-                  <ImagePlus className="w-4 h-4" /> Image (optional)
-                </Label>
-                <Input
-                  id="imageFile"
-                  type="file"
-                  accept="image/*"
-                  onChange={handleImageChange}
-                  className="cursor-pointer"
-                />
-                {imagePreview && (
-                  <div className="mt-2 rounded-md overflow-hidden border border-border">
-                    <img src={imagePreview} alt="Preview" className="w-full max-h-48 object-cover" />
-                  </div>
-                )}
-              </div>
+              <MultiImageUpload
+                images={images}
+                onChange={setImages}
+                mainIndex={mainImageIndex}
+                onMainIndexChange={setMainImageIndex}
+              />
               <Button type="submit" className="w-full" disabled={loading || remaining <= 0}>
                 {loading ? "Submitting..." : "Submit Ad for Approval"}
               </Button>
