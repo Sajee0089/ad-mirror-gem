@@ -13,6 +13,7 @@ type DbAd = {
   title: string;
   description: string;
   image_url: string | null;
+  additional_image_urls: string[] | null;
   badge: string | null;
   category: string;
   created_at: string;
