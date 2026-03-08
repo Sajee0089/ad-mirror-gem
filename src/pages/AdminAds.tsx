@@ -31,8 +31,16 @@ type Member = {
 };
 
 const categories = [
-  "Vehicles", "Property", "Electronics", "Jobs", "Services",
-  "Education", "Pets", "Fashion", "Furniture", "General",
+  "Lanka Ads",
+  "Girls Personal",
+  "Boys Personal",
+  "Shemale Personal",
+  "Marriage Proposals",
+  "Live Cam",
+  "Spa & Wellness Services",
+  "Rooms",
+  "Sales",
+  "Toys & Accessories",
 ];
 
 const AdminAds = () => {
