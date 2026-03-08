@@ -27,7 +27,8 @@ const badgeStyles: Record<string, string> = {
 const AdCard = ({ ad, onClick, isAdmin, onDelete }: { ad: AdType; onClick?: () => void; isAdmin?: boolean; onDelete?: (ad: AdType) => void }) => {
   return (
     <div
-      className="bg-card rounded-lg border border-border shadow-sm overflow-hidden hover:shadow-md transition-shadow cursor-pointer group relative"
+      className={`bg-card rounded-lg shadow-sm overflow-hidden hover:shadow-md transition-shadow cursor-pointer group relative ${ad.verified_member ? 'border-2 border-transparent bg-clip-padding' : 'border border-border'}`}
+      style={ad.verified_member ? { borderImage: 'linear-gradient(135deg, #10b981, #14b8a6, #06b6d4, #10b981) 1' } : undefined}
       onClick={onClick}
     >
       {isAdmin && ad.dbId && (

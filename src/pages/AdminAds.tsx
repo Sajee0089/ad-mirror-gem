@@ -175,6 +175,15 @@ const AdminAds = () => {
     }
   };
 
+  const handleToggleVerified = async (id: string, verified: boolean) => {
+    const { error } = await supabase.from("ads").update({ verified_member: verified } as any).eq("id", id);
+    if (error) toast.error(error.message);
+    else {
+      setAds((prev) => prev.map((a) => a.id === id ? { ...a, verified_member: verified } as any : a));
+      toast.success(verified ? "Marked as verified member" : "Verification removed");
+    }
+  };
+
   const handleBadge = async (id: string, badge: string) => {
     const { error } = await supabase.from("ads").update({ badge }).eq("id", id);
     if (error) toast.error(error.message);
