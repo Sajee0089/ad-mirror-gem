@@ -4,8 +4,8 @@ import { Send, AlertTriangle } from "lucide-react";
 const HeroBanner = () => {
   return (
     <div className="hero-gradient rounded-lg p-8 text-center mb-6">
-      <h1 className="text-2xl md:text-3xl font-bold text-primary-foreground mb-1">
-        Lanka Ads by Hela Lanka Ad
+      <h1 className="text-3xl md:text-4xl font-bold text-primary-foreground mb-1">
+        Lanka Ads by NO.1 Ads Agent
       </h1>
       <p className="text-lg font-semibold text-primary-foreground/90 mb-1">
         The #1 Lanka Add Platform
