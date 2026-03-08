@@ -147,6 +147,32 @@ const Navbar = () => {
           <NavButtons />
         </div>
       )}
+
+      <Dialog open={alertsOpen} onOpenChange={setAlertsOpen}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              <Bell className="w-5 h-5 text-primary" />
+              Get New Ad Alerts
+            </DialogTitle>
+            <DialogDescription>
+              Subscribe to receive email notifications about new ads.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="flex gap-2">
+            <Input
+              placeholder="Your email..."
+              type="email"
+              value={subEmail}
+              onChange={(e) => setSubEmail(e.target.value)}
+              onKeyDown={(e) => e.key === "Enter" && handleSubscribe()}
+            />
+            <Button onClick={handleSubscribe} disabled={subLoading}>
+              {subLoading ? "..." : "Subscribe"}
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
     </nav>
   );
 };
