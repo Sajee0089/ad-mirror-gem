@@ -48,7 +48,7 @@ const Index = () => {
     description: ad.description,
     image: ad.image_url || "https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=300&h=200&fit=crop",
     badge: (ad.badge || "nra") as "super" | "vip" | "nra",
-    cashback: false,
+    cashback: ad.cashback || false,
     likes: String(ad.favorite_count || 0),
     views: String(ad.view_count || 0),
     timeAgo: getTimeAgo(ad.created_at),

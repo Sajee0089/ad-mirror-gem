@@ -416,6 +416,40 @@ const AdminAds = () => {
           </TabsContent>
         </Tabs>
 
+        {/* Approve Dialog */}
+        <Dialog open={!!approveId} onOpenChange={(open) => { if (!open) { setApproveId(null); setApproveBadge("nra"); setApproveCashback(false); } }}>
+          <DialogContent>
+            <DialogHeader><DialogTitle>Approve Ad</DialogTitle></DialogHeader>
+            <div className="space-y-4">
+              <div className="space-y-2">
+                <Label>Ad Label</Label>
+                <Select value={approveBadge} onValueChange={setApproveBadge}>
+                  <SelectTrigger><SelectValue /></SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="super">Super Ad</SelectItem>
+                    <SelectItem value="vip">VIP Ad</SelectItem>
+                    <SelectItem value="nra">Normal Ad</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className="flex items-center gap-2">
+                <input
+                  type="checkbox"
+                  id="cashback-check"
+                  checked={approveCashback}
+                  onChange={(e) => setApproveCashback(e.target.checked)}
+                  className="h-4 w-4 rounded border-primary text-primary focus:ring-primary"
+                />
+                <Label htmlFor="cashback-check">Money Back Guaranteed</Label>
+              </div>
+            </div>
+            <DialogFooter>
+              <Button variant="outline" onClick={() => setApproveId(null)}>Cancel</Button>
+              <Button onClick={handleApprove}>Approve</Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
+
         {/* Reject Dialog */}
         <Dialog open={!!rejectId} onOpenChange={(open) => { if (!open) { setRejectId(null); setRejectReason(""); } }}>
           <DialogContent>
