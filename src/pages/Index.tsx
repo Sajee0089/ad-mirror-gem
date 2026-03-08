@@ -154,7 +154,7 @@ const Index = () => {
     <div className="min-h-screen bg-background">
       <Navbar />
       <div className="max-w-7xl mx-auto px-2 sm:px-4 py-4 sm:py-6">
-        <div className="flex flex-col md:flex-row gap-4 sm:gap-6">
+        <div className="flex flex-col md:flex-row gap-3 sm:gap-4">
           <div className="hidden md:block">
             <Sidebar
               selectedCategory={selectedCategory}
