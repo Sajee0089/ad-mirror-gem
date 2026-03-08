@@ -36,6 +36,8 @@ const Index = () => {
   const [selectedDistrict, setSelectedDistrict] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [isAdmin, setIsAdmin] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const ADS_PER_PAGE = 8;
 
   useEffect(() => {
     const checkAdmin = async () => {
