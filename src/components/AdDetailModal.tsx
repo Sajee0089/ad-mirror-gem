@@ -51,7 +51,11 @@ const AdDetailContent = ({ ad, onClose }: { ad: AdType; onClose: () => void }) =
 
   const toggleFavorite = async () => {
     const { data: { session } } = await supabase.auth.getSession();
-    if (!session?.user) return;
+    if (!session?.user) {
+      const { toast } = await import("sonner");
+      toast.error("Please login to save ads to your favorites");
+      return;
+    }
     if (!ad.dbId) return;
 
     if (isFavorited) {
