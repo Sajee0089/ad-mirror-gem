@@ -23,7 +23,9 @@ const AdDetailContent = ({ ad, onClose }: { ad: AdType; onClose: () => void }) =
   const [isFavorited, setIsFavorited] = useState(false);
   const [favCount, setFavCount] = useState(parseInt(ad.likes.replace(/[^0-9]/g, '')) || 0);
   const [viewCount, setViewCount] = useState(parseInt(ad.views.replace(/[^0-9]/g, '')) || 0);
-  const [imageExpanded, setImageExpanded] = useState(false);
+  const [selectedImageIndex, setSelectedImageIndex] = useState(0);
+
+  const allImages = [ad.image, ...(ad.additionalImages || [])].filter(Boolean);
 
   useEffect(() => {
     if (ad.dbId) {
