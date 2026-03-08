@@ -48,9 +48,9 @@ const AdCard = ({ ad, onClick }: { ad: AdType; onClick?: () => void }) => {
                 Cash Back
               </span>
             )}
-            {ad.badge && (
+            {ad.badge && ad.badge !== "nra" && (
               <span className={`text-[9px] sm:text-[10px] font-semibold px-1.5 sm:px-2 py-0.5 rounded absolute top-1.5 sm:top-2 right-1.5 sm:right-2 ${badgeStyles[ad.badge]}`}>
-                {ad.badge === "super" ? "Super" : ad.badge === "vip" ? "VIP" : "NRA"}
+                {ad.badge === "super" ? "Super" : "VIP"}
               </span>
             )}
           </div>

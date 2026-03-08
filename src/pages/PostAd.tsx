@@ -126,14 +126,15 @@ const PostAd = () => {
         <div className="mb-4 rounded-lg border border-border bg-card p-4 flex items-center gap-3">
           <span className="text-2xl">📱</span>
           <div>
-            <p className="text-sm font-medium text-foreground">Need help posting? Contact our agent</p>
+            <p className="text-sm font-medium text-foreground">Please Contact agent before posting ads</p>
+            <p className="text-xs text-muted-foreground mt-0.5">කරුණාකර දැන්වීම් පළකිරීමට පෙර අපව සම්බන්ධ කරගන්න</p>
             <a
               href="https://wa.me/94789663179"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-sm text-primary hover:underline font-semibold"
+              className="text-sm text-primary hover:underline font-semibold mt-1 inline-block"
             >
-              WhatsApp: 0789663179
+              WhatsApp: +94 78 966 3179
             </a>
           </div>
         </div>
