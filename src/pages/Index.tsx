@@ -22,6 +22,7 @@ type DbAd = {
   cashback: boolean;
   category: string;
   created_at: string;
+  approved_at: string | null;
   view_count: number;
   favorite_count: number;
   contact_phone: string | null;
