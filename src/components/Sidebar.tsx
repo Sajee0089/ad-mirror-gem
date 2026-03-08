@@ -7,7 +7,6 @@ import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { districts } from "@/data/districts";
-import { districts } from "@/data/districts";
 
 const categories = [
   { label: "Spa", icon: "💆" },
