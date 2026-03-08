@@ -5,6 +5,7 @@ import AdCard from "@/components/AdCard";
 import type { AdType } from "@/components/AdCard";
 import AdDetailModal from "@/components/AdDetailModal";
 import { sampleAds } from "@/data/sampleAds";
+import { districtAds } from "@/data/districtAds";
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 
@@ -61,7 +62,7 @@ const Index = () => {
     location: ad.location || undefined,
   }));
 
-  const allAds = [...dbAdCards, ...sampleAds];
+  const allAds = [...dbAdCards, ...districtAds, ...sampleAds];
   const filteredAds = allAds.filter((ad) => {
     if (selectedCategory && ad.category !== selectedCategory) return false;
     if (selectedDistrict && (ad as any).location !== selectedDistrict) return false;
