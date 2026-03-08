@@ -26,9 +26,11 @@ interface SidebarProps {
   onCategorySelect: (category: string | null) => void;
   selectedDistrict?: string | null;
   onDistrictSelect?: (district: string | null) => void;
+  searchQuery?: string;
+  onSearchChange?: (query: string) => void;
 }
 
-const Sidebar = ({ selectedCategory, onCategorySelect, selectedDistrict, onDistrictSelect }: SidebarProps) => {
+const Sidebar = ({ selectedCategory, onCategorySelect, selectedDistrict, onDistrictSelect, searchQuery = "", onSearchChange }: SidebarProps) => {
   const navigate = useNavigate();
   const [user, setUser] = useState<any>(null);
   const [subEmail, setSubEmail] = useState("");
@@ -91,10 +93,17 @@ const Sidebar = ({ selectedCategory, onCategorySelect, selectedDistrict, onDistr
       {/* Search */}
       <div className="bg-card rounded-lg p-3 shadow-sm border border-border">
         <div className="flex gap-2">
-          <Input placeholder="Search Ads ..." className="text-sm" />
-          <Button size="sm" variant="secondary">
-            <Search className="w-4 h-4" />
-          </Button>
+          <Input
+            placeholder="Search Ads ..."
+            className="text-sm"
+            value={searchQuery}
+            onChange={(e) => onSearchChange?.(e.target.value)}
+          />
+          {searchQuery && (
+            <Button size="sm" variant="secondary" onClick={() => onSearchChange?.("")}>
+              ✕
+            </Button>
+          )}
         </div>
       </div>
 

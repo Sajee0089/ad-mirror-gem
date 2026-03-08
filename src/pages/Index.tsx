@@ -30,6 +30,7 @@ const Index = () => {
   const [modalOpen, setModalOpen] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [selectedDistrict, setSelectedDistrict] = useState<string | null>(null);
+  const [searchQuery, setSearchQuery] = useState("");
 
   useEffect(() => {
     const fetchAds = async () => {
@@ -64,6 +65,10 @@ const Index = () => {
   const filteredAds = allAds.filter((ad) => {
     if (selectedCategory && ad.category !== selectedCategory) return false;
     if (selectedDistrict && (ad as any).location !== selectedDistrict) return false;
+    if (searchQuery.trim()) {
+      const q = searchQuery.toLowerCase();
+      if (!ad.title.toLowerCase().includes(q) && !ad.description.toLowerCase().includes(q)) return false;
+    }
     return true;
   });
 
@@ -83,6 +88,8 @@ const Index = () => {
               onCategorySelect={setSelectedCategory}
               selectedDistrict={selectedDistrict}
               onDistrictSelect={setSelectedDistrict}
+              searchQuery={searchQuery}
+              onSearchChange={setSearchQuery}
             />
           </div>
           <main className="flex-1 min-w-0">
@@ -93,6 +100,8 @@ const Index = () => {
                 onCategorySelect={setSelectedCategory}
                 selectedDistrict={selectedDistrict}
                 onDistrictSelect={setSelectedDistrict}
+                searchQuery={searchQuery}
+                onSearchChange={setSearchQuery}
               />
             </div>
 
