@@ -167,7 +167,7 @@ const Index = () => {
           </div>
           <main className="flex-1 min-w-0">
             <HeroBanner />
-            <div className="md:hidden mb-4">
+            <div className="md:hidden mb-3">
               <Sidebar
                 selectedCategory={selectedCategory}
                 onCategorySelect={setSelectedCategory}

@@ -22,18 +22,18 @@ const HeroBanner = () => {
   };
 
   return (
-    <div className="hero-gradient rounded-lg px-8 py-5 text-center mb-6">
-      <h1 className="text-2xl md:text-3xl font-bold text-primary-foreground mb-1">
+    <div className="hero-gradient rounded-lg px-8 py-4 text-center mb-4">
+      <h1 className="text-2xl md:text-3xl font-bold text-primary-foreground mb-0.5">
         Lanka Ads by NO.1 Ads Agent
       </h1>
-      <p className="text-lg font-semibold text-primary-foreground/90 mb-1">
+      <p className="text-lg font-semibold text-primary-foreground/90 mb-0.5">
         The #1 Lanka Add Platform
       </p>
-      <p className="text-sm text-primary-foreground/70 mb-5">
+      <p className="text-sm text-primary-foreground/70 mb-3">
         for Personal Ads in Sri Lanka
       </p>
 
-      <div className="flex items-center justify-center gap-2 flex-wrap mb-4">
+      <div className="flex items-center justify-center gap-2 flex-wrap mb-2">
         <Button size="sm" variant="secondary" className="font-medium">
           Agents
         </Button>
