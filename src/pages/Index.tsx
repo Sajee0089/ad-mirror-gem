@@ -137,6 +137,23 @@ const Index = () => {
                 No ads found in this category.
               </div>
             )}
+
+            {/* SEO Content - visible to crawlers */}
+            <footer className="mt-12 border-t border-border pt-8 pb-4 text-muted-foreground text-xs leading-relaxed space-y-3">
+              <h2 className="text-sm font-semibold text-foreground">Ads SL - Sri Lanka's Top Free Classified Ads Platform</h2>
+              <p>
+                Welcome to Ads SL, the leading SL ads platform for browsing and posting free classified ads across all 25 districts in Sri Lanka. 
+                Whether you're looking for spa services in Colombo, Lanka ads for rooms and rentals, live cam shows, or any other service — 
+                Ads SL connects buyers and sellers across Sri Lanka instantly.
+              </p>
+              <p>
+                Browse ads Lanka wide — from Colombo to Kandy, Galle to Jaffna. Post your own Lanka ads for free and reach thousands of Sri Lankan users daily. 
+                Our platform covers categories including spa, wellness, services, electronics, vehicles, real estate, jobs, and live entertainment across Sri Lanka.
+              </p>
+              <p className="text-muted-foreground/60">
+                Popular searches: SL ads, spa Sri Lanka, ads Lanka, Lanka ads, live cam show Sri Lanka, classified ads Sri Lanka, free ads SL, Colombo spa, Lankan ads platform
+              </p>
+            </footer>
           </main>
         </div>
       </div>
