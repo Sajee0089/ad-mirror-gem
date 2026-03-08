@@ -55,16 +55,13 @@ const PostAd = () => {
     }
   }, [userId]);
 
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      if (file.size > 5 * 1024 * 1024) {
-        toast.error("Image must be less than 5MB");
-        return;
-      }
-      setImageFile(file);
-      setImagePreview(URL.createObjectURL(file));
-    }
+  const uploadImage = async (file: File) => {
+    const ext = file.name.split(".").pop();
+    const path = `${userId}/${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`;
+    const { error: uploadError } = await supabase.storage.from("ad-images").upload(path, file);
+    if (uploadError) throw uploadError;
+    const { data: urlData } = supabase.storage.from("ad-images").getPublicUrl(path);
+    return urlData.publicUrl;
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
