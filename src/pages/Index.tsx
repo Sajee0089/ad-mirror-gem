@@ -62,7 +62,7 @@ const Index = () => {
     location: ad.location || undefined,
   }));
 
-  const allAds = [...dbAdCards, ...sampleAds];
+  const allAds = [...dbAdCards, ...districtAds, ...sampleAds];
   const filteredAds = allAds.filter((ad) => {
     if (selectedCategory && ad.category !== selectedCategory) return false;
     if (selectedDistrict && (ad as any).location !== selectedDistrict) return false;
