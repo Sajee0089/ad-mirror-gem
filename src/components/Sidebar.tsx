@@ -30,7 +30,7 @@ interface SidebarProps {
   onSearchChange?: (query: string) => void;
 }
 
-const Sidebar = ({ selectedCategory, onCategorySelect, selectedDistrict, onDistrictSelect }: SidebarProps) => {
+const Sidebar = ({ selectedCategory, onCategorySelect, selectedDistrict, onDistrictSelect, searchQuery = "", onSearchChange }: SidebarProps) => {
   const navigate = useNavigate();
   const [user, setUser] = useState<any>(null);
   const [subEmail, setSubEmail] = useState("");
