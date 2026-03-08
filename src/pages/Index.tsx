@@ -8,6 +8,7 @@ import { sampleAds } from "@/data/sampleAds";
 import { districtAds } from "@/data/districtAds";
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
+import { toast } from "sonner";
 
 type DbAd = {
   id: string;
@@ -32,18 +33,51 @@ const Index = () => {
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [selectedDistrict, setSelectedDistrict] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
+  const [isAdmin, setIsAdmin] = useState(false);
 
   useEffect(() => {
-    const fetchAds = async () => {
-      const { data } = await supabase
-        .from("ads")
-        .select("id, title, description, image_url, additional_image_urls, badge, cashback, category, created_at, view_count, favorite_count, contact_phone, location")
-        .eq("status", "approved")
-        .order("created_at", { ascending: false });
-      if (data) setDbAds(data as DbAd[]);
+    const checkAdmin = async () => {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (session?.user) {
+        const { data } = await supabase
+          .from("user_roles")
+          .select("role")
+          .eq("user_id", session.user.id)
+          .eq("role", "admin");
+        setIsAdmin(!!(data && data.length > 0));
+      }
     };
+    checkAdmin();
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(() => {
+      checkAdmin();
+    });
+    return () => subscription.unsubscribe();
+  }, []);
+
+  const fetchAds = async () => {
+    const { data } = await supabase
+      .from("ads")
+      .select("id, title, description, image_url, additional_image_urls, badge, cashback, category, created_at, view_count, favorite_count, contact_phone, location")
+      .eq("status", "approved")
+      .order("created_at", { ascending: false });
+    if (data) setDbAds(data as DbAd[]);
+  };
+
+  useEffect(() => {
     fetchAds();
   }, []);
+
+  const handleDeleteAd = async (ad: AdType) => {
+    if (!ad.dbId) return;
+    if (!confirm("Are you sure you want to delete this ad?")) return;
+    const { error } = await supabase.from("ads").delete().eq("id", ad.dbId);
+    if (error) {
+      toast.error("Failed to delete ad");
+    } else {
+      toast.success("Ad deleted");
+      fetchAds();
+    }
+  };
 
   const dbAdCards: AdType[] = dbAds.map((ad, idx) => ({
     id: 1000 + idx,
@@ -129,7 +163,13 @@ const Index = () => {
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
               {filteredAds.map((ad) => (
-                <AdCard key={`${ad.category}-${ad.id}`} ad={ad} onClick={() => handleAdClick(ad)} />
+                <AdCard
+                  key={`${ad.category}-${ad.id}`}
+                  ad={ad}
+                  onClick={() => handleAdClick(ad)}
+                  isAdmin={isAdmin}
+                  onDelete={handleDeleteAd}
+                />
               ))}
             </div>
 
@@ -139,7 +179,7 @@ const Index = () => {
               </div>
             )}
 
-            {/* SEO Content - visible to crawlers */}
+            {/* SEO Content */}
             <footer className="mt-12 border-t border-border pt-8 pb-4 text-muted-foreground text-xs leading-relaxed space-y-3">
               <h2 className="text-sm font-semibold text-foreground">Ads SL - Sri Lanka's Top Free Classified Ads Platform</h2>
               <p>
