@@ -115,9 +115,13 @@ const Index = () => {
   const totalPages = Math.ceil(filteredAds.length / ADS_PER_PAGE);
   const paginatedAds = filteredAds.slice((currentPage - 1) * ADS_PER_PAGE, currentPage * ADS_PER_PAGE);
 
-  // Scroll to top when page changes
+  // Scroll to ad grid area when page changes
+  const adGridRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
-    window.scrollTo({ top: 0, behavior: "smooth" });
+    if (adGridRef.current) {
+      const offset = adGridRef.current.getBoundingClientRect().top + window.scrollY - 80;
+      window.scrollTo({ top: offset, behavior: "smooth" });
+    }
   }, [currentPage]);
 
   // Reset page when filters change
