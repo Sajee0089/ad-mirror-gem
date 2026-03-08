@@ -81,6 +81,8 @@ const Index = () => {
             <Sidebar
               selectedCategory={selectedCategory}
               onCategorySelect={setSelectedCategory}
+              selectedDistrict={selectedDistrict}
+              onDistrictSelect={setSelectedDistrict}
             />
           </div>
           <main className="flex-1 min-w-0">
