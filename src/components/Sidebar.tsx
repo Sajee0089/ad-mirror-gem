@@ -32,45 +32,6 @@ const Sidebar = ({ selectedCategory, onCategorySelect, selectedDistrict, onDistr
   const navigate = useNavigate();
   const searchInputRef = useRef<HTMLInputElement>(null);
   const [user, setUser] = useState<any>(null);
-  const [subEmail, setSubEmail] = useState("");
-  const [subLoading, setSubLoading] = useState(false);
-
-  useEffect(() => {
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setUser(session?.user ?? null);
-    });
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_, session) => {
-      setUser(session?.user ?? null);
-    });
-    return () => subscription.unsubscribe();
-  }, []);
-
-  const handleSubscribe = async () => {
-    if (!subEmail.trim() || !subEmail.includes("@")) {
-      toast.error("Please enter a valid email");
-      return;
-    }
-    setSubLoading(true);
-    try {
-      const { error } = await (supabase as any)
-        .from("email_subscriptions")
-        .insert({ email: subEmail.trim().toLowerCase() });
-      if (error) {
-        if (error.code === "23505") {
-          toast.info("You're already subscribed!");
-        } else {
-          throw error;
-        }
-      } else {
-        toast.success("Subscribed! You'll receive new ad notifications.");
-        setSubEmail("");
-      }
-    } catch (err: any) {
-      toast.error(err.message || "Failed to subscribe");
-    } finally {
-      setSubLoading(false);
-    }
-  };
 
   return (
     <aside className="w-full md:w-64 lg:w-72 shrink-0 space-y-4">
