@@ -138,6 +138,37 @@ const Sidebar = ({ selectedCategory, onCategorySelect, selectedDistrict, onDistr
         </div>
       </div>
 
+      {/* District Filter */}
+      <Collapsible>
+        <div className="bg-card rounded-lg shadow-sm border border-border overflow-hidden">
+          <CollapsibleTrigger className="flex items-center justify-between w-full p-4 hover:bg-muted/50 transition-colors">
+            <h3 className="font-bold text-base flex items-center gap-2">
+              <MapPin className="w-4 h-4 text-primary" />
+              Filter by District
+            </h3>
+            <ChevronDown className="w-4 h-4 text-muted-foreground transition-transform duration-200 [&[data-state=open]]:rotate-180" />
+          </CollapsibleTrigger>
+          <CollapsibleContent>
+            <ul className="space-y-1 px-4 pb-4">
+              {districts.map((district) => (
+                <li key={district}>
+                  <button
+                    onClick={() => onDistrictSelect?.(selectedDistrict === district ? null : district)}
+                    className={`flex items-center gap-2 text-sm w-full text-left transition-colors rounded px-2 py-1 ${
+                      selectedDistrict === district
+                        ? "bg-primary/10 text-primary font-semibold"
+                        : "text-foreground/80 hover:text-primary"
+                    }`}
+                  >
+                    📍 {district}
+                  </button>
+                </li>
+              ))}
+            </ul>
+          </CollapsibleContent>
+        </div>
+      </Collapsible>
+
       {/* Categories */}
       <div className="bg-card rounded-lg p-4 shadow-sm border border-border">
         <h3 className="font-bold text-base mb-3">Top Categories</h3>
