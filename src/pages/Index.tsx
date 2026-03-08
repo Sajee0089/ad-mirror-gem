@@ -5,6 +5,7 @@ import AdCard from "@/components/AdCard";
 import type { AdType } from "@/components/AdCard";
 import AdDetailModal from "@/components/AdDetailModal";
 import { sampleAds } from "@/data/sampleAds";
+import { districtAds } from "@/data/districtAds";
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 
