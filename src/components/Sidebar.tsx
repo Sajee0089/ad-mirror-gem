@@ -80,10 +80,7 @@ const Sidebar = ({ selectedCategory, onCategorySelect, selectedDistrict, onDistr
       {/* How to publish */}
       <div
         className="bg-primary text-primary-foreground rounded-lg p-4 text-center cursor-pointer hover:bg-primary/90 transition-colors"
-        onClick={() => {
-          const nav = document.querySelector('[data-nav]') as any;
-          window.location.href = user ? "/post-ad" : "/auth";
-        }}
+        onClick={() => navigate(user ? "/post-ad" : "/auth")}
       >
         <p className="font-semibold text-sm">How to publish Ads?</p>
         <p className="text-xs opacity-80 mt-1">දැන්වීම් පලකරන පියවරක්?</p>
