@@ -63,7 +63,7 @@ const HeroBanner = () => {
           <AlertDialogHeader>
             <AlertDialogTitle>Verified Membership</AlertDialogTitle>
             <AlertDialogDescription className="text-base">
-              Verify Member ship සදහා මාසිකව 3000/= ක මුදලක් අය කෙරේ
+              Verified Member ship සදහා මාසිකව 3000/= ක මුදලක් අය කෙරේ
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
