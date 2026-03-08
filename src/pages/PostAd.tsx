@@ -124,7 +124,7 @@ const PostAd = () => {
   const remaining = 5 - adsToday;
 
   return (
-    <div className="min-h-screen bg-background p-4">
+    <div className="min-h-screen bg-gradient-to-br from-background via-background to-primary/10 p-4">
       <div className="max-w-2xl mx-auto">
         <Button variant="ghost" onClick={() => navigate("/")} className="mb-6">
           <ArrowLeft className="w-4 h-4 mr-2" /> Back to Home
