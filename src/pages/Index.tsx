@@ -6,7 +6,7 @@ import type { AdType } from "@/components/AdCard";
 import AdDetailModal from "@/components/AdDetailModal";
 import { sampleAds } from "@/data/sampleAds";
 import { districtAds } from "@/data/districtAds";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
@@ -115,9 +115,13 @@ const Index = () => {
   const totalPages = Math.ceil(filteredAds.length / ADS_PER_PAGE);
   const paginatedAds = filteredAds.slice((currentPage - 1) * ADS_PER_PAGE, currentPage * ADS_PER_PAGE);
 
-  // Scroll to top when page changes
+  // Scroll to ad grid area when page changes
+  const adGridRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
-    window.scrollTo({ top: 0, behavior: "smooth" });
+    if (adGridRef.current) {
+      const offset = adGridRef.current.getBoundingClientRect().top + window.scrollY - 80;
+      window.scrollTo({ top: offset, behavior: "smooth" });
+    }
   }, [currentPage]);
 
   // Reset page when filters change
@@ -195,7 +199,7 @@ const Index = () => {
               </div>
             )}
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
+            <div ref={adGridRef} className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
               {paginatedAds.map((ad) => (
                 <AdCard
                   key={`${ad.category}-${ad.id}`}
