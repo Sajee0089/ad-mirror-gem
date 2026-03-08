@@ -219,12 +219,13 @@ const AdminAds = () => {
         title: postTitle.trim(),
         description: postDesc.trim(),
         category: postCategory,
+        contact_phone: postContactPhone.trim() || null,
         image_url: imageUrl,
         status: "approved",
       });
       if (error) throw error;
       toast.success("Ad posted and approved!");
-      setPostTitle(""); setPostDesc(""); setPostCategory(""); setPostImageFile(null); setPostImagePreview(null);
+      setPostTitle(""); setPostDesc(""); setPostCategory(""); setPostContactPhone(""); setPostImageFile(null); setPostImagePreview(null);
       fetchAds();
     } catch (err: any) {
       toast.error(err.message);
