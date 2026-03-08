@@ -7,6 +7,8 @@ import AdDetailModal from "@/components/AdDetailModal";
 import { sampleAds } from "@/data/sampleAds";
 import { districtAds } from "@/data/districtAds";
 import { useEffect, useState } from "react";
+import { Button } from "@/components/ui/button";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 
