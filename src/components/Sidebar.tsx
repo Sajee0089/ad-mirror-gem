@@ -1,4 +1,5 @@
 import { Search, Users, UserCircle, Heart, Mail, MapPin, ChevronDown } from "lucide-react";
+import { useRef } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
@@ -32,6 +33,7 @@ interface SidebarProps {
 
 const Sidebar = ({ selectedCategory, onCategorySelect, selectedDistrict, onDistrictSelect, searchQuery = "", onSearchChange }: SidebarProps) => {
   const navigate = useNavigate();
+  const searchInputRef = useRef<HTMLInputElement>(null);
   const [user, setUser] = useState<any>(null);
   const [subEmail, setSubEmail] = useState("");
   const [subLoading, setSubLoading] = useState(false);
@@ -94,16 +96,29 @@ const Sidebar = ({ selectedCategory, onCategorySelect, selectedDistrict, onDistr
       <div className="bg-card rounded-lg p-3 shadow-sm border border-border">
         <div className="flex gap-2">
           <Input
+            ref={searchInputRef}
             placeholder="Search Ads ..."
             className="text-sm"
             value={searchQuery}
             onChange={(e) => onSearchChange?.(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                searchInputRef.current?.blur();
+              }
+            }}
           />
-          {searchQuery && (
-            <Button size="sm" variant="secondary" onClick={() => onSearchChange?.("")}>
+          {searchQuery ? (
+            <Button size="sm" variant="secondary" onClick={() => { onSearchChange?.(""); searchInputRef.current?.focus(); }}>
               ✕
             </Button>
-          )}
+          ) : null}
+          <Button
+            size="sm"
+            onClick={() => searchInputRef.current?.blur()}
+            className="shrink-0"
+          >
+            <Search className="w-4 h-4" />
+          </Button>
         </div>
       </div>
 
