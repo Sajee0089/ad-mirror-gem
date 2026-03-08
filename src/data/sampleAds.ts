@@ -670,4 +670,106 @@ export const sampleAds: AdType[] = [
     category: "Toys & Accessories",
     contact_phone: "0705678901",
   },
+
+  // ===== Spa Ads - One per District (25) =====
+  {
+    id: 101, title: "💆 Relaxing Spa Services - Colombo", description: "Full body massage, aromatherapy and relaxation packages in the heart of Colombo. Professional therapists available daily.",
+    image: "https://images.unsplash.com/photo-1544161515-4ab6ce6db874?w=300&h=200&fit=crop", badge: "super", cashback: true, likes: "45", views: "2.1K", timeAgo: "1h ago", category: "Spa & Wellness Services", contact_phone: "0771001001", location: "Colombo",
+  },
+  {
+    id: 102, title: "🧖 Wellness Spa Center - Gampaha", description: "Rejuvenating spa treatments and wellness therapies in Gampaha. Herbal oil massages and skin care packages.",
+    image: "https://images.unsplash.com/photo-1600334089648-b0d9d3028eb2?w=300&h=200&fit=crop", badge: "vip", cashback: false, likes: "22", views: "980", timeAgo: "2h ago", category: "Spa & Wellness Services", contact_phone: "0771001002", location: "Gampaha",
+  },
+  {
+    id: 103, title: "🌿 Herbal Spa Treatments - Kalutara", description: "Traditional herbal spa treatments in serene Kalutara. Stress relief and body rejuvenation packages available.",
+    image: "https://images.unsplash.com/photo-1540555700478-4be289fbec6d?w=300&h=200&fit=crop", badge: "nra", cashback: false, likes: "12", views: "450", timeAgo: "3h ago", category: "Spa & Wellness Services", contact_phone: "0771001003", location: "Kalutara",
+  },
+  {
+    id: 104, title: "💆 Premium Spa Experience - Kandy", description: "Luxury spa services in beautiful Kandy. Hot stone massage, facial treatments and couples packages.",
+    image: "https://images.unsplash.com/photo-1515377905703-c4788e51af15?w=300&h=200&fit=crop", badge: "super", cashback: false, likes: "33", views: "1.5K", timeAgo: "1h ago", category: "Spa & Wellness Services", contact_phone: "0771001004", location: "Kandy",
+  },
+  {
+    id: 105, title: "🧘 Ayurvedic Wellness - Matale", description: "Authentic Ayurvedic spa treatments in Matale. Natural herbal oils and traditional healing methods.",
+    image: "https://images.unsplash.com/photo-1519823551278-64ac92734fb1?w=300&h=200&fit=crop", badge: "vip", cashback: true, likes: "18", views: "670", timeAgo: "4h ago", category: "Spa & Wellness Services", contact_phone: "0771001005", location: "Matale",
+  },
+  {
+    id: 106, title: "🌸 Mountain Spa Retreat - Nuwara Eliya", description: "Relaxing spa services in the cool mountain climate. Hot spring therapies and aromatherapy sessions.",
+    image: "https://images.unsplash.com/photo-1544161515-4ab6ce6db874?w=300&h=200&fit=crop", badge: "super", cashback: false, likes: "28", views: "1.2K", timeAgo: "2h ago", category: "Spa & Wellness Services", contact_phone: "0771001006", location: "Nuwara Eliya",
+  },
+  {
+    id: 107, title: "💎 Coastal Spa Services - Galle", description: "Beachside spa experience in Galle. Swedish massage, deep tissue therapy and beauty treatments.",
+    image: "https://images.unsplash.com/photo-1600334089648-b0d9d3028eb2?w=300&h=200&fit=crop", badge: "vip", cashback: false, likes: "31", views: "1.4K", timeAgo: "1h ago", category: "Spa & Wellness Services", contact_phone: "0771001007", location: "Galle",
+  },
+  {
+    id: 108, title: "🧖 Traditional Spa - Matara", description: "Professional spa services in Matara. Body scrubs, oil massages and wellness packages at affordable prices.",
+    image: "https://images.unsplash.com/photo-1540555700478-4be289fbec6d?w=300&h=200&fit=crop", badge: "nra", cashback: false, likes: "9", views: "320", timeAgo: "5h ago", category: "Spa & Wellness Services", contact_phone: "0771001008", location: "Matara",
+  },
+  {
+    id: 109, title: "💆 Beach Spa Therapies - Hambantota", description: "Relaxing beachside spa treatments in Hambantota. Full body massage and skincare packages.",
+    image: "https://images.unsplash.com/photo-1515377905703-c4788e51af15?w=300&h=200&fit=crop", badge: "super", cashback: true, likes: "15", views: "580", timeAgo: "3h ago", category: "Spa & Wellness Services", contact_phone: "0771001009", location: "Hambantota",
+  },
+  {
+    id: 110, title: "🌿 Wellness Center - Jaffna", description: "Modern wellness and spa center in Jaffna. Relaxation massages, foot reflexology and beauty care.",
+    image: "https://images.unsplash.com/photo-1519823551278-64ac92734fb1?w=300&h=200&fit=crop", badge: "vip", cashback: false, likes: "11", views: "410", timeAgo: "4h ago", category: "Spa & Wellness Services", contact_phone: "0771001010", location: "Jaffna",
+  },
+  {
+    id: 111, title: "💆 Spa & Beauty Care - Kilinochchi", description: "Professional spa and beauty treatments in Kilinochchi. Affordable packages for all.",
+    image: "https://images.unsplash.com/photo-1544161515-4ab6ce6db874?w=300&h=200&fit=crop", badge: "nra", cashback: false, likes: "5", views: "180", timeAgo: "6h ago", category: "Spa & Wellness Services", contact_phone: "0771001011", location: "Kilinochchi",
+  },
+  {
+    id: 112, title: "🧘 Relaxation Spa - Mannar", description: "Calming spa treatments in Mannar. Body massage, facial care and stress relief therapies.",
+    image: "https://images.unsplash.com/photo-1600334089648-b0d9d3028eb2?w=300&h=200&fit=crop", badge: "super", cashback: false, likes: "7", views: "250", timeAgo: "5h ago", category: "Spa & Wellness Services", contact_phone: "0771001012", location: "Mannar",
+  },
+  {
+    id: 113, title: "💎 Premium Spa - Mullaitivu", description: "Quality spa services in Mullaitivu. Swedish and deep tissue massage available daily.",
+    image: "https://images.unsplash.com/photo-1540555700478-4be289fbec6d?w=300&h=200&fit=crop", badge: "vip", cashback: false, likes: "4", views: "150", timeAgo: "7h ago", category: "Spa & Wellness Services", contact_phone: "0771001013", location: "Mullaitivu",
+  },
+  {
+    id: 114, title: "🌸 Spa & Wellness - Vavuniya", description: "Affordable spa packages in Vavuniya. Aromatherapy, hot oil massage and body treatments.",
+    image: "https://images.unsplash.com/photo-1515377905703-c4788e51af15?w=300&h=200&fit=crop", badge: "nra", cashback: false, likes: "6", views: "210", timeAgo: "4h ago", category: "Spa & Wellness Services", contact_phone: "0771001014", location: "Vavuniya",
+  },
+  {
+    id: 115, title: "💆 Eastern Spa Center - Batticaloa", description: "Relaxing spa experience in Batticaloa. Full body treatments, facial care and wellness packages.",
+    image: "https://images.unsplash.com/photo-1519823551278-64ac92734fb1?w=300&h=200&fit=crop", badge: "super", cashback: true, likes: "13", views: "490", timeAgo: "2h ago", category: "Spa & Wellness Services", contact_phone: "0771001015", location: "Batticaloa",
+  },
+  {
+    id: 116, title: "🧖 Coastal Wellness - Ampara", description: "Traditional and modern spa treatments in Ampara. Professional staff with certified training.",
+    image: "https://images.unsplash.com/photo-1544161515-4ab6ce6db874?w=300&h=200&fit=crop", badge: "vip", cashback: false, likes: "8", views: "300", timeAgo: "3h ago", category: "Spa & Wellness Services", contact_phone: "0771001016", location: "Ampara",
+  },
+  {
+    id: 117, title: "💆 Beachfront Spa - Trincomalee", description: "Beachside spa services in Trincomalee. Relaxation packages with ocean views. Open daily.",
+    image: "https://images.unsplash.com/photo-1600334089648-b0d9d3028eb2?w=300&h=200&fit=crop", badge: "super", cashback: false, likes: "19", views: "720", timeAgo: "1h ago", category: "Spa & Wellness Services", contact_phone: "0771001017", location: "Trincomalee",
+  },
+  {
+    id: 118, title: "🌿 Natural Wellness Spa - Kurunegala", description: "Herbal and Ayurvedic spa treatments in Kurunegala. Natural products, experienced therapists.",
+    image: "https://images.unsplash.com/photo-1540555700478-4be289fbec6d?w=300&h=200&fit=crop", badge: "vip", cashback: true, likes: "21", views: "890", timeAgo: "2h ago", category: "Spa & Wellness Services", contact_phone: "0771001018", location: "Kurunegala",
+  },
+  {
+    id: 119, title: "💎 Royal Spa Services - Puttalam", description: "Luxury spa treatments in Puttalam. Hot stone therapy, body wraps and beauty treatments.",
+    image: "https://images.unsplash.com/photo-1515377905703-c4788e51af15?w=300&h=200&fit=crop", badge: "nra", cashback: false, likes: "10", views: "380", timeAgo: "4h ago", category: "Spa & Wellness Services", contact_phone: "0771001019", location: "Puttalam",
+  },
+  {
+    id: 120, title: "🧘 Ancient City Spa - Anuradhapura", description: "Relaxing spa services near the ancient city. Traditional treatments with modern comfort.",
+    image: "https://images.unsplash.com/photo-1519823551278-64ac92734fb1?w=300&h=200&fit=crop", badge: "super", cashback: false, likes: "14", views: "530", timeAgo: "3h ago", category: "Spa & Wellness Services", contact_phone: "0771001020", location: "Anuradhapura",
+  },
+  {
+    id: 121, title: "💆 Heritage Spa - Polonnaruwa", description: "Wellness spa in historic Polonnaruwa. Body massage, foot care and relaxation packages.",
+    image: "https://images.unsplash.com/photo-1544161515-4ab6ce6db874?w=300&h=200&fit=crop", badge: "vip", cashback: false, likes: "9", views: "340", timeAgo: "5h ago", category: "Spa & Wellness Services", contact_phone: "0771001021", location: "Polonnaruwa",
+  },
+  {
+    id: 122, title: "🌸 Hill Country Spa - Badulla", description: "Refreshing spa treatments in the hill country. Cool climate spa experience with herbal therapies.",
+    image: "https://images.unsplash.com/photo-1600334089648-b0d9d3028eb2?w=300&h=200&fit=crop", badge: "super", cashback: true, likes: "16", views: "610", timeAgo: "2h ago", category: "Spa & Wellness Services", contact_phone: "0771001022", location: "Badulla",
+  },
+  {
+    id: 123, title: "💆 Nature Spa - Monaragala", description: "Spa services surrounded by nature in Monaragala. Relaxation and wellness in a peaceful setting.",
+    image: "https://images.unsplash.com/photo-1540555700478-4be289fbec6d?w=300&h=200&fit=crop", badge: "nra", cashback: false, likes: "6", views: "220", timeAgo: "6h ago", category: "Spa & Wellness Services", contact_phone: "0771001023", location: "Monaragala",
+  },
+  {
+    id: 124, title: "🧖 Gem City Spa - Ratnapura", description: "Premium spa and wellness center in Ratnapura. Full body treatments and beauty packages.",
+    image: "https://images.unsplash.com/photo-1515377905703-c4788e51af15?w=300&h=200&fit=crop", badge: "vip", cashback: false, likes: "11", views: "420", timeAgo: "3h ago", category: "Spa & Wellness Services", contact_phone: "0771001024", location: "Ratnapura",
+  },
+  {
+    id: 125, title: "💆 Wellness Haven - Kegalle", description: "Peaceful spa retreat in Kegalle. Aromatherapy, deep tissue massage and body care services.",
+    image: "https://images.unsplash.com/photo-1519823551278-64ac92734fb1?w=300&h=200&fit=crop", badge: "super", cashback: false, likes: "8", views: "310", timeAgo: "4h ago", category: "Spa & Wellness Services", contact_phone: "0771001025", location: "Kegalle",
+  },
 ];
