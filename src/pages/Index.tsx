@@ -15,6 +15,7 @@ type DbAd = {
   image_url: string | null;
   additional_image_urls: string[] | null;
   badge: string | null;
+  cashback: boolean;
   category: string;
   created_at: string;
   view_count: number;
