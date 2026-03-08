@@ -94,7 +94,7 @@ const Index = () => {
     cashback: ad.cashback || false,
     likes: String(ad.favorite_count || 0),
     views: String(ad.view_count || 0),
-    timeAgo: getTimeAgo(ad.created_at),
+    timeAgo: getTimeAgo(ad.approved_at || ad.created_at),
     category: ad.category,
     contact_phone: ad.contact_phone || undefined,
     additionalImages: ad.additional_image_urls || [],
