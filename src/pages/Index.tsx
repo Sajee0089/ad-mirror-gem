@@ -213,6 +213,7 @@ const Index = () => {
                   onDelete={handleDeleteAd}
                 />
               ))}
+              </div>
             </div>
 
             {filteredAds.length === 0 && (
