@@ -375,6 +375,11 @@ const AdminAds = () => {
                     <Textarea id="admin-desc" placeholder="Description..." value={postDesc} onChange={(e) => setPostDesc(e.target.value)} maxLength={2000} rows={4} required />
                   </div>
                   <div className="space-y-2">
+                    <Label htmlFor="admin-phone">Contact Phone</Label>
+                    <Input id="admin-phone" placeholder="e.g. 0771234567" value={postContactPhone} onChange={(e) => setPostContactPhone(e.target.value)} maxLength={15} />
+                    <p className="text-xs text-muted-foreground">This number will be shown to viewers.</p>
+                  </div>
+                  <div className="space-y-2">
                     <Label htmlFor="admin-image" className="flex items-center gap-1"><ImagePlus className="w-4 h-4" /> Image (optional)</Label>
                     <Input id="admin-image" type="file" accept="image/*" onChange={handlePostImageChange} className="cursor-pointer" />
                     {postImagePreview && (
