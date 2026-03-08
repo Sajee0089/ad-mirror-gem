@@ -27,8 +27,7 @@ const badgeStyles: Record<string, string> = {
 const AdCard = ({ ad, onClick, isAdmin, onDelete }: { ad: AdType; onClick?: () => void; isAdmin?: boolean; onDelete?: (ad: AdType) => void }) => {
   return (
     <div
-      className={`bg-card rounded-lg shadow-sm overflow-hidden hover:shadow-md transition-shadow cursor-pointer group relative ${ad.verified_member ? 'border-2 border-transparent bg-clip-padding' : 'border border-border'}`}
-      style={ad.verified_member ? { borderImage: 'linear-gradient(135deg, #10b981, #14b8a6, #06b6d4, #10b981) 1' } : undefined}
+      className={`bg-card rounded-lg shadow-sm overflow-hidden hover:shadow-md transition-shadow cursor-pointer group relative ${ad.verified_member ? 'border-2 border-primary' : 'border border-border'}`}
       onClick={onClick}
     >
       {isAdmin && ad.dbId && (
@@ -46,7 +45,7 @@ const AdCard = ({ ad, onClick, isAdmin, onDelete }: { ad: AdType; onClick?: () =
       <div className="flex">
         <div className="w-32 h-36 sm:w-36 sm:h-40 md:w-44 md:h-44 shrink-0 overflow-hidden bg-muted relative">
           {ad.verified_member && (
-            <div className="absolute top-0 left-0 right-0 z-10 bg-gradient-to-r from-emerald-500 via-teal-500 to-cyan-500 text-white text-[8px] sm:text-[9px] font-bold text-center py-0.5 tracking-wide">
+            <div className="absolute top-0 left-0 right-0 z-10 bg-primary text-primary-foreground text-[8px] sm:text-[9px] font-bold text-center py-0.5 tracking-wide">
               ✅ Verified Member
             </div>
           )}
