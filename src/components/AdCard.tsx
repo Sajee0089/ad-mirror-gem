@@ -1,7 +1,7 @@
 import { ThumbsUp, Eye } from "lucide-react";
 
 export type AdType = {
-  id: number;
+  id: number | string;
   title: string;
   description: string;
   image: string;
@@ -10,6 +10,9 @@ export type AdType = {
   likes: string;
   views: string;
   timeAgo: string;
+  category?: string;
+  contact_phone?: string;
+  dbId?: string; // actual DB uuid for tracking
 };
 
 const badgeStyles: Record<string, string> = {
@@ -18,45 +21,49 @@ const badgeStyles: Record<string, string> = {
   nra: "bg-badge-nra text-primary-foreground",
 };
 
-const AdCard = ({ ad }: { ad: AdType }) => {
+const AdCard = ({ ad, onClick }: { ad: AdType; onClick?: () => void }) => {
   return (
-    <div className="bg-card rounded-lg border border-border shadow-sm overflow-hidden hover:shadow-md transition-shadow cursor-pointer group">
+    <div
+      className="bg-card rounded-lg border border-border shadow-sm overflow-hidden hover:shadow-md transition-shadow cursor-pointer group"
+      onClick={onClick}
+    >
       <div className="flex">
         {/* Image */}
-        <div className="w-32 h-32 md:w-40 md:h-36 shrink-0 overflow-hidden bg-muted">
+        <div className="w-28 h-28 sm:w-32 sm:h-32 md:w-40 md:h-36 shrink-0 overflow-hidden bg-muted">
           <img
             src={ad.image}
             alt={ad.title}
             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+            loading="lazy"
           />
         </div>
 
         {/* Content */}
-        <div className="flex-1 p-3 relative min-w-0">
+        <div className="flex-1 p-2 sm:p-3 relative min-w-0">
           {/* Badges */}
-          <div className="flex items-center gap-2 mb-1 flex-wrap">
+          <div className="flex items-center gap-1 sm:gap-2 mb-1 flex-wrap">
             {ad.cashback && (
-              <span className="text-[10px] font-semibold px-2 py-0.5 rounded bg-badge-cashback text-primary-foreground">
-                Cash Back Guaranteed
+              <span className="text-[9px] sm:text-[10px] font-semibold px-1.5 sm:px-2 py-0.5 rounded bg-badge-cashback text-primary-foreground">
+                Cash Back
               </span>
             )}
             {ad.badge && (
-              <span className={`text-[10px] font-semibold px-2 py-0.5 rounded absolute top-2 right-2 ${badgeStyles[ad.badge]}`}>
-                {ad.badge === "super" ? "Super Ad" : ad.badge === "vip" ? "VIP Ad" : "NRA Ad"}
+              <span className={`text-[9px] sm:text-[10px] font-semibold px-1.5 sm:px-2 py-0.5 rounded absolute top-1.5 sm:top-2 right-1.5 sm:right-2 ${badgeStyles[ad.badge]}`}>
+                {ad.badge === "super" ? "Super" : ad.badge === "vip" ? "VIP" : "NRA"}
               </span>
             )}
           </div>
 
-          <h3 className="font-semibold text-sm leading-snug line-clamp-2 mb-1 pr-16">
+          <h3 className="font-semibold text-xs sm:text-sm leading-snug line-clamp-2 mb-0.5 sm:mb-1 pr-12 sm:pr-16">
             {ad.title}
           </h3>
-          <p className="text-xs text-muted-foreground line-clamp-2 mb-3">
+          <p className="text-[11px] sm:text-xs text-muted-foreground line-clamp-2 mb-2 sm:mb-3">
             {ad.description}
           </p>
 
           {/* Footer */}
-          <div className="flex items-center justify-between text-[11px] text-muted-foreground mt-auto">
-            <div className="flex items-center gap-3">
+          <div className="flex items-center justify-between text-[10px] sm:text-[11px] text-muted-foreground mt-auto">
+            <div className="flex items-center gap-2 sm:gap-3">
               <span className="flex items-center gap-1">
                 <ThumbsUp className="w-3 h-3" />
                 {ad.likes}

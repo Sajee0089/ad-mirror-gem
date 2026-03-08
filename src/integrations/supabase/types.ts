@@ -14,12 +14,75 @@ export type Database = {
   }
   public: {
     Tables: {
+      ad_favorites: {
+        Row: {
+          ad_id: string
+          created_at: string
+          id: string
+          user_id: string
+        }
+        Insert: {
+          ad_id: string
+          created_at?: string
+          id?: string
+          user_id: string
+        }
+        Update: {
+          ad_id?: string
+          created_at?: string
+          id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ad_favorites_ad_id_fkey"
+            columns: ["ad_id"]
+            isOneToOne: false
+            referencedRelation: "ads"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      ad_views: {
+        Row: {
+          ad_id: string
+          created_at: string
+          id: string
+          session_id: string | null
+          viewer_ip: string | null
+        }
+        Insert: {
+          ad_id: string
+          created_at?: string
+          id?: string
+          session_id?: string | null
+          viewer_ip?: string | null
+        }
+        Update: {
+          ad_id?: string
+          created_at?: string
+          id?: string
+          session_id?: string | null
+          viewer_ip?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ad_views_ad_id_fkey"
+            columns: ["ad_id"]
+            isOneToOne: false
+            referencedRelation: "ads"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       ads: {
         Row: {
           badge: string | null
           category: string
+          contact_phone: string | null
           created_at: string
           description: string
+          favorite_count: number
           id: string
           image_url: string | null
           rejection_reason: string | null
@@ -27,12 +90,15 @@ export type Database = {
           title: string
           updated_at: string
           user_id: string
+          view_count: number
         }
         Insert: {
           badge?: string | null
           category?: string
+          contact_phone?: string | null
           created_at?: string
           description: string
+          favorite_count?: number
           id?: string
           image_url?: string | null
           rejection_reason?: string | null
@@ -40,12 +106,15 @@ export type Database = {
           title: string
           updated_at?: string
           user_id: string
+          view_count?: number
         }
         Update: {
           badge?: string | null
           category?: string
+          contact_phone?: string | null
           created_at?: string
           description?: string
+          favorite_count?: number
           id?: string
           image_url?: string | null
           rejection_reason?: string | null
@@ -53,6 +122,7 @@ export type Database = {
           title?: string
           updated_at?: string
           user_id?: string
+          view_count?: number
         }
         Relationships: []
       }
@@ -111,6 +181,7 @@ export type Database = {
         }
         Returns: boolean
       }
+      increment_view_count: { Args: { _ad_id: string }; Returns: undefined }
     }
     Enums: {
       app_role: "admin" | "moderator" | "user"
