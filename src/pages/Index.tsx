@@ -21,6 +21,7 @@ type DbAd = {
   view_count: number;
   favorite_count: number;
   contact_phone: string | null;
+  location: string | null;
 };
 
 const Index = () => {
