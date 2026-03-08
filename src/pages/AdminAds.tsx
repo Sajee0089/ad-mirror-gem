@@ -384,13 +384,12 @@ const AdminAds = () => {
                     <Input id="admin-phone" placeholder="e.g. 0771234567" value={postContactPhone} onChange={(e) => setPostContactPhone(e.target.value)} maxLength={15} />
                     <p className="text-xs text-muted-foreground">This number will be shown to viewers.</p>
                   </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="admin-image" className="flex items-center gap-1"><ImagePlus className="w-4 h-4" /> Image (optional)</Label>
-                    <Input id="admin-image" type="file" accept="image/*" onChange={handlePostImageChange} className="cursor-pointer" />
-                    {postImagePreview && (
-                      <img src={postImagePreview} alt="Preview" className="w-full max-h-48 object-cover rounded-md border border-border mt-2" />
-                    )}
-                  </div>
+                  <MultiImageUpload
+                    images={postImages}
+                    onChange={setPostImages}
+                    mainIndex={postMainIndex}
+                    onMainIndexChange={setPostMainIndex}
+                  />
                   <Button type="submit" className="w-full" disabled={posting}>
                     {posting ? "Posting..." : "Post Ad (Auto-Approved)"}
                   </Button>
