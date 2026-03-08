@@ -130,13 +130,30 @@ const AdminAds = () => {
     setMembers(memberList);
   };
 
-  const handleApprove = async (id: string) => {
-    const { error } = await supabase.from("ads").update({ status: "approved", rejection_reason: null }).eq("id", id);
+  // Approval dialog state
+  const [approveId, setApproveId] = useState<string | null>(null);
+  const [approveBadge, setApproveBadge] = useState<string>("nra");
+  const [approveCashback, setApproveCashback] = useState(false);
+
+  const handleApprove = async () => {
+    if (!approveId) return;
+    const now = new Date().toISOString();
+    const { error } = await supabase.from("ads").update({
+      status: "approved",
+      rejection_reason: null,
+      badge: approveBadge,
+      cashback: approveCashback,
+      approved_at: now,
+      created_at: now,
+    }).eq("id", approveId);
     if (error) toast.error(error.message);
     else {
-      setAds((prev) => prev.map((a) => a.id === id ? { ...a, status: "approved" } : a));
+      setAds((prev) => prev.map((a) => a.id === approveId ? { ...a, status: "approved", badge: approveBadge } : a));
       toast.success("Ad approved");
     }
+    setApproveId(null);
+    setApproveBadge("nra");
+    setApproveCashback(false);
   };
 
   const handleReject = async () => {
@@ -292,7 +309,7 @@ const AdminAds = () => {
                           <div className="flex flex-wrap items-center gap-2 mt-3">
                             {ad.status === "pending" && (
                               <>
-                                <Button size="sm" onClick={() => handleApprove(ad.id)}>
+                                <Button size="sm" onClick={() => { setApproveId(ad.id); setApproveBadge(ad.badge || "nra"); setApproveCashback(false); }}>
                                   <CheckCircle className="w-3 h-3 mr-1" /> Approve
                                 </Button>
                                 <Button variant="outline" size="sm" className="text-destructive hover:text-destructive" onClick={() => setRejectId(ad.id)}>
@@ -398,6 +415,40 @@ const AdminAds = () => {
             </Card>
           </TabsContent>
         </Tabs>
+
+        {/* Approve Dialog */}
+        <Dialog open={!!approveId} onOpenChange={(open) => { if (!open) { setApproveId(null); setApproveBadge("nra"); setApproveCashback(false); } }}>
+          <DialogContent>
+            <DialogHeader><DialogTitle>Approve Ad</DialogTitle></DialogHeader>
+            <div className="space-y-4">
+              <div className="space-y-2">
+                <Label>Ad Label</Label>
+                <Select value={approveBadge} onValueChange={setApproveBadge}>
+                  <SelectTrigger><SelectValue /></SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="super">Super Ad</SelectItem>
+                    <SelectItem value="vip">VIP Ad</SelectItem>
+                    <SelectItem value="nra">Normal Ad</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className="flex items-center gap-2">
+                <input
+                  type="checkbox"
+                  id="cashback-check"
+                  checked={approveCashback}
+                  onChange={(e) => setApproveCashback(e.target.checked)}
+                  className="h-4 w-4 rounded border-primary text-primary focus:ring-primary"
+                />
+                <Label htmlFor="cashback-check">Money Back Guaranteed</Label>
+              </div>
+            </div>
+            <DialogFooter>
+              <Button variant="outline" onClick={() => setApproveId(null)}>Cancel</Button>
+              <Button onClick={handleApprove}>Approve</Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
 
         {/* Reject Dialog */}
         <Dialog open={!!rejectId} onOpenChange={(open) => { if (!open) { setRejectId(null); setRejectReason(""); } }}>

@@ -15,6 +15,7 @@ type DbAd = {
   image_url: string | null;
   additional_image_urls: string[] | null;
   badge: string | null;
+  cashback: boolean;
   category: string;
   created_at: string;
   view_count: number;
@@ -32,7 +33,7 @@ const Index = () => {
     const fetchAds = async () => {
       const { data } = await supabase
         .from("ads")
-        .select("id, title, description, image_url, additional_image_urls, badge, category, created_at, view_count, favorite_count, contact_phone")
+        .select("id, title, description, image_url, additional_image_urls, badge, cashback, category, created_at, view_count, favorite_count, contact_phone")
         .eq("status", "approved")
         .order("created_at", { ascending: false });
       if (data) setDbAds(data as DbAd[]);
@@ -47,7 +48,7 @@ const Index = () => {
     description: ad.description,
     image: ad.image_url || "https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=300&h=200&fit=crop",
     badge: (ad.badge || "nra") as "super" | "vip" | "nra",
-    cashback: false,
+    cashback: ad.cashback || false,
     likes: String(ad.favorite_count || 0),
     views: String(ad.view_count || 0),
     timeAgo: getTimeAgo(ad.created_at),
