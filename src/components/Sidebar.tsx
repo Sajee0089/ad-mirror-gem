@@ -1,10 +1,12 @@
-import { Search, Users, UserCircle, Heart, Mail } from "lucide-react";
+import { Search, Users, UserCircle, Heart, Mail, MapPin, ChevronDown } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
+import { districts } from "@/data/districts";
 
 const categories = [
   { label: "Lanka Ads", icon: "🌸" },
@@ -22,6 +24,8 @@ const categories = [
 interface SidebarProps {
   selectedCategory: string | null;
   onCategorySelect: (category: string | null) => void;
+  selectedDistrict?: string | null;
+  onDistrictSelect?: (district: string | null) => void;
 }
 
 const Sidebar = ({ selectedCategory, onCategorySelect }: SidebarProps) => {
