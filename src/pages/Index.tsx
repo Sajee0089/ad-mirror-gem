@@ -96,16 +96,23 @@ const Index = () => {
               />
             </div>
 
-            {selectedCategory && (
-              <div className="flex items-center gap-2 mb-4">
-                <span className="text-sm font-medium text-foreground">
-                  Showing: <span className="text-primary">{selectedCategory}</span>
-                </span>
+            {(selectedCategory || selectedDistrict) && (
+              <div className="flex items-center gap-2 mb-4 flex-wrap">
+                {selectedCategory && (
+                  <span className="text-sm font-medium text-foreground">
+                    Category: <span className="text-primary">{selectedCategory}</span>
+                  </span>
+                )}
+                {selectedDistrict && (
+                  <span className="text-sm font-medium text-foreground">
+                    District: <span className="text-primary">{selectedDistrict}</span>
+                  </span>
+                )}
                 <button
-                  onClick={() => setSelectedCategory(null)}
+                  onClick={() => { setSelectedCategory(null); setSelectedDistrict(null); }}
                   className="text-xs text-muted-foreground hover:text-foreground underline"
                 >
-                  Show All
+                  Clear Filters
                 </button>
               </div>
             )}
