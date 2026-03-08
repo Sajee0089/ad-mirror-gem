@@ -66,6 +66,12 @@ const AdCard = ({ ad, onClick }: { ad: AdType; onClick?: () => void }) => {
           {/* Footer */}
           <div className="flex items-center justify-between text-[10px] sm:text-[11px] text-muted-foreground mt-auto">
             <div className="flex items-center gap-2 sm:gap-3">
+              {ad.location && (
+                <span className="flex items-center gap-0.5">
+                  <MapPin className="w-3 h-3" />
+                  {ad.location}
+                </span>
+              )}
               <span className="flex items-center gap-1">
                 <ThumbsUp className="w-3 h-3" />
                 {ad.likes}
