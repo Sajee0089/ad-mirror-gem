@@ -88,6 +88,8 @@ const Index = () => {
               onCategorySelect={setSelectedCategory}
               selectedDistrict={selectedDistrict}
               onDistrictSelect={setSelectedDistrict}
+              searchQuery={searchQuery}
+              onSearchChange={setSearchQuery}
             />
           </div>
           <main className="flex-1 min-w-0">
@@ -98,6 +100,8 @@ const Index = () => {
                 onCategorySelect={setSelectedCategory}
                 selectedDistrict={selectedDistrict}
                 onDistrictSelect={setSelectedDistrict}
+                searchQuery={searchQuery}
+                onSearchChange={setSearchQuery}
               />
             </div>
 
