@@ -7,6 +7,7 @@ import Index from "./pages/Index";
 import Auth from "./pages/Auth";
 import PostAd from "./pages/PostAd";
 import MyAds from "./pages/MyAds";
+import SavedAds from "./pages/SavedAds";
 import AdminAds from "./pages/AdminAds";
 import NotFound from "./pages/NotFound";
 
