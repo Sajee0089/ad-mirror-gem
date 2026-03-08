@@ -11,6 +11,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toast } from "sonner";
 import { ArrowLeft, CheckCircle, XCircle, Clock, Trash2, Users, Send, ImagePlus, ShieldBan, ShieldCheck } from "lucide-react";
+import MultiImageUpload from "@/components/MultiImageUpload";
 
 type Ad = {
   id: string;
@@ -60,8 +61,8 @@ const AdminAds = () => {
   const [postDesc, setPostDesc] = useState("");
   const [postCategory, setPostCategory] = useState("");
   const [postContactPhone, setPostContactPhone] = useState("");
-  const [postImageFile, setPostImageFile] = useState<File | null>(null);
-  const [postImagePreview, setPostImagePreview] = useState<string | null>(null);
+  const [postImages, setPostImages] = useState<{ file: File; preview: string }[]>([]);
+  const [postMainIndex, setPostMainIndex] = useState(0);
   const [posting, setPosting] = useState(false);
 
   useEffect(() => {
@@ -188,13 +189,13 @@ const AdminAds = () => {
     }
   };
 
-  const handlePostImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      if (file.size > 5 * 1024 * 1024) { toast.error("Image must be less than 5MB"); return; }
-      setPostImageFile(file);
-      setPostImagePreview(URL.createObjectURL(file));
-    }
+  const uploadImage = async (file: File) => {
+    const ext = file.name.split(".").pop();
+    const path = `${adminUserId}/${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`;
+    const { error: uploadError } = await supabase.storage.from("ad-images").upload(path, file);
+    if (uploadError) throw uploadError;
+    const { data: urlData } = supabase.storage.from("ad-images").getPublicUrl(path);
+    return urlData.publicUrl;
   };
 
   const handleManualPost = async (e: React.FormEvent) => {
@@ -205,27 +206,31 @@ const AdminAds = () => {
     }
     setPosting(true);
     try {
-      let imageUrl: string | null = null;
-      if (postImageFile) {
-        const ext = postImageFile.name.split(".").pop();
-        const path = `${adminUserId}/${Date.now()}.${ext}`;
-        const { error: uploadError } = await supabase.storage.from("ad-images").upload(path, postImageFile);
-        if (uploadError) throw uploadError;
-        const { data: urlData } = supabase.storage.from("ad-images").getPublicUrl(path);
-        imageUrl = urlData.publicUrl;
+      let mainImageUrl: string | null = null;
+      const additionalUrls: string[] = [];
+
+      if (postImages.length > 0) {
+        const urls = await Promise.all(postImages.map((img) => uploadImage(img.file)));
+        mainImageUrl = urls[postMainIndex];
+        urls.forEach((url, i) => {
+          if (i !== postMainIndex) additionalUrls.push(url);
+        });
       }
+
       const { error } = await supabase.from("ads").insert({
         user_id: adminUserId,
         title: postTitle.trim(),
         description: postDesc.trim(),
         category: postCategory,
         contact_phone: postContactPhone.trim() || null,
-        image_url: imageUrl,
+        image_url: mainImageUrl,
+        additional_image_urls: additionalUrls,
         status: "approved",
       });
       if (error) throw error;
       toast.success("Ad posted and approved!");
-      setPostTitle(""); setPostDesc(""); setPostCategory(""); setPostContactPhone(""); setPostImageFile(null); setPostImagePreview(null);
+      setPostTitle(""); setPostDesc(""); setPostCategory(""); setPostContactPhone("");
+      setPostImages([]); setPostMainIndex(0);
       fetchAds();
     } catch (err: any) {
       toast.error(err.message);
@@ -379,13 +384,12 @@ const AdminAds = () => {
                     <Input id="admin-phone" placeholder="e.g. 0771234567" value={postContactPhone} onChange={(e) => setPostContactPhone(e.target.value)} maxLength={15} />
                     <p className="text-xs text-muted-foreground">This number will be shown to viewers.</p>
                   </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="admin-image" className="flex items-center gap-1"><ImagePlus className="w-4 h-4" /> Image (optional)</Label>
-                    <Input id="admin-image" type="file" accept="image/*" onChange={handlePostImageChange} className="cursor-pointer" />
-                    {postImagePreview && (
-                      <img src={postImagePreview} alt="Preview" className="w-full max-h-48 object-cover rounded-md border border-border mt-2" />
-                    )}
-                  </div>
+                  <MultiImageUpload
+                    images={postImages}
+                    onChange={setPostImages}
+                    mainIndex={postMainIndex}
+                    onMainIndexChange={setPostMainIndex}
+                  />
                   <Button type="submit" className="w-full" disabled={posting}>
                     {posting ? "Posting..." : "Post Ad (Auto-Approved)"}
                   </Button>

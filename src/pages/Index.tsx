@@ -13,6 +13,7 @@ type DbAd = {
   title: string;
   description: string;
   image_url: string | null;
+  additional_image_urls: string[] | null;
   badge: string | null;
   category: string;
   created_at: string;
@@ -31,7 +32,7 @@ const Index = () => {
     const fetchAds = async () => {
       const { data } = await supabase
         .from("ads")
-        .select("id, title, description, image_url, badge, category, created_at, view_count, favorite_count, contact_phone")
+        .select("id, title, description, image_url, additional_image_urls, badge, category, created_at, view_count, favorite_count, contact_phone")
         .eq("status", "approved")
         .order("created_at", { ascending: false });
       if (data) setDbAds(data as DbAd[]);
@@ -52,6 +53,7 @@ const Index = () => {
     timeAgo: getTimeAgo(ad.created_at),
     category: ad.category,
     contact_phone: ad.contact_phone || undefined,
+    additionalImages: ad.additional_image_urls || [],
   }));
 
   const allAds = [...dbAdCards, ...sampleAds];

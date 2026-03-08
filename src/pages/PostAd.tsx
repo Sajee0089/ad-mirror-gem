@@ -8,7 +8,8 @@ import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { toast } from "sonner";
-import { ArrowLeft, ImagePlus, Send, AlertCircle } from "lucide-react";
+import { ArrowLeft, Send, AlertCircle } from "lucide-react";
+import MultiImageUpload from "@/components/MultiImageUpload";
 
 const categories = [
   "Lanka Ads",
@@ -28,8 +29,8 @@ const PostAd = () => {
   const [description, setDescription] = useState("");
   const [category, setCategory] = useState("");
   const [contactPhone, setContactPhone] = useState("");
-  const [imageFile, setImageFile] = useState<File | null>(null);
-  const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const [images, setImages] = useState<{ file: File; preview: string }[]>([]);
+  const [mainImageIndex, setMainImageIndex] = useState(0);
   const [loading, setLoading] = useState(false);
   const [userId, setUserId] = useState<string | null>(null);
   const [adsToday, setAdsToday] = useState<number>(0);
@@ -55,16 +56,13 @@ const PostAd = () => {
     }
   }, [userId]);
 
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      if (file.size > 5 * 1024 * 1024) {
-        toast.error("Image must be less than 5MB");
-        return;
-      }
-      setImageFile(file);
-      setImagePreview(URL.createObjectURL(file));
-    }
+  const uploadImage = async (file: File) => {
+    const ext = file.name.split(".").pop();
+    const path = `${userId}/${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`;
+    const { error: uploadError } = await supabase.storage.from("ad-images").upload(path, file);
+    if (uploadError) throw uploadError;
+    const { data: urlData } = supabase.storage.from("ad-images").getPublicUrl(path);
+    return urlData.publicUrl;
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -84,19 +82,16 @@ const PostAd = () => {
 
     setLoading(true);
     try {
-      let imageUrl: string | null = null;
+      let mainImageUrl: string | null = null;
+      const additionalUrls: string[] = [];
 
-      if (imageFile) {
-        const ext = imageFile.name.split(".").pop();
-        const path = `${userId}/${Date.now()}.${ext}`;
-        const { error: uploadError } = await supabase.storage
-          .from("ad-images")
-          .upload(path, imageFile);
-        if (uploadError) throw uploadError;
-        const { data: urlData } = supabase.storage
-          .from("ad-images")
-          .getPublicUrl(path);
-        imageUrl = urlData.publicUrl;
+      if (images.length > 0) {
+        // Upload all images
+        const urls = await Promise.all(images.map((img) => uploadImage(img.file)));
+        mainImageUrl = urls[mainImageIndex];
+        urls.forEach((url, i) => {
+          if (i !== mainImageIndex) additionalUrls.push(url);
+        });
       }
 
       const { error } = await supabase.from("ads").insert({
@@ -104,7 +99,8 @@ const PostAd = () => {
         title: title.trim(),
         description: description.trim(),
         category,
-        image_url: imageUrl,
+        image_url: mainImageUrl,
+        additional_image_urls: additionalUrls,
         contact_phone: contactPhone.trim() || null,
         status: "pending",
       });
@@ -209,23 +205,12 @@ const PostAd = () => {
                   This number will be shown to people viewing your ad.
                 </p>
               </div>
-              <div className="space-y-2">
-                <Label htmlFor="imageFile" className="flex items-center gap-1">
-                  <ImagePlus className="w-4 h-4" /> Image (optional)
-                </Label>
-                <Input
-                  id="imageFile"
-                  type="file"
-                  accept="image/*"
-                  onChange={handleImageChange}
-                  className="cursor-pointer"
-                />
-                {imagePreview && (
-                  <div className="mt-2 rounded-md overflow-hidden border border-border">
-                    <img src={imagePreview} alt="Preview" className="w-full max-h-48 object-cover" />
-                  </div>
-                )}
-              </div>
+              <MultiImageUpload
+                images={images}
+                onChange={setImages}
+                mainIndex={mainImageIndex}
+                onMainIndexChange={setMainImageIndex}
+              />
               <Button type="submit" className="w-full" disabled={loading || remaining <= 0}>
                 {loading ? "Submitting..." : "Submit Ad for Approval"}
               </Button>

@@ -1,0 +1,1 @@
+ALTER TABLE public.ads ADD COLUMN additional_image_urls text[] DEFAULT '{}'::text[];

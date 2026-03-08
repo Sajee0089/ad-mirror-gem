@@ -77,6 +77,7 @@ export type Database = {
       }
       ads: {
         Row: {
+          additional_image_urls: string[] | null
           badge: string | null
           category: string
           contact_phone: string | null
@@ -93,6 +94,7 @@ export type Database = {
           view_count: number
         }
         Insert: {
+          additional_image_urls?: string[] | null
           badge?: string | null
           category?: string
           contact_phone?: string | null
@@ -109,6 +111,7 @@ export type Database = {
           view_count?: number
         }
         Update: {
+          additional_image_urls?: string[] | null
           badge?: string | null
           category?: string
           contact_phone?: string | null
