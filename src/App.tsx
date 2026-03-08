@@ -9,6 +9,7 @@ import PostAd from "./pages/PostAd";
 import MyAds from "./pages/MyAds";
 import SavedAds from "./pages/SavedAds";
 import AdminAds from "./pages/AdminAds";
+import AdminRoute from "./components/AdminRoute";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
