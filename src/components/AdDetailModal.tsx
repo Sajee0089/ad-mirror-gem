@@ -49,7 +49,10 @@ const AdDetailContent = ({ ad, onClose }: { ad: AdType; onClose: () => void }) =
     checkFavorite();
   }, [ad.dbId]);
 
+  const [togglingFav, setTogglingFav] = useState(false);
+
   const toggleFavorite = async () => {
+    if (togglingFav) return;
     const { data: { session } } = await supabase.auth.getSession();
     if (!session?.user) {
       const { toast } = await import("sonner");
@@ -57,15 +60,23 @@ const AdDetailContent = ({ ad, onClose }: { ad: AdType; onClose: () => void }) =
       return;
     }
     if (!ad.dbId) return;
-
-    if (isFavorited) {
-      await supabase.from('ad_favorites').delete().eq('ad_id', ad.dbId).eq('user_id', session.user.id);
-      setIsFavorited(false);
-      setFavCount(c => Math.max(0, c - 1));
-    } else {
-      await supabase.from('ad_favorites').insert({ ad_id: ad.dbId, user_id: session.user.id });
-      setIsFavorited(true);
-      setFavCount(c => c + 1);
+    setTogglingFav(true);
+    try {
+      if (isFavorited) {
+        await supabase.from('ad_favorites').delete().eq('ad_id', ad.dbId).eq('user_id', session.user.id);
+        setIsFavorited(false);
+        setFavCount(c => Math.max(0, c - 1));
+      } else {
+        const { error } = await supabase.from('ad_favorites').insert({ ad_id: ad.dbId, user_id: session.user.id });
+        if (error && error.code === '23505') {
+          setIsFavorited(true);
+        } else if (!error) {
+          setIsFavorited(true);
+          setFavCount(c => c + 1);
+        }
+      }
+    } finally {
+      setTogglingFav(false);
     }
   };
 
