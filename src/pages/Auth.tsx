@@ -27,7 +27,26 @@ const Auth = () => {
     return () => subscription.unsubscribe();
   }, [navigate]);
 
-  const handleSubmit = async (e: React.FormEvent) => {
+    const handleForgotPassword = async () => {
+      if (!email.trim()) {
+        toast.error("Please enter your email first");
+        return;
+      }
+      setLoading(true);
+      try {
+        const { error } = await supabase.auth.resetPasswordForEmail(email.trim(), {
+          redirectTo: `${window.location.origin}/reset-password`,
+        });
+        if (error) throw error;
+        toast.success("Password reset link sent! Check your email.");
+      } catch (error: any) {
+        toast.error(error.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!email.trim() || !password.trim()) {
       toast.error("Please fill in all fields");
@@ -108,6 +127,16 @@ const Auth = () => {
                   />
                 </div>
               </div>
+              {isLogin && (
+                <button
+                  type="button"
+                  onClick={handleForgotPassword}
+                  className="text-sm text-primary hover:underline w-full text-right"
+                  disabled={loading}
+                >
+                  Forgot Password?
+                </button>
+              )}
               <Button type="submit" className="w-full" disabled={loading}>
                 {loading ? "Please wait..." : isLogin ? "Sign In" : "Sign Up"}
               </Button>

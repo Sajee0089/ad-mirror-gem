@@ -35,7 +35,12 @@ const HeroBanner = () => {
       </p>
 
       <div className="flex items-center justify-center gap-2 flex-wrap mb-2">
-        <Button size="sm" variant="secondary" className="font-medium">
+        <Button
+          size="sm"
+          variant="secondary"
+          className="font-medium"
+          onClick={() => window.open("https://wa.me/94789663179?text=" + encodeURIComponent("Hello, I need agent support"), "_blank")}
+        >
           Agents
         </Button>
         <Button size="sm" variant="secondary" className="font-medium">
