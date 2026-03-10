@@ -10,6 +10,7 @@ import MyAds from "./pages/MyAds";
 import SavedAds from "./pages/SavedAds";
 import AdminAds from "./pages/AdminAds";
 import AdminRoute from "./components/AdminRoute";
+import ResetPassword from "./pages/ResetPassword";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -23,6 +24,7 @@ const App = () => (
         <Routes>
           <Route path="/" element={<Index />} />
           <Route path="/auth" element={<Auth />} />
+          <Route path="/reset-password" element={<ResetPassword />} />
           <Route path="/post-ad" element={<PostAd />} />
           <Route path="/my-ads" element={<MyAds />} />
           <Route path="/saved-ads" element={<SavedAds />} />

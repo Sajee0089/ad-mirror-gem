@@ -127,6 +127,16 @@ const Auth = () => {
                   />
                 </div>
               </div>
+              {isLogin && (
+                <button
+                  type="button"
+                  onClick={handleForgotPassword}
+                  className="text-sm text-primary hover:underline w-full text-right"
+                  disabled={loading}
+                >
+                  Forgot Password?
+                </button>
+              )}
               <Button type="submit" className="w-full" disabled={loading}>
                 {loading ? "Please wait..." : isLogin ? "Sign In" : "Sign Up"}
               </Button>
