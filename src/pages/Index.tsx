@@ -101,7 +101,7 @@ const Index = () => {
     verified_member: ad.verified_member || false,
   }));
 
-  const allAds = [...dbAdCards, ...districtAds, ...sampleAds];
+  const allAds = dbAdCards;
   const filteredAds = allAds.filter((ad) => {
     if (selectedCategory && ad.category !== selectedCategory) return false;
     if (selectedDistrict && (ad as any).location !== selectedDistrict) return false;
