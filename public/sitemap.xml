@@ -1,36 +1,68 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+
+  <!-- Homepage -->
   <url>
-    <loc>https://ad-mirror-gem.lovable.app/</loc>
-    <lastmod>2026-03-08</lastmod>
-    <changefreq>hourly</changefreq>
-    <priority>1.0</priority>
-  </url>
+    <loc>https://www.ads-sl.com/</loc>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
+
+  <!-- Location Pages -->
   <url>
-    <loc>https://ad-mirror-gem.lovable.app/post-ad</loc>
-    <lastmod>2026-03-08</lastmod>
-    <changefreq>monthly</changefreq>
+    <loc>https://www.ads-sl.com/colombo-spa-ads</loc>
+    <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://ad-mirror-gem.lovable.app/auth</loc>
-    <lastmod>2026-03-08</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
+    <loc>https://www.ads-sl.com/kandy-spa-ads</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://ad-mirror-gem.lovable.app/my-ads</loc>
-    <lastmod>2026-03-08</lastmod>
+    <loc>https://www.ads-sl.com/galle-spa-ads</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- Category Pages -->
+  <url>
+    <loc>https://www.ads-sl.com/massage-ads</loc>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://ad-mirror-gem.lovable.app/saved</loc>
-    <lastmod>2026-03-08</lastmod>
+    <loc>https://www.ads-sl.com/spa-offers</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.ads-sl.com/wellness-ads</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <!-- Sample Ads Pages -->
+  <url>
+    <loc>https://www.ads-sl.com/ad/sample-ad-1</loc>
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>
   </url>
+  <url>
+    <loc>https://www.ads-sl.com/ad/sample-ad-2</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://www.ads-sl.com/ad/sample-ad-3</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <!-- ... repeat until sample-ad-50 -->
+  <url>
+    <loc>https://www.ads-sl.com/ad/sample-ad-50</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+
 </urlset>
