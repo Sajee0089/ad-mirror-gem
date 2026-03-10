@@ -4,8 +4,6 @@ import Sidebar from "@/components/Sidebar";
 import AdCard from "@/components/AdCard";
 import type { AdType } from "@/components/AdCard";
 import AdDetailModal from "@/components/AdDetailModal";
-import { sampleAds } from "@/data/sampleAds";
-import { districtAds } from "@/data/districtAds";
 import { useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { ChevronLeft, ChevronRight } from "lucide-react";
