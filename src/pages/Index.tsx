@@ -5,10 +5,13 @@ import AdCard from "@/components/AdCard";
 import type { AdType } from "@/components/AdCard";
 import AdDetailModal from "@/components/AdDetailModal";
 import { useEffect, useRef, useState } from "react";
+import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
+import { districts } from "@/data/districts";
+import { getDistrictUrl, getCategoryUrl, categorySlugMap, getAdUrl } from "@/lib/seo";
 
 type DbAd = {
   id: string;
