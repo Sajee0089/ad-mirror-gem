@@ -1,68 +1,178 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-
-  <!-- Homepage -->
   <url>
     <loc>https://www.ads-sl.com/</loc>
-    <changefreq>daily</changefreq>
+    <changefreq>hourly</changefreq>
     <priority>1.0</priority>
   </url>
-
-  <!-- Location Pages -->
   <url>
-    <loc>https://www.ads-sl.com/colombo-spa-ads</loc>
+    <loc>https://www.ads-sl.com/blogs</loc>
     <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://www.ads-sl.com/spa-ads</loc>
+    <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://www.ads-sl.com/kandy-spa-ads</loc>
-    <changefreq>weekly</changefreq>
+    <loc>https://www.ads-sl.com/live-cam-ads</loc>
+    <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://www.ads-sl.com/galle-spa-ads</loc>
-    <changefreq>weekly</changefreq>
+    <loc>https://www.ads-sl.com/girls-personal-ads</loc>
+    <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
-
-  <!-- Category Pages -->
   <url>
-    <loc>https://www.ads-sl.com/massage-ads</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
+    <loc>https://www.ads-sl.com/boys-personal-ads</loc>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://www.ads-sl.com/spa-offers</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
+    <loc>https://www.ads-sl.com/shemale-personal-ads</loc>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://www.ads-sl.com/wellness-ads</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-
-  <!-- Sample Ads Pages -->
-  <url>
-    <loc>https://www.ads-sl.com/ad/sample-ad-1</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.6</priority>
+    <loc>https://www.ads-sl.com/marriage-proposals</loc>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://www.ads-sl.com/ad/sample-ad-2</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.6</priority>
+    <loc>https://www.ads-sl.com/rooms-ads</loc>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://www.ads-sl.com/ad/sample-ad-3</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.6</priority>
+    <loc>https://www.ads-sl.com/toys-accessories-ads</loc>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
   </url>
-  <!-- ... repeat until sample-ad-50 -->
   <url>
-    <loc>https://www.ads-sl.com/ad/sample-ad-50</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.6</priority>
+    <loc>https://www.ads-sl.com/district/colombo</loc>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
   </url>
-
+  <url>
+    <loc>https://www.ads-sl.com/district/gampaha</loc>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.ads-sl.com/district/kalutara</loc>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.ads-sl.com/district/kandy</loc>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.ads-sl.com/district/matale</loc>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.ads-sl.com/district/nuwara-eliya</loc>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.ads-sl.com/district/galle</loc>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.ads-sl.com/district/matara</loc>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.ads-sl.com/district/hambantota</loc>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.ads-sl.com/district/jaffna</loc>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.ads-sl.com/district/kilinochchi</loc>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.ads-sl.com/district/mannar</loc>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.ads-sl.com/district/mullaitivu</loc>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.ads-sl.com/district/vavuniya</loc>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.ads-sl.com/district/batticaloa</loc>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.ads-sl.com/district/ampara</loc>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.ads-sl.com/district/trincomalee</loc>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.ads-sl.com/district/kurunegala</loc>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.ads-sl.com/district/puttalam</loc>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.ads-sl.com/district/anuradhapura</loc>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.ads-sl.com/district/polonnaruwa</loc>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.ads-sl.com/district/badulla</loc>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.ads-sl.com/district/monaragala</loc>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.ads-sl.com/district/ratnapura</loc>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.ads-sl.com/district/kegalle</loc>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
 </urlset>
