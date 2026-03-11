@@ -33,7 +33,6 @@ const PostAd = () => {
   const [mainImageIndex, setMainImageIndex] = useState(0);
   const [loading, setLoading] = useState(false);
   const [userId, setUserId] = useState<string | null>(null);
-  const [adsToday, setAdsToday] = useState<number>(0);
   const navigate = useNavigate();
 
   useEffect(() => {
