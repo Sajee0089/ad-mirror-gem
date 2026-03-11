@@ -26,6 +26,7 @@ type DbAd = {
   contact_phone: string | null;
   location: string | null;
   verified_member: boolean;
+  slug: string | null;
 };
 
 const Index = () => {
