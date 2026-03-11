@@ -43,8 +43,8 @@ const HeroBanner = () => {
         >
           Agents
         </Button>
-        <Button size="sm" variant="secondary" className="font-medium">
-          Browse
+        <Button size="sm" variant="secondary" className="font-medium" onClick={() => window.location.hash = "#/blogs"}>
+          Blogs
         </Button>
       </div>
 
