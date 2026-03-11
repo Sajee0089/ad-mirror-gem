@@ -100,6 +100,7 @@ const Index = () => {
     additionalImages: ad.additional_image_urls || [],
     location: ad.location || undefined,
     verified_member: ad.verified_member || false,
+    slug: ad.slug || undefined,
   }));
 
   const allAds = dbAdCards;
