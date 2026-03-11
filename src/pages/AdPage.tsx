@@ -58,12 +58,12 @@ const AdPage = () => {
   useEffect(() => {
     const fetchAd = async () => {
       setLoading(true);
-      const { data } = await supabase
+      const { data } = await (supabase
         .from("ads")
         .select("id, title, description, image_url, additional_image_urls, badge, cashback, category, created_at, approved_at, view_count, favorite_count, contact_phone, location, verified_member, slug")
-        .eq("slug", slug)
+        .eq("slug", slug as any)
         .eq("status", "approved")
-        .maybeSingle();
+        .maybeSingle() as any);
 
       if (data) {
         setAd(data as DbAd);
