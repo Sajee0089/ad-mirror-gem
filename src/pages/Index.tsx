@@ -59,12 +59,12 @@ const Index = () => {
   }, []);
 
   const fetchAds = async () => {
-    const { data } = await supabase
+    const { data } = await (supabase as any)
       .from("ads")
-      .select("id, title, description, image_url, additional_image_urls, badge, cashback, category, created_at, approved_at, view_count, favorite_count, contact_phone, location, verified_member")
+      .select("id, title, description, image_url, additional_image_urls, badge, cashback, category, created_at, approved_at, view_count, favorite_count, contact_phone, location, verified_member, slug")
       .eq("status", "approved")
       .order("approved_at", { ascending: false, nullsFirst: false });
-    if (data) setDbAds(data as DbAd[]);
+    if (data) setDbAds(data);
   };
 
   useEffect(() => {
