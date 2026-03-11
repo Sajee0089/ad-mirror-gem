@@ -71,10 +71,6 @@ const PostAd = () => {
       toast.error("You must be logged in");
       return;
     }
-    if (adsToday >= 5) {
-      toast.error("You can only post 5 ads per day");
-      return;
-    }
 
     setLoading(true);
     try {
