@@ -47,13 +47,6 @@ const PostAd = () => {
     return () => subscription.unsubscribe();
   }, [navigate]);
 
-  useEffect(() => {
-    if (userId) {
-      supabase.rpc("count_user_ads_today", { _user_id: userId }).then(({ data }) => {
-        setAdsToday(data ?? 0);
-      });
-    }
-  }, [userId]);
 
   const uploadImage = async (file: File) => {
     const ext = file.name.split(".").pop();
