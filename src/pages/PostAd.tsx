@@ -139,14 +139,6 @@ const PostAd = () => {
             <CardDescription>
               Fill in the details to submit your ad for approval
             </CardDescription>
-            <div className="flex items-center gap-2 mt-2 text-sm">
-              <AlertCircle className="w-4 h-4 text-muted-foreground" />
-              <span className="text-muted-foreground">
-                {remaining > 0
-                  ? `You can post ${remaining} more ad${remaining !== 1 ? "s" : ""} today`
-                  : "You've reached the daily limit of 5 ads"}
-              </span>
-            </div>
           </CardHeader>
           <CardContent>
             <form onSubmit={handleSubmit} className="space-y-5">
