@@ -35,10 +35,8 @@ const CategoryPage = () => {
       setLoading(true);
       let query = supabase
         .from("ads")
-        .select("id, title, description, image_url, additional_image_urls, badge, cashback, category, created_at, approved_at, view_count, favorite_count, contact_phone, location, verified_member, slug")
-        .eq("status", "approved")
-        .eq("category", category)
-        .order("approved_at", { ascending: false });
+        .select("id, title, description, image_url, additional_image_urls, badge, cashback, category, created_at, approved_at, view_count, favorite_count, contact_phone, location, verified_member, slug") as any;
+      query = query.eq("status", "approved").eq("category", category).order("approved_at", { ascending: false });
 
       if (district) {
         query = query.eq("location", district);

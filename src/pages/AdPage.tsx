@@ -75,14 +75,14 @@ const AdPage = () => {
         setViewCount((v) => v + 1);
 
         // Fetch related ads (same category, exclude current)
-        const { data: related } = await supabase
+        const { data: related } = await (supabase
           .from("ads")
           .select("id, title, description, image_url, additional_image_urls, badge, cashback, category, created_at, approved_at, view_count, favorite_count, contact_phone, location, verified_member, slug")
           .eq("status", "approved")
           .eq("category", data.category)
           .neq("id", data.id)
           .order("approved_at", { ascending: false })
-          .limit(6);
+          .limit(6) as any);
         if (related) setRelatedAds(related as DbAd[]);
 
         // Check favorite status

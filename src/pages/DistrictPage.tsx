@@ -32,12 +32,12 @@ const DistrictPage = () => {
     const fetchAds = async () => {
       if (!district) { setLoading(false); return; }
       setLoading(true);
-      const { data } = await supabase
+      const { data } = await (supabase
         .from("ads")
         .select("id, title, description, image_url, additional_image_urls, badge, cashback, category, created_at, approved_at, view_count, favorite_count, contact_phone, location, verified_member, slug")
         .eq("status", "approved")
         .eq("location", district)
-        .order("approved_at", { ascending: false });
+        .order("approved_at", { ascending: false }) as any);
       if (data) setAds(data);
       setLoading(false);
     };
