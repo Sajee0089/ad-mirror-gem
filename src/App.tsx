@@ -11,6 +11,7 @@ import SavedAds from "./pages/SavedAds";
 import AdminAds from "./pages/AdminAds";
 import AdminRoute from "./components/AdminRoute";
 import ResetPassword from "./pages/ResetPassword";
+import Blogs from "./pages/Blogs";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
