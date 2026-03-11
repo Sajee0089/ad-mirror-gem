@@ -5,10 +5,13 @@ import AdCard from "@/components/AdCard";
 import type { AdType } from "@/components/AdCard";
 import AdDetailModal from "@/components/AdDetailModal";
 import { useEffect, useRef, useState } from "react";
+import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
+import { districts } from "@/data/districts";
+import { getDistrictUrl, getCategoryUrl, categorySlugMap, getAdUrl } from "@/lib/seo";
 
 type DbAd = {
   id: string;
@@ -26,6 +29,7 @@ type DbAd = {
   contact_phone: string | null;
   location: string | null;
   verified_member: boolean;
+  slug: string | null;
 };
 
 const Index = () => {
@@ -59,12 +63,12 @@ const Index = () => {
   }, []);
 
   const fetchAds = async () => {
-    const { data } = await supabase
+    const { data } = await (supabase as any)
       .from("ads")
-      .select("id, title, description, image_url, additional_image_urls, badge, cashback, category, created_at, approved_at, view_count, favorite_count, contact_phone, location, verified_member")
+      .select("id, title, description, image_url, additional_image_urls, badge, cashback, category, created_at, approved_at, view_count, favorite_count, contact_phone, location, verified_member, slug")
       .eq("status", "approved")
       .order("approved_at", { ascending: false, nullsFirst: false });
-    if (data) setDbAds(data as DbAd[]);
+    if (data) setDbAds(data);
   };
 
   useEffect(() => {
@@ -99,6 +103,7 @@ const Index = () => {
     additionalImages: ad.additional_image_urls || [],
     location: ad.location || undefined,
     verified_member: ad.verified_member || false,
+    slug: ad.slug || undefined,
   }));
 
   const allAds = dbAdCards;
@@ -263,17 +268,38 @@ const Index = () => {
             )}
 
             {/* SEO Content */}
-            <footer className="mt-12 border-t border-border pt-8 pb-4 text-muted-foreground text-xs leading-relaxed space-y-3">
+            <footer className="mt-12 border-t border-border pt-8 pb-4 text-muted-foreground text-xs leading-relaxed space-y-4">
               <h2 className="text-sm font-semibold text-foreground">Ads SL - Sri Lanka's Top Free Classified Ads Platform</h2>
               <p>
                 Welcome to Ads SL, the leading SL ads platform for browsing and posting free classified ads across all 25 districts in Sri Lanka. 
                 Whether you're looking for spa services in Colombo, Lanka ads for rooms and rentals, live cam shows, or any other service — 
                 Ads SL connects buyers and sellers across Sri Lanka instantly.
               </p>
-              <p>
-                Browse ads Lanka wide — from Colombo to Kandy, Galle to Jaffna. Post your own Lanka ads for free and reach thousands of Sri Lankan users daily. 
-                Our platform covers categories including spa, wellness, services, electronics, vehicles, real estate, jobs, and live entertainment across Sri Lanka.
-              </p>
+
+              {/* Internal links - Categories */}
+              <div>
+                <h3 className="text-xs font-semibold text-foreground mb-2">Browse by Category</h3>
+                <div className="flex flex-wrap gap-1.5">
+                  {Object.entries(categorySlugMap).map(([cat, slug]) => (
+                    <Link key={cat} to={`/${slug}`} className="px-2 py-1 rounded bg-muted hover:bg-primary/10 hover:text-primary transition-colors">
+                      {cat}
+                    </Link>
+                  ))}
+                </div>
+              </div>
+
+              {/* Internal links - Districts */}
+              <div>
+                <h3 className="text-xs font-semibold text-foreground mb-2">Browse by District</h3>
+                <div className="flex flex-wrap gap-1.5">
+                  {districts.map((d) => (
+                    <Link key={d} to={getDistrictUrl(d)} className="px-2 py-1 rounded bg-muted hover:bg-primary/10 hover:text-primary transition-colors">
+                      {d}
+                    </Link>
+                  ))}
+                </div>
+              </div>
+
               <p className="text-muted-foreground/60">
                 Popular searches: SL ads, spa Sri Lanka, ads Lanka, Lanka ads, live cam show Sri Lanka, classified ads Sri Lanka, free ads SL, Colombo spa, Lankan ads platform
               </p>

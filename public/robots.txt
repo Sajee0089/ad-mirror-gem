@@ -2,3 +2,4 @@ User-agent: *
 Allow: /
 
 Sitemap: https://www.ads-sl.com/sitemap.xml
+Sitemap: https://vlucxspeohjhrhdxkpqb.supabase.co/functions/v1/sitemap

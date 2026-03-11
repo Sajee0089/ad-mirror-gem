@@ -16,6 +16,7 @@ export type AdType = {
   additionalImages?: string[];
   location?: string;
   verified_member?: boolean;
+  slug?: string;
 };
 
 const badgeStyles: Record<string, string> = {

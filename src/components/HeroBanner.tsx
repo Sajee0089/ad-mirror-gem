@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { ShieldCheck, AlertTriangle } from "lucide-react";
 import {
@@ -13,6 +14,7 @@ import {
 } from "@/components/ui/alert-dialog";
 
 const HeroBanner = () => {
+  const navigate = useNavigate();
   const [verifyOpen, setVerifyOpen] = useState(false);
   const [disclaimerOpen, setDisclaimerOpen] = useState(false);
 
@@ -43,7 +45,7 @@ const HeroBanner = () => {
         >
           Agents
         </Button>
-        <Button size="sm" variant="secondary" className="font-medium" onClick={() => window.location.hash = "#/blogs"}>
+        <Button size="sm" variant="secondary" className="font-medium" onClick={() => navigate("/blogs")}>
           Blogs
         </Button>
       </div>

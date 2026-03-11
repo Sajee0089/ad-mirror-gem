@@ -2,17 +2,14 @@
 <html>
   <head>
     <meta charset="utf-8">
-    <title>Redirecting...</title>
+    <title>Ads SL</title>
     <script>
-      // Single Page App redirect for GitHub Pages
-      var pathSegmentsToKeep = 1;
+      // SPA redirect for GitHub Pages (BrowserRouter support)
+      // Encodes the path into a query parameter so index.html can restore it
       var l = window.location;
       l.replace(
         l.protocol + '//' + l.hostname + (l.port ? ':' + l.port : '') +
-        l.pathname.split('/').slice(0, 1 + pathSegmentsToKeep).join('/') + '/#/' +
-        l.pathname.slice(1).split('/').slice(pathSegmentsToKeep).join('/').replace(/&/g, '~and~') +
-        (l.search ? '&' + l.search.slice(1).replace(/&/g, '~and~') : '') +
-        l.hash
+        '/?p=' + encodeURIComponent(l.pathname + l.search + l.hash)
       );
     </script>
   </head>
