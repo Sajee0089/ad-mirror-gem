@@ -208,7 +208,7 @@ const PostAd = () => {
                 mainIndex={mainImageIndex}
                 onMainIndexChange={setMainImageIndex}
               />
-              <Button type="submit" className="w-full" disabled={loading || remaining <= 0}>
+              <Button type="submit" className="w-full" disabled={loading}>
                 {loading ? "Submitting..." : "Submit Ad for Approval"}
               </Button>
             </form>
