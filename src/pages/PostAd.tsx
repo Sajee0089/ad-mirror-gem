@@ -8,7 +8,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { toast } from "sonner";
-import { ArrowLeft, Send, AlertCircle } from "lucide-react";
+import { ArrowLeft, Send } from "lucide-react";
 import MultiImageUpload from "@/components/MultiImageUpload";
 import { districts } from "@/data/districts";
 
@@ -33,7 +33,6 @@ const PostAd = () => {
   const [mainImageIndex, setMainImageIndex] = useState(0);
   const [loading, setLoading] = useState(false);
   const [userId, setUserId] = useState<string | null>(null);
-  const [adsToday, setAdsToday] = useState<number>(0);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -48,13 +47,6 @@ const PostAd = () => {
     return () => subscription.unsubscribe();
   }, [navigate]);
 
-  useEffect(() => {
-    if (userId) {
-      supabase.rpc("count_user_ads_today", { _user_id: userId }).then(({ data }) => {
-        setAdsToday(data ?? 0);
-      });
-    }
-  }, [userId]);
 
   const uploadImage = async (file: File) => {
     const ext = file.name.split(".").pop();
@@ -77,10 +69,6 @@ const PostAd = () => {
     }
     if (!userId) {
       toast.error("You must be logged in");
-      return;
-    }
-    if (adsToday >= 5) {
-      toast.error("You can only post 5 ads per day");
       return;
     }
 
@@ -119,7 +107,7 @@ const PostAd = () => {
     }
   };
 
-  const remaining = 5 - adsToday;
+  
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-background to-primary/10 p-4">
@@ -132,7 +120,7 @@ const PostAd = () => {
           <span className="text-2xl">📱</span>
           <div>
             <p className="text-sm font-medium text-foreground">Please Contact agent before posting ads</p>
-            <p className="text-xs text-muted-foreground mt-0.5">කරුණාකර දැන්වීම් පළකිරීමට පෙර අපව සම්බන්ධ කරගන්න</p>
+            <p className="text-xs text-muted-foreground mt-0.5">කරුණාකර දැන්වීම් පළකිරීමට පෙර අපව සම්බන්ධ කරගන්න, නැතහොත් දැන්වීම පළ නොකරනු ලැබේ.</p>
             <a
               href="https://wa.me/94789663179"
               target="_blank"
@@ -151,14 +139,6 @@ const PostAd = () => {
             <CardDescription>
               Fill in the details to submit your ad for approval
             </CardDescription>
-            <div className="flex items-center gap-2 mt-2 text-sm">
-              <AlertCircle className="w-4 h-4 text-muted-foreground" />
-              <span className="text-muted-foreground">
-                {remaining > 0
-                  ? `You can post ${remaining} more ad${remaining !== 1 ? "s" : ""} today`
-                  : "You've reached the daily limit of 5 ads"}
-              </span>
-            </div>
           </CardHeader>
           <CardContent>
             <form onSubmit={handleSubmit} className="space-y-5">
@@ -228,7 +208,7 @@ const PostAd = () => {
                 mainIndex={mainImageIndex}
                 onMainIndexChange={setMainImageIndex}
               />
-              <Button type="submit" className="w-full" disabled={loading || remaining <= 0}>
+              <Button type="submit" className="w-full" disabled={loading}>
                 {loading ? "Submitting..." : "Submit Ad for Approval"}
               </Button>
             </form>
