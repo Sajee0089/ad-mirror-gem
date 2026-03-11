@@ -120,7 +120,7 @@ const PostAd = () => {
           <span className="text-2xl">📱</span>
           <div>
             <p className="text-sm font-medium text-foreground">Please Contact agent before posting ads</p>
-            <p className="text-xs text-muted-foreground mt-0.5">කරුණාකර දැන්වීම් පළකිරීමට පෙර අපව සම්බන්ධ කරගන්න</p>
+            <p className="text-xs text-muted-foreground mt-0.5">කරුණාකර දැන්වීම් පළකිරීමට පෙර අපව සම්බන්ධ කරගන්න, නැතහොත් දැන්වීම පළ නොකරනු ලැබේ.</p>
             <a
               href="https://wa.me/94789663179"
               target="_blank"
