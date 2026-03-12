@@ -1,85 +1,132 @@
 import Navbar from "@/components/Navbar";
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent } from "@/components/ui/card";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { BookOpen, PenLine, Calendar, ArrowLeft, Sparkles, ImagePlus, X } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
+import { supabase } from "@/integrations/supabase/client";
+import { toast } from "sonner";
+import { Helmet } from "react-helmet-async";
+import { SITE_URL } from "@/lib/seo";
 
 type BlogPost = {
-  id: number;
+  id: string;
   title: string;
-  excerpt: string;
+  slug: string;
+  excerpt: string | null;
   content: string;
   author: string;
-  date: string;
-  image: string;
+  image_url: string | null;
+  created_at: string;
 };
-
-const sampleBlogs: BlogPost[] = [
-  {
-    id: 1,
-    title: "How to Stay Safe While Using Classified Ads",
-    excerpt: "Tips and tricks for safe transactions when buying or selling through online classifieds in Sri Lanka.",
-    content: "Online classified ads have become a popular way to buy and sell goods and services in Sri Lanka. However, it's important to stay safe. Always meet in public places, verify the seller's identity, and never send money in advance. Use our verified member system for added security. Report suspicious ads immediately to help keep the community safe.",
-    author: "Ads SL Team",
-    date: "2026-03-10",
-    image: "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=600&h=400&fit=crop",
-  },
-  {
-    id: 2,
-    title: "Top 5 Districts for Spa & Wellness Services",
-    excerpt: "Discover the most popular districts in Sri Lanka for spa and wellness services on Ads SL.",
-    content: "Sri Lanka is home to a vibrant wellness industry. Colombo leads the way with the highest number of spa listings, followed by Kandy, Galle, Negombo, and Matara. Whether you're looking for traditional Ayurvedic treatments or modern spa experiences, Ads SL connects you with verified providers across all 25 districts.",
-    author: "Ads SL Team",
-    date: "2026-03-08",
-    image: "https://images.unsplash.com/photo-1544161515-4ab6ce6db874?w=600&h=400&fit=crop",
-  },
-  {
-    id: 3,
-    title: "Why Verified Membership Matters",
-    excerpt: "Learn about the benefits of becoming a verified member on Ads SL and how it builds trust.",
-    content: "Verified membership on Ads SL is more than just a badge — it's a mark of trust. Verified members go through an identity check process, ensuring that their ads are legitimate. This helps buyers feel confident and increases the visibility of your listings. Become a verified member today and stand out from the crowd.",
-    author: "Ads SL Team",
-    date: "2026-03-05",
-    image: "https://images.unsplash.com/photo-1553484771-047a44eee27b?w=600&h=400&fit=crop",
-  },
-];
 
 const Blogs = () => {
   const navigate = useNavigate();
-  const [blogs] = useState<BlogPost[]>(sampleBlogs);
-  const [selectedBlog, setSelectedBlog] = useState<BlogPost | null>(null);
+  const [blogs, setBlogs] = useState<BlogPost[]>([]);
+  const [loading, setLoading] = useState(true);
   const [showCreateForm, setShowCreateForm] = useState(false);
   const [newTitle, setNewTitle] = useState("");
   const [newExcerpt, setNewExcerpt] = useState("");
   const [newContent, setNewContent] = useState("");
-  const [newAuthor, setNewAuthor] = useState("");
-  const [newImage, setNewImage] = useState<string | null>(null);
+  const [newAuthor, setNewAuthor] = useState("Ads SL Team");
+  const [newImage, setNewImage] = useState<File | null>(null);
+  const [newImagePreview, setNewImagePreview] = useState<string | null>(null);
+  const [publishing, setPublishing] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    fetchBlogs();
+    checkAdmin();
+  }, []);
+
+  const fetchBlogs = async () => {
+    const { data } = await supabase
+      .from("blog_posts")
+      .select("id, title, slug, excerpt, content, author, image_url, created_at")
+      .order("created_at", { ascending: false });
+    setBlogs(data || []);
+    setLoading(false);
+  };
+
+  const checkAdmin = async () => {
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) return;
+    const { data } = await supabase.rpc("has_role", { _user_id: user.id, _role: "admin" });
+    setIsAdmin(!!data);
+  };
 
   const handleImageSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
-    if (file.size > 5 * 1024 * 1024) return;
+    if (file.size > 5 * 1024 * 1024) {
+      toast.error("Image must be under 5MB");
+      return;
+    }
+    setNewImage(file);
     const reader = new FileReader();
-    reader.onload = () => setNewImage(reader.result as string);
+    reader.onload = () => setNewImagePreview(reader.result as string);
     reader.readAsDataURL(file);
   };
 
-  const handleCreate = () => {
-    setShowCreateForm(false);
-    setNewTitle("");
-    setNewExcerpt("");
-    setNewContent("");
-    setNewAuthor("");
-    setNewImage(null);
+  const handleCreate = async () => {
+    if (!newTitle.trim() || !newContent.trim()) return;
+    setPublishing(true);
+
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) { toast.error("Please log in"); return; }
+
+      let imageUrl: string | null = null;
+      if (newImage) {
+        const ext = newImage.name.split(".").pop();
+        const path = `blog/${Date.now()}.${ext}`;
+        const { error: uploadError } = await supabase.storage
+          .from("ad-images")
+          .upload(path, newImage);
+        if (uploadError) throw uploadError;
+        const { data: urlData } = supabase.storage.from("ad-images").getPublicUrl(path);
+        imageUrl = urlData.publicUrl;
+      }
+
+      const { error } = await supabase.from("blog_posts").insert({
+        title: newTitle.trim(),
+        excerpt: newExcerpt.trim() || null,
+        content: newContent.trim(),
+        author: newAuthor.trim() || "Ads SL Team",
+        image_url: imageUrl,
+        user_id: user.id,
+      });
+
+      if (error) throw error;
+
+      toast.success("Blog post published!");
+      setShowCreateForm(false);
+      setNewTitle("");
+      setNewExcerpt("");
+      setNewContent("");
+      setNewAuthor("Ads SL Team");
+      setNewImage(null);
+      setNewImagePreview(null);
+      fetchBlogs();
+    } catch (err: any) {
+      toast.error(err.message || "Failed to publish");
+    } finally {
+      setPublishing(false);
+    }
   };
 
   return (
     <div className="min-h-screen bg-background">
+      <Helmet>
+        <title>Blog - Tips & Insights | Ads SL</title>
+        <meta name="description" content="Read tips, insights, and stories from Sri Lanka's leading classified ads platform. Stay safe, find the best deals, and learn about Ads SL." />
+        <link rel="canonical" href={`${SITE_URL}/blogs`} />
+      </Helmet>
+
       <Navbar />
 
       {/* Hero section */}
@@ -97,23 +144,14 @@ const Blogs = () => {
               Tips, insights, and stories from Sri Lanka's leading classified ads platform
             </p>
             <div className="flex gap-3 justify-center flex-wrap">
-              <Button
-                variant="secondary"
-                size="sm"
-                onClick={() => navigate("/")}
-                className="gap-1"
-              >
-                <ArrowLeft className="w-4 h-4" />
-                Back to Ads
+              <Button variant="secondary" size="sm" onClick={() => navigate("/")} className="gap-1">
+                <ArrowLeft className="w-4 h-4" /> Back to Ads
               </Button>
-              <Button
-                size="sm"
-                className="bg-accent text-accent-foreground hover:bg-accent/90 gap-1"
-                onClick={() => setShowCreateForm(true)}
-              >
-                <PenLine className="w-4 h-4" />
-                Write a Post
-              </Button>
+              {isAdmin && (
+                <Button size="sm" className="bg-accent text-accent-foreground hover:bg-accent/90 gap-1" onClick={() => setShowCreateForm(true)}>
+                  <PenLine className="w-4 h-4" /> Write a Post
+                </Button>
+              )}
             </div>
           </div>
         </div>
@@ -126,73 +164,50 @@ const Blogs = () => {
           <h2 className="text-xl font-bold text-foreground">Latest Posts</h2>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {blogs.map((blog) => (
-            <Card
-              key={blog.id}
-              className="group cursor-pointer overflow-hidden border-border/60 hover:shadow-lg hover:shadow-primary/10 transition-all duration-300 hover:-translate-y-1"
-              onClick={() => setSelectedBlog(blog)}
-            >
-              <div className="aspect-video overflow-hidden">
-                <img
-                  src={blog.image}
-                  alt={blog.title}
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                />
-              </div>
-              <CardContent className="p-4 space-y-2">
-                <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                  <Calendar className="w-3 h-3" />
-                  {new Date(blog.date).toLocaleDateString("en-US", { year: "numeric", month: "short", day: "numeric" })}
-                </div>
-                <h3 className="font-semibold text-foreground leading-snug line-clamp-2 group-hover:text-primary transition-colors">
-                  {blog.title}
-                </h3>
-                <p className="text-sm text-muted-foreground line-clamp-3">
-                  {blog.excerpt}
-                </p>
-                <p className="text-xs font-medium text-primary pt-1">Read more →</p>
-              </CardContent>
-            </Card>
-          ))}
-        </div>
+        {loading ? (
+          <div className="flex justify-center py-12">
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary" />
+          </div>
+        ) : blogs.length === 0 ? (
+          <p className="text-center text-muted-foreground py-12">No blog posts yet.</p>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {blogs.map((blog) => (
+              <Link key={blog.id} to={`/blog/${blog.slug}`}>
+                <Card className="group cursor-pointer overflow-hidden border-border/60 hover:shadow-lg hover:shadow-primary/10 transition-all duration-300 hover:-translate-y-1 h-full">
+                  {blog.image_url && (
+                    <div className="aspect-video overflow-hidden">
+                      <img src={blog.image_url} alt={blog.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy" />
+                    </div>
+                  )}
+                  <CardContent className="p-4 space-y-2">
+                    <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                      <Calendar className="w-3 h-3" />
+                      {new Date(blog.created_at).toLocaleDateString("en-US", { year: "numeric", month: "short", day: "numeric" })}
+                    </div>
+                    <h3 className="font-semibold text-foreground leading-snug line-clamp-2 group-hover:text-primary transition-colors">
+                      {blog.title}
+                    </h3>
+                    <p className="text-sm text-muted-foreground line-clamp-3">
+                      {blog.excerpt || blog.content.substring(0, 120) + "..."}
+                    </p>
+                    <p className="text-xs font-medium text-primary pt-1">Read more →</p>
+                  </CardContent>
+                </Card>
+              </Link>
+            ))}
+          </div>
+        )}
       </div>
-
-      {/* Blog detail modal */}
-      <Dialog open={!!selectedBlog} onOpenChange={() => setSelectedBlog(null)}>
-        <DialogContent className="sm:max-w-2xl max-h-[85vh] overflow-y-auto">
-          {selectedBlog && (
-            <>
-              <DialogHeader>
-                <DialogTitle className="text-xl leading-snug">{selectedBlog.title}</DialogTitle>
-                <DialogDescription className="flex items-center gap-3 text-sm">
-                  <span>{selectedBlog.author}</span>
-                  <span>•</span>
-                  <span>{new Date(selectedBlog.date).toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" })}</span>
-                </DialogDescription>
-              </DialogHeader>
-              <div className="aspect-video overflow-hidden rounded-lg mt-2">
-                <img src={selectedBlog.image} alt={selectedBlog.title} className="w-full h-full object-cover" />
-              </div>
-              <div className="prose prose-sm max-w-none mt-4 text-foreground leading-relaxed whitespace-pre-wrap">
-                {selectedBlog.content}
-              </div>
-            </>
-          )}
-        </DialogContent>
-      </Dialog>
 
       {/* Create blog post form */}
       <Dialog open={showCreateForm} onOpenChange={setShowCreateForm}>
         <DialogContent className="sm:max-w-lg">
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2">
-              <PenLine className="w-5 h-5 text-primary" />
-              Write a New Blog Post
+              <PenLine className="w-5 h-5 text-primary" /> Write a New Blog Post
             </DialogTitle>
-            <DialogDescription>
-              Share your thoughts and experiences with the Ads SL community.
-            </DialogDescription>
+            <DialogDescription>Share your thoughts with the Ads SL community.</DialogDescription>
           </DialogHeader>
           <div className="space-y-4 mt-2">
             <div>
@@ -205,15 +220,15 @@ const Blogs = () => {
             </div>
             <div>
               <label className="text-sm font-medium text-foreground mb-1 block">Excerpt</label>
-              <Input placeholder="Short summary..." value={newExcerpt} onChange={(e) => setNewExcerpt(e.target.value)} />
+              <Input placeholder="Short summary for SEO..." value={newExcerpt} onChange={(e) => setNewExcerpt(e.target.value)} />
             </div>
             <div>
               <label className="text-sm font-medium text-foreground mb-1 block">Image</label>
               <input type="file" accept="image/*" ref={fileInputRef} onChange={handleImageSelect} className="hidden" />
-              {newImage ? (
+              {newImagePreview ? (
                 <div className="relative w-full aspect-video rounded-lg overflow-hidden border border-border">
-                  <img src={newImage} alt="Preview" className="w-full h-full object-cover" />
-                  <button onClick={() => setNewImage(null)} className="absolute top-2 right-2 bg-background/80 rounded-full p-1">
+                  <img src={newImagePreview} alt="Preview" className="w-full h-full object-cover" />
+                  <button onClick={() => { setNewImage(null); setNewImagePreview(null); }} className="absolute top-2 right-2 bg-background/80 rounded-full p-1">
                     <X className="w-4 h-4" />
                   </button>
                 </div>
@@ -227,8 +242,8 @@ const Blogs = () => {
               <label className="text-sm font-medium text-foreground mb-1 block">Content</label>
               <Textarea placeholder="Write your blog post..." rows={6} value={newContent} onChange={(e) => setNewContent(e.target.value)} />
             </div>
-            <Button className="w-full" onClick={handleCreate} disabled={!newTitle.trim() || !newContent.trim()}>
-              Publish Post
+            <Button className="w-full" onClick={handleCreate} disabled={!newTitle.trim() || !newContent.trim() || publishing}>
+              {publishing ? "Publishing..." : "Publish Post"}
             </Button>
           </div>
         </DialogContent>
