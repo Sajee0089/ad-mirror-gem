@@ -139,24 +139,6 @@ const AdPage = () => {
   const metaTitle = `${ad.title}${ad.location ? ` - ${ad.location}` : ""} | Ads SL`;
   const metaDesc = `${ad.description.slice(0, 150)}... Find ${ad.category} ads in ${ad.location || "Sri Lanka"} on Ads SL.`;
 
-  const relatedAdCards: AdType[] = relatedAds.map((r, i) => ({
-    id: i,
-    dbId: r.id,
-    title: r.title,
-    description: r.description,
-    image: r.image_url || "/placeholder.svg",
-    badge: (r.badge || "nra") as "super" | "vip" | "nra",
-    cashback: r.cashback,
-    likes: String(r.favorite_count || 0),
-    views: String(r.view_count || 0),
-    timeAgo: getTimeAgo(r.approved_at || r.created_at),
-    category: r.category,
-    contact_phone: r.contact_phone || undefined,
-    additionalImages: r.additional_image_urls || [],
-    location: r.location || undefined,
-    verified_member: r.verified_member,
-    slug: r.slug || undefined,
-  }));
 
   return (
     <div className="min-h-screen bg-background">
