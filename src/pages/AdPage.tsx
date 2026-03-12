@@ -73,16 +73,6 @@ const AdPage = () => {
         supabase.rpc("increment_view_count", { _ad_id: data.id });
         setViewCount((v) => v + 1);
 
-        // Fetch related ads (same category, exclude current)
-        const { data: related } = await (supabase as any)
-          .from("ads")
-          .select("id, title, description, image_url, additional_image_urls, badge, cashback, category, created_at, approved_at, view_count, favorite_count, contact_phone, location, verified_member, slug")
-          .eq("status", "approved")
-          .eq("category", data.category)
-          .neq("id", data.id)
-          .order("approved_at", { ascending: false })
-          .limit(6);
-        if (related) setRelatedAds(related as DbAd[]);
 
         // Check favorite status
         const { data: { session } } = await supabase.auth.getSession();
