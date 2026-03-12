@@ -3,7 +3,6 @@ import { useEffect, useState } from "react";
 import { Helmet } from "react-helmet-async";
 import { supabase } from "@/integrations/supabase/client";
 import Navbar from "@/components/Navbar";
-import AdCard from "@/components/AdCard";
 import type { AdType } from "@/components/AdCard";
 import { Button } from "@/components/ui/button";
 import { Eye, Heart, Phone, MessageCircle, MapPin, Tag, ArrowLeft, ChevronRight } from "lucide-react";
@@ -48,7 +47,6 @@ type DbAd = {
 const AdPage = () => {
   const { slug } = useParams<{ slug: string }>();
   const [ad, setAd] = useState<DbAd | null>(null);
-  const [relatedAds, setRelatedAds] = useState<DbAd[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [isFavorited, setIsFavorited] = useState(false);
@@ -74,16 +72,6 @@ const AdPage = () => {
         supabase.rpc("increment_view_count", { _ad_id: data.id });
         setViewCount((v) => v + 1);
 
-        // Fetch related ads (same category, exclude current)
-        const { data: related } = await (supabase as any)
-          .from("ads")
-          .select("id, title, description, image_url, additional_image_urls, badge, cashback, category, created_at, approved_at, view_count, favorite_count, contact_phone, location, verified_member, slug")
-          .eq("status", "approved")
-          .eq("category", data.category)
-          .neq("id", data.id)
-          .order("approved_at", { ascending: false })
-          .limit(6);
-        if (related) setRelatedAds(related as DbAd[]);
 
         // Check favorite status
         const { data: { session } } = await supabase.auth.getSession();
@@ -150,24 +138,6 @@ const AdPage = () => {
   const metaTitle = `${ad.title}${ad.location ? ` - ${ad.location}` : ""} | Ads SL`;
   const metaDesc = `${ad.description.slice(0, 150)}... Find ${ad.category} ads in ${ad.location || "Sri Lanka"} on Ads SL.`;
 
-  const relatedAdCards: AdType[] = relatedAds.map((r, i) => ({
-    id: i,
-    dbId: r.id,
-    title: r.title,
-    description: r.description,
-    image: r.image_url || "/placeholder.svg",
-    badge: (r.badge || "nra") as "super" | "vip" | "nra",
-    cashback: r.cashback,
-    likes: String(r.favorite_count || 0),
-    views: String(r.view_count || 0),
-    timeAgo: getTimeAgo(r.approved_at || r.created_at),
-    category: r.category,
-    contact_phone: r.contact_phone || undefined,
-    additionalImages: r.additional_image_urls || [],
-    location: r.location || undefined,
-    verified_member: r.verified_member,
-    slug: r.slug || undefined,
-  }));
 
   return (
     <div className="min-h-screen bg-background">
@@ -306,19 +276,6 @@ const AdPage = () => {
           </div>
         </div>
 
-        {/* Related Ads */}
-        {relatedAdCards.length > 0 && (
-          <div className="border-t border-border pt-6">
-            <h2 className="font-semibold text-lg text-foreground mb-4">Related Ads</h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              {relatedAdCards.map((ra) => (
-                <Link key={ra.dbId} to={ra.slug ? getAdUrl(ra.slug) : "#"}>
-                  <AdCard ad={ra} />
-                </Link>
-              ))}
-            </div>
-          </div>
-        )}
 
         {/* SEO Footer */}
         <footer className="mt-12 border-t border-border pt-6 pb-4 text-muted-foreground text-xs space-y-2">

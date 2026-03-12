@@ -1,11 +1,11 @@
 import Navbar from "@/components/Navbar";
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent } from "@/components/ui/card";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
-import { BookOpen, PenLine, Calendar, ArrowLeft, Sparkles } from "lucide-react";
+import { BookOpen, PenLine, Calendar, ArrowLeft, Sparkles, ImagePlus, X } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
 type BlogPost = {
@@ -57,14 +57,25 @@ const Blogs = () => {
   const [newExcerpt, setNewExcerpt] = useState("");
   const [newContent, setNewContent] = useState("");
   const [newAuthor, setNewAuthor] = useState("");
+  const [newImage, setNewImage] = useState<string | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const handleImageSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    if (file.size > 5 * 1024 * 1024) return;
+    const reader = new FileReader();
+    reader.onload = () => setNewImage(reader.result as string);
+    reader.readAsDataURL(file);
+  };
 
   const handleCreate = () => {
-    // placeholder — future: save to database
     setShowCreateForm(false);
     setNewTitle("");
     setNewExcerpt("");
     setNewContent("");
     setNewAuthor("");
+    setNewImage(null);
   };
 
   return (
@@ -195,6 +206,22 @@ const Blogs = () => {
             <div>
               <label className="text-sm font-medium text-foreground mb-1 block">Excerpt</label>
               <Input placeholder="Short summary..." value={newExcerpt} onChange={(e) => setNewExcerpt(e.target.value)} />
+            </div>
+            <div>
+              <label className="text-sm font-medium text-foreground mb-1 block">Image</label>
+              <input type="file" accept="image/*" ref={fileInputRef} onChange={handleImageSelect} className="hidden" />
+              {newImage ? (
+                <div className="relative w-full aspect-video rounded-lg overflow-hidden border border-border">
+                  <img src={newImage} alt="Preview" className="w-full h-full object-cover" />
+                  <button onClick={() => setNewImage(null)} className="absolute top-2 right-2 bg-background/80 rounded-full p-1">
+                    <X className="w-4 h-4" />
+                  </button>
+                </div>
+              ) : (
+                <Button type="button" variant="outline" className="w-full gap-2" onClick={() => fileInputRef.current?.click()}>
+                  <ImagePlus className="w-4 h-4" /> Add Cover Image
+                </Button>
+              )}
             </div>
             <div>
               <label className="text-sm font-medium text-foreground mb-1 block">Content</label>
