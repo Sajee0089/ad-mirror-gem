@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { Helmet } from "react-helmet-async";
 import { supabase } from "@/integrations/supabase/client";
 import Navbar from "@/components/Navbar";
-import AdCard from "@/components/AdCard";
+import type { AdType } from "@/components/AdCard";
 import type { AdType } from "@/components/AdCard";
 import { Button } from "@/components/ui/button";
 import { Eye, Heart, Phone, MessageCircle, MapPin, Tag, ArrowLeft, ChevronRight } from "lucide-react";
