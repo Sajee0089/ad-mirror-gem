@@ -134,9 +134,11 @@ const Index = () => {
     setCurrentPage(1);
   }, [selectedCategory, selectedDistrict, searchQuery]);
 
+  const navigate = useNavigate();
+
   const handleAdClick = (ad: AdType) => {
     if (ad.slug) {
-      window.location.href = getAdUrl(ad.slug);
+      navigate(getAdUrl(ad.slug));
     } else {
       setSelectedAd(ad);
       setModalOpen(true);
