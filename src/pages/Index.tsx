@@ -134,9 +134,15 @@ const Index = () => {
     setCurrentPage(1);
   }, [selectedCategory, selectedDistrict, searchQuery]);
 
+  const navigate = (await import("react-router-dom")).useNavigate ? undefined : undefined;
+
   const handleAdClick = (ad: AdType) => {
-    setSelectedAd(ad);
-    setModalOpen(true);
+    if (ad.slug) {
+      window.location.href = getAdUrl(ad.slug);
+    } else {
+      setSelectedAd(ad);
+      setModalOpen(true);
+    }
   };
 
   const getPageNumbers = () => {
