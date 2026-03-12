@@ -48,7 +48,6 @@ type DbAd = {
 const AdPage = () => {
   const { slug } = useParams<{ slug: string }>();
   const [ad, setAd] = useState<DbAd | null>(null);
-  const [relatedAds, setRelatedAds] = useState<DbAd[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [isFavorited, setIsFavorited] = useState(false);
