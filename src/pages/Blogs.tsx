@@ -57,14 +57,25 @@ const Blogs = () => {
   const [newExcerpt, setNewExcerpt] = useState("");
   const [newContent, setNewContent] = useState("");
   const [newAuthor, setNewAuthor] = useState("");
+  const [newImage, setNewImage] = useState<string | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const handleImageSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    if (file.size > 5 * 1024 * 1024) return;
+    const reader = new FileReader();
+    reader.onload = () => setNewImage(reader.result as string);
+    reader.readAsDataURL(file);
+  };
 
   const handleCreate = () => {
-    // placeholder — future: save to database
     setShowCreateForm(false);
     setNewTitle("");
     setNewExcerpt("");
     setNewContent("");
     setNewAuthor("");
+    setNewImage(null);
   };
 
   return (
