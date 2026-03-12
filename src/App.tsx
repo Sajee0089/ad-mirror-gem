@@ -13,6 +13,7 @@ import AdminAds from "./pages/AdminAds";
 import AdminRoute from "./components/AdminRoute";
 import ResetPassword from "./pages/ResetPassword";
 import Blogs from "./pages/Blogs";
+import BlogPost from "./pages/BlogPost";
 import AdPage from "./pages/AdPage";
 import DistrictPage from "./pages/DistrictPage";
 import CategoryPage from "./pages/CategoryPage";
@@ -35,6 +36,7 @@ const App = () => (
             <Route path="/my-ads" element={<MyAds />} />
             <Route path="/saved-ads" element={<SavedAds />} />
             <Route path="/blogs" element={<Blogs />} />
+            <Route path="/blog/:slug" element={<BlogPost />} />
             <Route path="/admin/ads" element={<AdminRoute><AdminAds /></AdminRoute>} />
             {/* SEO pages */}
             <Route path="/ad/:slug" element={<AdPage />} />

@@ -29,12 +29,15 @@ serve(async () => {
   const supabaseKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
   const supabase = createClient(supabaseUrl, supabaseKey);
 
-  // Fetch all approved ad slugs
   const { data: ads } = await supabase
     .from("ads")
     .select("slug, updated_at")
     .eq("status", "approved")
     .not("slug", "is", null);
+
+  const { data: blogPosts } = await supabase
+    .from("blog_posts")
+    .select("slug, updated_at");
 
   const now = new Date().toISOString().split("T")[0];
 
@@ -49,13 +52,26 @@ serve(async () => {
     <lastmod>${now}</lastmod>
   </url>
 
-  <!-- Blogs -->
+  <!-- Blogs listing -->
   <url>
     <loc>${SITE_URL}/blogs</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.6</priority>
+    <changefreq>daily</changefreq>
+    <priority>0.7</priority>
   </url>
 `;
+
+  // Individual blog posts
+  if (blogPosts) {
+    for (const post of blogPosts) {
+      xml += `
+  <url>
+    <loc>${SITE_URL}/blog/${post.slug}</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+    <lastmod>${post.updated_at?.split("T")[0] || now}</lastmod>
+  </url>`;
+    }
+  }
 
   // District pages
   for (const d of districts) {
@@ -77,7 +93,7 @@ serve(async () => {
   </url>`;
   }
 
-  // District + Category combination pages
+  // District + Category
   for (const d of districts) {
     for (const [, catSlug] of Object.entries(categorySlugMap)) {
       xml += `
