@@ -134,8 +134,6 @@ const Index = () => {
     setCurrentPage(1);
   }, [selectedCategory, selectedDistrict, searchQuery]);
 
-  const navigate = (await import("react-router-dom")).useNavigate ? undefined : undefined;
-
   const handleAdClick = (ad: AdType) => {
     if (ad.slug) {
       window.location.href = getAdUrl(ad.slug);
