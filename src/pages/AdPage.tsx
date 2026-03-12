@@ -306,19 +306,6 @@ const AdPage = () => {
           </div>
         </div>
 
-        {/* Related Ads */}
-        {relatedAdCards.length > 0 && (
-          <div className="border-t border-border pt-6">
-            <h2 className="font-semibold text-lg text-foreground mb-4">Related Ads</h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              {relatedAdCards.map((ra) => (
-                <Link key={ra.dbId} to={ra.slug ? getAdUrl(ra.slug) : "#"}>
-                  <AdCard ad={ra} />
-                </Link>
-              ))}
-            </div>
-          </div>
-        )}
 
         {/* SEO Footer */}
         <footer className="mt-12 border-t border-border pt-6 pb-4 text-muted-foreground text-xs space-y-2">
