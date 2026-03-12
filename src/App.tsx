@@ -13,6 +13,7 @@ import AdminAds from "./pages/AdminAds";
 import AdminRoute from "./components/AdminRoute";
 import ResetPassword from "./pages/ResetPassword";
 import Blogs from "./pages/Blogs";
+import BlogPost from "./pages/BlogPost";
 import AdPage from "./pages/AdPage";
 import DistrictPage from "./pages/DistrictPage";
 import CategoryPage from "./pages/CategoryPage";
