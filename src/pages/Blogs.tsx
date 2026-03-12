@@ -208,6 +208,22 @@ const Blogs = () => {
               <Input placeholder="Short summary..." value={newExcerpt} onChange={(e) => setNewExcerpt(e.target.value)} />
             </div>
             <div>
+              <label className="text-sm font-medium text-foreground mb-1 block">Image</label>
+              <input type="file" accept="image/*" ref={fileInputRef} onChange={handleImageSelect} className="hidden" />
+              {newImage ? (
+                <div className="relative w-full aspect-video rounded-lg overflow-hidden border border-border">
+                  <img src={newImage} alt="Preview" className="w-full h-full object-cover" />
+                  <button onClick={() => setNewImage(null)} className="absolute top-2 right-2 bg-background/80 rounded-full p-1">
+                    <X className="w-4 h-4" />
+                  </button>
+                </div>
+              ) : (
+                <Button type="button" variant="outline" className="w-full gap-2" onClick={() => fileInputRef.current?.click()}>
+                  <ImagePlus className="w-4 h-4" /> Add Cover Image
+                </Button>
+              )}
+            </div>
+            <div>
               <label className="text-sm font-medium text-foreground mb-1 block">Content</label>
               <Textarea placeholder="Write your blog post..." rows={6} value={newContent} onChange={(e) => setNewContent(e.target.value)} />
             </div>
