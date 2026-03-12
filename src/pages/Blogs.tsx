@@ -94,12 +94,13 @@ const Blogs = () => {
 
       const { error } = await supabase.from("blog_posts").insert({
         title: newTitle.trim(),
+        slug: "temp-" + Date.now(),
         excerpt: newExcerpt.trim() || null,
         content: newContent.trim(),
         author: newAuthor.trim() || "Ads SL Team",
         image_url: imageUrl,
         user_id: user.id,
-      });
+      } as any);
 
       if (error) throw error;
 
