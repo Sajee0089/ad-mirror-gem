@@ -3,10 +3,9 @@ import { useEffect, useState } from "react";
 import { Helmet } from "react-helmet-async";
 import { supabase } from "@/integrations/supabase/client";
 import Navbar from "@/components/Navbar";
-import type { AdType } from "@/components/AdCard";
 import { Button } from "@/components/ui/button";
-import { Eye, Heart, Phone, MessageCircle, MapPin, Tag, ArrowLeft, ChevronRight } from "lucide-react";
-import { SITE_URL, getDistrictUrl, getCategoryUrl, getAdUrl } from "@/lib/seo";
+import { Eye, Heart, Phone, MessageCircle, MapPin, Tag, ChevronRight } from "lucide-react";
+import { SITE_URL, getDistrictUrl, getCategoryUrl, getAdUrl, categorySlugMap, districtToSlug } from "@/lib/seo";
 
 const badgeStyles: Record<string, string> = {
   super: "bg-badge-super text-primary-foreground",
@@ -21,8 +20,7 @@ function getTimeAgo(dateStr: string): string {
   if (mins < 60) return `${mins}m ago`;
   const hours = Math.floor(mins / 60);
   if (hours < 24) return `${hours}h ago`;
-  const days = Math.floor(hours / 24);
-  return `${days}d ago`;
+  return `${Math.floor(hours / 24)}d ago`;
 }
 
 type DbAd = {
@@ -67,13 +65,9 @@ const AdPage = () => {
         setAd(data as DbAd);
         setFavCount(data.favorite_count || 0);
         setViewCount(data.view_count || 0);
-
-        // Increment view count
         supabase.rpc("increment_view_count", { _ad_id: data.id });
         setViewCount((v) => v + 1);
 
-
-        // Check favorite status
         const { data: { session } } = await supabase.auth.getSession();
         if (session?.user) {
           const { data: fav } = await supabase
@@ -135,9 +129,35 @@ const AdPage = () => {
   const allImages = [ad.image_url, ...(ad.additional_image_urls || [])].filter(Boolean) as string[];
   const phone = ad.contact_phone || null;
   const canonicalUrl = `${SITE_URL}/ad/${ad.slug}`;
-  const metaTitle = `${ad.title}${ad.location ? ` - ${ad.location}` : ""} | Ads SL`;
-  const metaDesc = `${ad.description.slice(0, 150)}... Find ${ad.category} ads in ${ad.location || "Sri Lanka"} on Ads SL.`;
+  const metaTitle = `${ad.title}${ad.location ? ` in ${ad.location}` : ""} - ${ad.category} | Ads SL`;
+  const metaDesc = ad.description.slice(0, 150) + `... Find ${ad.category} ads in ${ad.location || "Sri Lanka"} on Ads SL.`;
 
+  // Structured data
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    name: ad.title,
+    description: ad.description.slice(0, 500),
+    image: allImages[0] || `${SITE_URL}/logo.png`,
+    url: canonicalUrl,
+    brand: { "@type": "Organization", name: "Ads SL" },
+    offers: {
+      "@type": "Offer",
+      availability: "https://schema.org/InStock",
+      areaServed: { "@type": "Place", name: ad.location || "Sri Lanka" },
+    },
+  };
+
+  const breadcrumbJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "Home", item: SITE_URL },
+      ...(ad.location ? [{ "@type": "ListItem", position: 2, name: ad.location, item: `${SITE_URL}/district/${districtToSlug(ad.location)}` }] : []),
+      { "@type": "ListItem", position: ad.location ? 3 : 2, name: ad.category, item: `${SITE_URL}/${categorySlugMap[ad.category] || ad.category}` },
+      { "@type": "ListItem", position: ad.location ? 4 : 3, name: ad.title },
+    ],
+  };
 
   return (
     <div className="min-h-screen bg-background">
@@ -150,6 +170,9 @@ const AdPage = () => {
         <meta property="og:url" content={canonicalUrl} />
         {allImages[0] && <meta property="og:image" content={allImages[0]} />}
         <meta property="og:type" content="article" />
+        <meta property="og:site_name" content="Ads SL" />
+        <script type="application/ld+json">{JSON.stringify(jsonLd)}</script>
+        <script type="application/ld+json">{JSON.stringify(breadcrumbJsonLd)}</script>
       </Helmet>
 
       <Navbar />
@@ -174,7 +197,7 @@ const AdPage = () => {
         <div className="w-full rounded-lg overflow-hidden bg-muted aspect-video mb-4">
           <img
             src={allImages[selectedImageIndex] || "/placeholder.svg"}
-            alt={ad.title}
+            alt={`${ad.title} - ${ad.category} ad in ${ad.location || "Sri Lanka"}`}
             className="w-full h-full object-cover"
           />
         </div>
@@ -188,7 +211,7 @@ const AdPage = () => {
                 onClick={() => setSelectedImageIndex(i)}
                 className={`w-16 h-16 sm:w-20 sm:h-20 rounded-md overflow-hidden border-2 shrink-0 ${i === selectedImageIndex ? "border-primary" : "border-border"}`}
               >
-                <img src={img} alt={`Photo ${i + 1}`} className="w-full h-full object-cover" />
+                <img src={img} alt={`${ad.title} photo ${i + 1}`} className="w-full h-full object-cover" />
               </button>
             ))}
           </div>
@@ -267,15 +290,17 @@ const AdPage = () => {
             </Link>
             {ad.location && (
               <Link
-                to={`/${ad.location.toLowerCase().replace(/\s+/g, "-")}/${getCategoryUrl(ad.category).slice(1)}`}
+                to={`/${districtToSlug(ad.location)}/${categorySlugMap[ad.category] || ad.category}`}
                 className="text-sm px-3 py-1.5 rounded-full bg-secondary text-secondary-foreground hover:bg-secondary/80"
               >
                 {ad.category} in {ad.location}
               </Link>
             )}
+            <Link to="/blogs" className="text-sm px-3 py-1.5 rounded-full bg-secondary text-secondary-foreground hover:bg-secondary/80">
+              Read Blog
+            </Link>
           </div>
         </div>
-
 
         {/* SEO Footer */}
         <footer className="mt-12 border-t border-border pt-6 pb-4 text-muted-foreground text-xs space-y-2">
@@ -283,6 +308,13 @@ const AdPage = () => {
             Find the best {ad.category} ads in {ad.location || "Sri Lanka"} on Ads SL.
             Browse classified ads across all 25 districts including Colombo, Kandy, Galle, and more.
           </p>
+          <div className="flex flex-wrap gap-2 mt-2">
+            <Link to="/about" className="hover:text-primary">About Us</Link>
+            <span>·</span>
+            <Link to="/privacy" className="hover:text-primary">Privacy Policy</Link>
+            <span>·</span>
+            <Link to="/terms" className="hover:text-primary">Terms of Service</Link>
+          </div>
         </footer>
       </div>
     </div>

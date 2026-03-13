@@ -52,15 +52,30 @@ serve(async () => {
     <lastmod>${now}</lastmod>
   </url>
 
-  <!-- Blogs listing -->
+  <!-- Static pages -->
   <url>
     <loc>${SITE_URL}/blogs</loc>
     <changefreq>daily</changefreq>
     <priority>0.7</priority>
   </url>
+  <url>
+    <loc>${SITE_URL}/about</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>${SITE_URL}/privacy</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.3</priority>
+  </url>
+  <url>
+    <loc>${SITE_URL}/terms</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.3</priority>
+  </url>
 `;
 
-  // Individual blog posts
+  // Blog posts
   if (blogPosts) {
     for (const post of blogPosts) {
       xml += `

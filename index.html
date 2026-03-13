@@ -2,12 +2,18 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" href="/logo.png" type="image/png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Ads SL | SL Ads, Spa Sri Lanka, Lanka Ads, Ads Lanka - Free Classified Ads</title>
-    <meta name="description" content="Ads SL - Sri Lanka's top classified ads platform. Post free SL ads, spa services, Lanka ads, live cam shows & more. Browse ads across all 25 districts in Sri Lanka.">
+
+    <!-- Favicon - Multiple sizes for Google & browsers -->
+    <link rel="icon" href="/logo.png" type="image/png" sizes="48x48" />
+    <link rel="icon" href="/logo.png" type="image/png" sizes="96x96" />
+    <link rel="icon" href="/logo.png" type="image/png" sizes="192x192" />
+    <link rel="apple-touch-icon" href="/logo.png" />
+
+    <title>Ads SL | Free Classified Ads Sri Lanka - SL Ads, Spa, Lanka Ads</title>
+    <meta name="description" content="Ads SL - Sri Lanka's #1 free classified ads platform. Post free SL ads, find spa services, personal ads, rooms & more across all 25 districts. Browse Lanka ads today.">
     <meta name="author" content="Ads SL" />
-    <meta name="keywords" content="spa, SL ads, ads Lanka, Lanka ads, live cam show, Sri Lanka ads, spa Sri Lanka, classified ads Sri Lanka, free ads SL, Colombo ads, spa services Sri Lanka, Lankan ads, ads in Sri Lanka, buy sell Sri Lanka, services Sri Lanka, rooms Sri Lanka, live shows Sri Lanka" />
+    <meta name="keywords" content="free classified ads sri lanka, spa ads sri lanka, sl ads, ads lanka, lanka ads, post free ads sri lanka, classified ads colombo, spa sri lanka, live cam show, rooms sri lanka, buy sell sri lanka" />
     <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
     <meta name="geo.region" content="LK" />
     <meta name="geo.country" content="Sri Lanka" />
@@ -17,48 +23,66 @@
 
     <!-- Open Graph -->
     <meta property="og:type" content="website" />
-    <meta property="og:site_name" content="Ads SL - Lanka Ads" />
-    <meta property="og:title" content="Ads SL | SL Ads, Spa Sri Lanka, Lanka Ads - Free Classified Ads" />
-    <meta property="og:description" content="Sri Lanka's #1 ads platform. Post free SL ads, spa services, Lanka ads, live cam shows & more across all 25 districts." />
+    <meta property="og:site_name" content="Ads SL" />
+    <meta property="og:title" content="Ads SL | Free Classified Ads Sri Lanka - Post Ads Free" />
+    <meta property="og:description" content="Sri Lanka's #1 free classified ads platform. Post free ads, find spa services, personal ads, rooms & more across all 25 districts." />
     <meta property="og:url" content="https://www.ads-sl.com/" />
-    <meta property="og:image" content="https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/33eb2ff4-911b-4bcd-890f-755e640160d4/id-preview-d6182adb--2a06d225-3579-459b-97e0-b6604067371c.lovable.app-1772362093170.png" />
-    <meta property="og:image:width" content="1200" />
-    <meta property="og:image:height" content="630" />
+    <meta property="og:image" content="https://www.ads-sl.com/logo.png" />
+    <meta property="og:image:width" content="512" />
+    <meta property="og:image:height" content="512" />
     <meta property="og:locale" content="en_LK" />
 
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="Ads SL | SL Ads, Spa Sri Lanka, Lanka Ads - Free Classified Ads" />
-    <meta name="twitter:description" content="Sri Lanka's #1 ads platform. Post free SL ads, spa services, Lanka ads, live cam shows & more across all 25 districts." />
-    <meta name="twitter:image" content="https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/33eb2ff4-911b-4bcd-890f-755e640160d4/id-preview-d6182adb--2a06d225-3579-459b-97e0-b6604067371c.lovable.app-1772362093170.png" />
+    <meta name="twitter:title" content="Ads SL | Free Classified Ads Sri Lanka" />
+    <meta name="twitter:description" content="Sri Lanka's #1 free classified ads platform. Post free ads across all 25 districts." />
+    <meta name="twitter:image" content="https://www.ads-sl.com/logo.png" />
 
-    <!-- JSON-LD Structured Data -->
+    <!-- JSON-LD: Organization + WebSite -->
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
-      "@type": "WebSite",
-      "name": "Ads SL",
-      "alternateName": ["SL Ads", "Lanka Ads", "Ads Lanka"],
-      "url": "https://ad-mirror-gem.lovable.app/",
-      "description": "Sri Lanka's top free classified ads platform for spa services, live cam shows, and more across all 25 districts",
-      "inLanguage": "en",
-      "potentialAction": {
-        "@type": "SearchAction",
-        "target": "https://ad-mirror-gem.lovable.app/?q={search_term_string}",
-        "query-input": "required name=search_term_string"
-      },
-      "areaServed": {
-        "@type": "Country",
-        "name": "Sri Lanka",
-        "alternateName": "Lanka"
-      }
+      "@graph": [
+        {
+          "@type": "Organization",
+          "@id": "https://www.ads-sl.com/#organization",
+          "name": "Ads SL",
+          "alternateName": ["SL Ads", "Lanka Ads", "Ads Lanka"],
+          "url": "https://www.ads-sl.com",
+          "logo": {
+            "@type": "ImageObject",
+            "url": "https://www.ads-sl.com/logo.png",
+            "width": 512,
+            "height": 512
+          },
+          "description": "Sri Lanka's leading free classified ads platform",
+          "areaServed": {
+            "@type": "Country",
+            "name": "Sri Lanka"
+          },
+          "sameAs": []
+        },
+        {
+          "@type": "WebSite",
+          "@id": "https://www.ads-sl.com/#website",
+          "name": "Ads SL",
+          "url": "https://www.ads-sl.com",
+          "publisher": { "@id": "https://www.ads-sl.com/#organization" },
+          "inLanguage": "en",
+          "potentialAction": {
+            "@type": "SearchAction",
+            "target": "https://www.ads-sl.com/?q={search_term_string}",
+            "query-input": "required name=search_term_string"
+          }
+        }
+      ]
     }
     </script>
   </head>
 
   <body>
     <script>
-      // SPA redirect handler for GitHub Pages (restores path from 404.html redirect)
+      // SPA redirect handler for GitHub Pages
       (function(l) {
         if (l.search) {
           var q = {};
