@@ -17,6 +17,9 @@ import BlogPost from "./pages/BlogPost";
 import AdPage from "./pages/AdPage";
 import DistrictPage from "./pages/DistrictPage";
 import CategoryPage from "./pages/CategoryPage";
+import About from "./pages/About";
+import Privacy from "./pages/Privacy";
+import Terms from "./pages/Terms";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -37,6 +40,9 @@ const App = () => (
             <Route path="/saved-ads" element={<SavedAds />} />
             <Route path="/blogs" element={<Blogs />} />
             <Route path="/blog/:slug" element={<BlogPost />} />
+            <Route path="/about" element={<About />} />
+            <Route path="/privacy" element={<Privacy />} />
+            <Route path="/terms" element={<Terms />} />
             <Route path="/admin/ads" element={<AdminRoute><AdminAds /></AdminRoute>} />
             {/* SEO pages */}
             <Route path="/ad/:slug" element={<AdPage />} />

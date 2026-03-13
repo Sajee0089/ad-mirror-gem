@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent } from "@/components/ui/card";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
-import { BookOpen, PenLine, Calendar, ArrowLeft, Sparkles, ImagePlus, X } from "lucide-react";
+import { BookOpen, PenLine, Calendar, ArrowLeft, Sparkles, ImagePlus, X, Trash2 } from "lucide-react";
 import { useNavigate, Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
@@ -78,7 +78,11 @@ const Blogs = () => {
 
     try {
       const { data: { user } } = await supabase.auth.getUser();
-      if (!user) { toast.error("Please log in"); return; }
+      if (!user) {
+        toast.error("Please log in");
+        setPublishing(false);
+        return;
+      }
 
       let imageUrl: string | null = null;
       if (newImage) {
@@ -86,7 +90,7 @@ const Blogs = () => {
         const path = `blog/${Date.now()}.${ext}`;
         const { error: uploadError } = await supabase.storage
           .from("ad-images")
-          .upload(path, newImage);
+          .upload(path, newImage, { contentType: newImage.type });
         if (uploadError) throw uploadError;
         const { data: urlData } = supabase.storage.from("ad-images").getPublicUrl(path);
         imageUrl = urlData.publicUrl;
@@ -94,7 +98,6 @@ const Blogs = () => {
 
       const { error } = await supabase.from("blog_posts").insert({
         title: newTitle.trim(),
-        slug: "temp-" + Date.now(),
         excerpt: newExcerpt.trim() || null,
         content: newContent.trim(),
         author: newAuthor.trim() || "Ads SL Team",
@@ -112,20 +115,57 @@ const Blogs = () => {
       setNewAuthor("Ads SL Team");
       setNewImage(null);
       setNewImagePreview(null);
+      if (fileInputRef.current) fileInputRef.current.value = "";
       fetchBlogs();
     } catch (err: any) {
+      console.error("Blog publish error:", err);
       toast.error(err.message || "Failed to publish");
     } finally {
       setPublishing(false);
     }
   };
 
+  const handleDelete = async (blogId: string, e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (!confirm("Are you sure you want to delete this blog post?")) return;
+    const { error } = await supabase.from("blog_posts").delete().eq("id", blogId);
+    if (error) {
+      toast.error("Failed to delete blog post");
+    } else {
+      toast.success("Blog post deleted");
+      setBlogs((prev) => prev.filter((b) => b.id !== blogId));
+    }
+  };
+
+  const blogListJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    name: "Ads SL Blog",
+    description: "Tips, insights, and stories from Sri Lanka's leading classified ads platform.",
+    url: `${SITE_URL}/blogs`,
+    mainEntity: {
+      "@type": "ItemList",
+      itemListElement: blogs.map((blog, i) => ({
+        "@type": "ListItem",
+        position: i + 1,
+        url: `${SITE_URL}/blog/${blog.slug}`,
+        name: blog.title,
+      })),
+    },
+  };
+
   return (
     <div className="min-h-screen bg-background">
       <Helmet>
-        <title>Blog - Tips & Insights | Ads SL</title>
-        <meta name="description" content="Read tips, insights, and stories from Sri Lanka's leading classified ads platform. Stay safe, find the best deals, and learn about Ads SL." />
+        <title>Blog - Tips & Insights for Classified Ads Sri Lanka | Ads SL</title>
+        <meta name="description" content="Read tips, insights, and stories about classified ads in Sri Lanka. Learn how to post free ads, stay safe online, and find the best deals on Ads SL." />
         <link rel="canonical" href={`${SITE_URL}/blogs`} />
+        <meta property="og:title" content="Blog - Tips & Insights | Ads SL" />
+        <meta property="og:description" content="Tips, insights, and stories from Sri Lanka's leading classified ads platform." />
+        <meta property="og:url" content={`${SITE_URL}/blogs`} />
+        <meta property="og:type" content="website" />
+        <script type="application/ld+json">{JSON.stringify(blogListJsonLd)}</script>
       </Helmet>
 
       <Navbar />
@@ -174,8 +214,8 @@ const Blogs = () => {
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {blogs.map((blog) => (
-              <Link key={blog.id} to={`/blog/${blog.slug}`}>
-                <Card className="group cursor-pointer overflow-hidden border-border/60 hover:shadow-lg hover:shadow-primary/10 transition-all duration-300 hover:-translate-y-1 h-full">
+              <Link key={blog.id} to={`/blog/${blog.slug}`} className="relative group">
+                <Card className="cursor-pointer overflow-hidden border-border/60 hover:shadow-lg hover:shadow-primary/10 transition-all duration-300 hover:-translate-y-1 h-full">
                   {blog.image_url && (
                     <div className="aspect-video overflow-hidden">
                       <img src={blog.image_url} alt={blog.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy" />
@@ -195,6 +235,15 @@ const Blogs = () => {
                     <p className="text-xs font-medium text-primary pt-1">Read more →</p>
                   </CardContent>
                 </Card>
+                {isAdmin && (
+                  <button
+                    onClick={(e) => handleDelete(blog.id, e)}
+                    className="absolute top-2 right-2 z-10 bg-destructive text-destructive-foreground rounded-full p-1.5 opacity-0 group-hover:opacity-100 transition-opacity shadow-md"
+                    title="Delete blog post"
+                  >
+                    <Trash2 className="w-4 h-4" />
+                  </button>
+                )}
               </Link>
             ))}
           </div>
@@ -203,7 +252,7 @@ const Blogs = () => {
 
       {/* Create blog post form */}
       <Dialog open={showCreateForm} onOpenChange={setShowCreateForm}>
-        <DialogContent className="sm:max-w-lg">
+        <DialogContent className="sm:max-w-lg max-h-[90vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2">
               <PenLine className="w-5 h-5 text-primary" /> Write a New Blog Post
@@ -224,12 +273,12 @@ const Blogs = () => {
               <Input placeholder="Short summary for SEO..." value={newExcerpt} onChange={(e) => setNewExcerpt(e.target.value)} />
             </div>
             <div>
-              <label className="text-sm font-medium text-foreground mb-1 block">Image</label>
+              <label className="text-sm font-medium text-foreground mb-1 block">Cover Image</label>
               <input type="file" accept="image/*" ref={fileInputRef} onChange={handleImageSelect} className="hidden" />
               {newImagePreview ? (
                 <div className="relative w-full aspect-video rounded-lg overflow-hidden border border-border">
                   <img src={newImagePreview} alt="Preview" className="w-full h-full object-cover" />
-                  <button onClick={() => { setNewImage(null); setNewImagePreview(null); }} className="absolute top-2 right-2 bg-background/80 rounded-full p-1">
+                  <button onClick={() => { setNewImage(null); setNewImagePreview(null); if (fileInputRef.current) fileInputRef.current.value = ""; }} className="absolute top-2 right-2 bg-background/80 rounded-full p-1">
                     <X className="w-4 h-4" />
                   </button>
                 </div>

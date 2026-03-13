@@ -8,7 +8,7 @@ import type { AdType } from "@/components/AdCard";
 import { Button } from "@/components/ui/button";
 import { ChevronLeft, ChevronRight, MapPin } from "lucide-react";
 import { districts } from "@/data/districts";
-import { SITE_URL, districtFromSlug, districtToSlug, categorySlugMap, getDistrictUrl, getCategoryUrl, getAdUrl } from "@/lib/seo";
+import { SITE_URL, districtFromSlug, districtToSlug, categorySlugMap, getDistrictUrl, getAdUrl } from "@/lib/seo";
 
 function getTimeAgo(dateStr: string): string {
   const diff = Date.now() - new Date(dateStr).getTime();
@@ -20,13 +20,25 @@ function getTimeAgo(dateStr: string): string {
   return `${Math.floor(hours / 24)}d ago`;
 }
 
+const districtDescriptions: Record<string, string> = {
+  "Colombo": "Colombo, Sri Lanka's commercial capital, is the most active city for classified ads. Find spa services, personal ads, rooms, and more in Colombo on Ads SL.",
+  "Kandy": "Kandy, the cultural capital of Sri Lanka, offers a vibrant classified ads market. Browse ads for services, rooms, and personal listings in Kandy.",
+  "Galle": "Galle, known for its historic fort and coastal beauty, is a growing market for classified ads. Find services and listings in Galle on Ads SL.",
+  "Jaffna": "Jaffna, the capital of Sri Lanka's Northern Province, has a growing online presence. Browse classified ads and services in Jaffna.",
+  "Matara": "Matara is a major city in southern Sri Lanka. Find classified ads for services, rooms, and personal listings in Matara.",
+  "Kurunegala": "Kurunegala is a key city in North Western Province. Browse free classified ads and services in Kurunegala on Ads SL.",
+  "Gampaha": "Gampaha district, adjacent to Colombo, is one of the most populated areas. Find classified ads for various services in Gampaha.",
+  "Badulla": "Badulla, in the hill country of Sri Lanka, offers unique local services. Browse classified ads in Badulla on Ads SL.",
+  "Ratnapura": "Ratnapura, the gem capital of Sri Lanka, offers classified ads for various services. Browse listings in Ratnapura.",
+};
+
 const DistrictPage = () => {
   const { district: districtSlug } = useParams<{ district: string }>();
   const district = districtFromSlug(districtSlug || "", districts);
   const [ads, setAds] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
-  const ADS_PER_PAGE = 12;
+  const ADS_PER_PAGE = 15;
 
   useEffect(() => {
     const fetchAds = async () => {
@@ -79,11 +91,57 @@ const DistrictPage = () => {
     slug: ad.slug || undefined,
   }));
 
-  const metaTitle = `${district} Ads - Classified Ads in ${district}, Sri Lanka | Ads SL`;
-  const metaDesc = `Browse ${ads.length}+ classified ads in ${district}, Sri Lanka. Find spa services, personal ads, rooms & more in ${district} on Ads SL.`;
+  const metaTitle = `Free Classified Ads ${district} - Ads in ${district}, Sri Lanka | Ads SL`;
+  const metaDesc = `Browse ${ads.length}+ free classified ads in ${district}, Sri Lanka. Find spa services, personal ads, rooms & more in ${district}. Post free ads on Ads SL.`;
   const canonicalUrl = `${SITE_URL}/district/${districtSlug}`;
+  const districtDesc = districtDescriptions[district] || `Browse free classified ads in ${district}, Sri Lanka. Find services, rooms, personal ads, and more on Ads SL.`;
 
   const categories = Object.keys(categorySlugMap);
+
+  // Structured data
+  const breadcrumbJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "Home", item: SITE_URL },
+      { "@type": "ListItem", position: 2, name: district },
+    ],
+  };
+
+  const itemListJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    name: metaTitle,
+    description: metaDesc,
+    url: canonicalUrl,
+    mainEntity: {
+      "@type": "ItemList",
+      numberOfItems: ads.length,
+      itemListElement: paginatedAds.slice(0, 10).map((ad: any, i: number) => ({
+        "@type": "ListItem",
+        position: i + 1,
+        url: ad.slug ? `${SITE_URL}/ad/${ad.slug}` : canonicalUrl,
+        name: ad.title,
+      })),
+    },
+  };
+
+  const faqJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: [
+      {
+        "@type": "Question",
+        name: `How to post free ads in ${district}?`,
+        acceptedAnswer: { "@type": "Answer", text: `Create a free account on Ads SL, click 'Post Ad', select ${district} as your location, fill in your ad details, and submit. Your ad will be reviewed and published within hours.` },
+      },
+      {
+        "@type": "Question",
+        name: `What types of ads can I find in ${district}?`,
+        acceptedAnswer: { "@type": "Answer", text: `You can find spa services, personal ads, rooms for rent, marriage proposals, toys & accessories, and more in ${district} on Ads SL.` },
+      },
+    ],
+  };
 
   return (
     <div className="min-h-screen bg-background">
@@ -94,6 +152,11 @@ const DistrictPage = () => {
         <meta property="og:title" content={metaTitle} />
         <meta property="og:description" content={metaDesc} />
         <meta property="og:url" content={canonicalUrl} />
+        <meta property="og:type" content="website" />
+        <meta property="og:site_name" content="Ads SL" />
+        <script type="application/ld+json">{JSON.stringify(breadcrumbJsonLd)}</script>
+        <script type="application/ld+json">{JSON.stringify(itemListJsonLd)}</script>
+        <script type="application/ld+json">{JSON.stringify(faqJsonLd)}</script>
       </Helmet>
 
       <Navbar />
@@ -108,20 +171,19 @@ const DistrictPage = () => {
 
         <div className="flex items-center gap-2 mb-2">
           <MapPin className="w-6 h-6 text-primary" />
-          <h1 className="text-2xl sm:text-3xl font-bold text-foreground">Ads in {district}</h1>
+          <h1 className="text-2xl sm:text-3xl font-bold text-foreground">Free Ads in {district}</h1>
         </div>
-        <p className="text-muted-foreground mb-6">
-          Browse all classified ads in {district}, Sri Lanka. {ads.length} ads available.
+        <p className="text-muted-foreground mb-4">
+          {districtDesc}
+        </p>
+        <p className="text-sm text-muted-foreground mb-6">
+          {ads.length} classified ads available in {district}.
         </p>
 
-        {/* Category links for this district */}
+        {/* Category links */}
         <div className="flex flex-wrap gap-2 mb-6">
           {categories.map((cat) => (
-            <Link
-              key={cat}
-              to={`/${districtToSlug(district)}/${categorySlugMap[cat]}`}
-              className="text-xs px-3 py-1.5 rounded-full bg-secondary text-secondary-foreground hover:bg-secondary/80 transition-colors"
-            >
+            <Link key={cat} to={`/${districtToSlug(district)}/${categorySlugMap[cat]}`} className="text-xs px-3 py-1.5 rounded-full bg-secondary text-secondary-foreground hover:bg-secondary/80 transition-colors">
               {cat} in {district}
             </Link>
           ))}
@@ -133,6 +195,9 @@ const DistrictPage = () => {
           <p className="text-center text-muted-foreground py-12">No ads found in {district}.</p>
         ) : (
           <>
+            {totalPages > 1 && (
+              <p className="text-sm text-muted-foreground mb-3">Page {currentPage} of {totalPages}</p>
+            )}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               {adCards.map((ad) => (
                 <Link key={ad.dbId} to={ad.slug ? getAdUrl(ad.slug) : "#"}>
@@ -155,6 +220,21 @@ const DistrictPage = () => {
           </>
         )}
 
+        {/* FAQ */}
+        <div className="border-t border-border pt-6 mt-8">
+          <h2 className="font-semibold text-lg text-foreground mb-4">Frequently Asked Questions</h2>
+          <div className="space-y-4">
+            <div>
+              <h3 className="font-medium text-foreground text-sm">How to post free ads in {district}?</h3>
+              <p className="text-sm text-muted-foreground mt-1">Create a free account on Ads SL, click 'Post Ad', select {district} as your location, add details and images, and submit. Your ad will be reviewed and published.</p>
+            </div>
+            <div>
+              <h3 className="font-medium text-foreground text-sm">What types of ads can I find in {district}?</h3>
+              <p className="text-sm text-muted-foreground mt-1">You can find spa services, personal ads, rooms for rent, marriage proposals, live cam shows, toys & accessories, and more in {district} on Ads SL.</p>
+            </div>
+          </div>
+        </div>
+
         {/* Other districts */}
         <div className="border-t border-border pt-6 mt-8">
           <h2 className="font-semibold text-lg text-foreground mb-3">Browse Other Districts</h2>
@@ -168,7 +248,16 @@ const DistrictPage = () => {
         </div>
 
         <footer className="mt-8 border-t border-border pt-6 pb-4 text-muted-foreground text-xs space-y-2">
-          <p>Ads SL is Sri Lanka's leading classified ads platform. Find the best services and deals in {district} and across all 25 districts.</p>
+          <p>Ads SL is Sri Lanka's leading free classified ads platform. Find the best services, deals, and listings in {district} and across all 25 districts of Sri Lanka.</p>
+          <div className="flex flex-wrap gap-2 mt-2">
+            <Link to="/about" className="hover:text-primary">About Us</Link>
+            <span>·</span>
+            <Link to="/privacy" className="hover:text-primary">Privacy Policy</Link>
+            <span>·</span>
+            <Link to="/terms" className="hover:text-primary">Terms</Link>
+            <span>·</span>
+            <Link to="/blogs" className="hover:text-primary">Blog</Link>
+          </div>
         </footer>
       </div>
     </div>
