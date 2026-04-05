@@ -223,17 +223,25 @@ const Index = () => {
               {totalPages > 1 && (
                 <p className="text-center text-xs text-muted-foreground pt-2">Page {currentPage} of {totalPages}</p>
               )}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 p-3 sm:p-4">
-              {paginatedAds.map((ad) => (
-                <AdCard
-                  key={`${ad.category}-${ad.id}`}
-                  ad={ad}
-                  onClick={() => handleAdClick(ad)}
-                  isAdmin={isAdmin}
-                  onDelete={handleDeleteAd}
-                />
-              ))}
-              </div>
+              {loading ? (
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 p-3 sm:p-4">
+                  {Array.from({ length: 6 }).map((_, i) => (
+                    <div key={i} className="rounded-lg bg-muted animate-pulse h-48" />
+                  ))}
+                </div>
+              ) : (
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 p-3 sm:p-4">
+                {paginatedAds.map((ad) => (
+                  <AdCard
+                    key={`${ad.category}-${ad.id}`}
+                    ad={ad}
+                    onClick={() => handleAdClick(ad)}
+                    isAdmin={isAdmin}
+                    onDelete={handleDeleteAd}
+                  />
+                ))}
+                </div>
+              )}
             </div>
 
             {filteredAds.length === 0 && (
