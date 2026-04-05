@@ -30,19 +30,36 @@ Deno.serve(async (req) => {
 
     let updated = 0;
     for (const ad of ads) {
-      // Random views between 100 and 500 for each ad
+      // Random views between 100 and 500
       const randomViews = Math.floor(Math.random() * 401) + 100;
+      // Random favorites between 1 and 5
+      const randomFavorites = Math.floor(Math.random() * 5) + 1;
 
-      const { error: updateError } = await supabase.rpc("increment_view_count_by", {
+      const { error: updateError } = await supabase
+        .from("ads")
+        .update({
+          view_count: undefined, // handled by rpc
+          favorite_count: undefined, // handled by rpc
+        })
+        .eq("id", ad.id);
+
+      // Use RPC for views
+      await supabase.rpc("increment_view_count_by", {
         _ad_id: ad.id,
         _count: randomViews,
       });
 
-      if (!updateError) updated++;
+      // Use RPC for favorites
+      await supabase.rpc("increment_favorite_count_by", {
+        _ad_id: ad.id,
+        _count: randomFavorites,
+      });
+
+      updated++;
     }
 
     return new Response(
-      JSON.stringify({ message: `Boosted ${updated} ads with random views` }),
+      JSON.stringify({ message: `Boosted ${updated} ads with random views and favorites` }),
       { headers: { ...corsHeaders, "Content-Type": "application/json" } }
     );
   } catch (err) {
