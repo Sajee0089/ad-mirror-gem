@@ -258,6 +258,10 @@ export type Database = {
         }
         Returns: boolean
       }
+      increment_favorite_count_by: {
+        Args: { _ad_id: string; _count: number }
+        Returns: undefined
+      }
       increment_view_count: { Args: { _ad_id: string }; Returns: undefined }
       increment_view_count_by: {
         Args: { _ad_id: string; _count: number }
