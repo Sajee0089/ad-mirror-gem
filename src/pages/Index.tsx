@@ -11,7 +11,8 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { districts } from "@/data/districts";
-import { getDistrictUrl, getCategoryUrl, categorySlugMap, getAdUrl } from "@/lib/seo";
+import { getDistrictUrl, getCategoryUrl, categorySlugMap, getAdUrl, SITE_URL } from "@/lib/seo";
+import { Helmet } from "react-helmet-async";
 
 type DbAd = {
   id: string;
@@ -170,8 +171,27 @@ const Index = () => {
     return pages;
   };
 
+  const websiteJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "ads-sl.com",
+    "url": SITE_URL,
+    "description": "Sri Lanka's classified ads platform",
+    "potentialAction": {
+      "@type": "SearchAction",
+      "target": `${SITE_URL}/?q={search_term_string}`,
+      "query-input": "required name=search_term_string"
+    }
+  };
+
   return (
     <div className="min-h-screen bg-background">
+      <Helmet>
+        <title>Ads SL | Free Classified Ads Sri Lanka - SL Ads, Spa, Lanka Ads</title>
+        <meta name="description" content="Ads SL - Sri Lanka's #1 free classified ads platform. Post free SL ads, find spa services, personal ads, rooms & more across all 25 districts." />
+        <link rel="canonical" href={`${SITE_URL}/`} />
+        <script type="application/ld+json">{JSON.stringify(websiteJsonLd)}</script>
+      </Helmet>
       <Navbar />
       <div className="max-w-7xl mx-auto px-2 sm:px-4 py-3 sm:py-4">
         <div className="flex flex-col md:flex-row gap-3 sm:gap-4">

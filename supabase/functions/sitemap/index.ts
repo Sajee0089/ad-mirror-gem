@@ -33,7 +33,8 @@ serve(async () => {
     .from("ads")
     .select("slug, updated_at")
     .eq("status", "approved")
-    .not("slug", "is", null);
+    .not("slug", "is", null)
+    .limit(5000);
 
   const { data: blogPosts } = await supabase
     .from("blog_posts")
@@ -56,7 +57,7 @@ serve(async () => {
   <url>
     <loc>${SITE_URL}/blogs</loc>
     <changefreq>daily</changefreq>
-    <priority>0.7</priority>
+    <priority>0.6</priority>
   </url>
   <url>
     <loc>${SITE_URL}/about</loc>
@@ -120,7 +121,7 @@ serve(async () => {
     }
   }
 
-  // Individual ad pages
+  // Individual ad pages (max 5000)
   if (ads) {
     for (const ad of ads) {
       xml += `
@@ -139,7 +140,7 @@ serve(async () => {
   return new Response(xml, {
     headers: {
       "Content-Type": "application/xml",
-      "Cache-Control": "public, max-age=3600",
+      "Cache-Control": "public, s-maxage=3600, max-age=3600",
     },
   });
 });
