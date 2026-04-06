@@ -11,7 +11,8 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { districts } from "@/data/districts";
-import { getDistrictUrl, getCategoryUrl, categorySlugMap, getAdUrl } from "@/lib/seo";
+import { getDistrictUrl, getCategoryUrl, categorySlugMap, getAdUrl, SITE_URL } from "@/lib/seo";
+import { Helmet } from "react-helmet-async";
 
 type DbAd = {
   id: string;
