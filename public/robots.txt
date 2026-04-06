@@ -6,3 +6,5 @@ Disallow: /reset-password
 Disallow: /my-ads
 Disallow: /saved-ads
 Disallow: /post-ad
+
+Sitemap: https://www.ads-sl.com/sitemap.xml
