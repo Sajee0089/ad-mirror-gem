@@ -6,9 +6,3 @@ Disallow: /reset-password
 Disallow: /my-ads
 Disallow: /saved-ads
 Disallow: /post-ad
-
-Sitemap: https://www.ads-sl.com/sitemap.xml
-Sitemap: https://vlucxspeohjhrhdxkpqb.supabase.co/functions/v1/sitemap
-
-# Crawl-delay for polite crawling
-Crawl-delay: 2
