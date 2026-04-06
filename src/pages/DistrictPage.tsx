@@ -91,8 +91,8 @@ const DistrictPage = () => {
     slug: ad.slug || undefined,
   }));
 
-  const metaTitle = `Free Classified Ads ${district} - Ads in ${district}, Sri Lanka | Ads SL`;
-  const metaDesc = `Browse ${ads.length}+ free classified ads in ${district}, Sri Lanka. Find spa services, personal ads, rooms & more in ${district}. Post free ads on Ads SL.`;
+  const metaTitle = `${district} Classified Ads Sri Lanka | ads-sl.com`;
+  const metaDesc = `Browse classified ads in ${district}, Sri Lanka. Find spa services, personal ads, rooms for rent and more.`;
   const canonicalUrl = `${SITE_URL}/district/${districtSlug}`;
   const districtDesc = districtDescriptions[district] || `Browse free classified ads in ${district}, Sri Lanka. Find services, rooms, personal ads, and more on Ads SL.`;
 
@@ -154,6 +154,7 @@ const DistrictPage = () => {
         <meta property="og:url" content={canonicalUrl} />
         <meta property="og:type" content="website" />
         <meta property="og:site_name" content="Ads SL" />
+        <meta property="og:image" content={`${SITE_URL}/logo.png`} />
         <script type="application/ld+json">{JSON.stringify(breadcrumbJsonLd)}</script>
         <script type="application/ld+json">{JSON.stringify(itemListJsonLd)}</script>
         <script type="application/ld+json">{JSON.stringify(faqJsonLd)}</script>

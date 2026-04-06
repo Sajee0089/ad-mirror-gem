@@ -41,7 +41,117 @@ const categoryFaqs: Record<string, { q: string; a: string }[]> = {
     { q: "How to find rooms for rent in Sri Lanka?", a: "Browse the Rooms category on Ads SL. Filter by district like Colombo, Kandy, or Galle to find rooms near you." },
     { q: "How to post a room rental ad?", a: "Create a free account on Ads SL, post your room listing with photos, location, and contact details." },
   ],
+  "Marriage Proposals": [
+    { q: "How to find marriage proposals in Sri Lanka?", a: "Browse the Marriage Proposals category on Ads SL to find genuine proposals from all 25 districts across Sri Lanka." },
+    { q: "Is it safe to browse marriage proposals online?", a: "Ads SL moderates all listings. We recommend verifying identities and meeting in safe, public places." },
+  ],
+  "Toys & Accessories": [
+    { q: "How to buy adult toys in Sri Lanka?", a: "Browse the Toys & Accessories category on Ads SL. Contact sellers directly for discreet purchasing and delivery options." },
+  ],
+  "Shemale Personal": [
+    { q: "How to find shemale personal ads in Sri Lanka?", a: "Browse the Shemale Personal category on Ads SL. Filter by district to find listings near you." },
+  ],
 };
+
+// Unique SEO titles and descriptions per category
+const categorySeo: Record<string, { title: string; description: string }> = {
+  "Spa": {
+    title: "Spa Services & Massage Ads in Sri Lanka | ads-sl.com",
+    description: "Find verified spa and massage services across Sri Lanka. Browse ads from Colombo, Kandy, Galle and all districts.",
+  },
+  "Girls Personal": {
+    title: "Girls Personal Ads Sri Lanka | ads-sl.com",
+    description: "Browse girls personal ads in Sri Lanka. Find local listings from all 25 districts.",
+  },
+  "Boys Personal": {
+    title: "Boys Personal Ads Sri Lanka | ads-sl.com",
+    description: "Browse boys personal ads in Sri Lanka. Find local listings from all 25 districts.",
+  },
+  "Live Cam": {
+    title: "Live Cam Ads Sri Lanka | ads-sl.com",
+    description: "Browse live cam ads in Sri Lanka.",
+  },
+  "Shemale Personal": {
+    title: "Shemale Personal Ads Sri Lanka | ads-sl.com",
+    description: "Browse shemale personal ads in Sri Lanka from all districts.",
+  },
+  "Marriage Proposals": {
+    title: "Marriage Proposals Sri Lanka | ads-sl.com",
+    description: "Find genuine marriage proposals in Sri Lanka. Browse listings from all districts.",
+  },
+  "Rooms": {
+    title: "Rooms for Rent Sri Lanka | ads-sl.com",
+    description: "Find rooms for rent across Sri Lanka. Browse listings from Colombo, Kandy, Galle and all districts.",
+  },
+  "Toys & Accessories": {
+    title: "Adult Toys & Accessories Sri Lanka | ads-sl.com",
+    description: "Buy adult toys and accessories in Sri Lanka. Discreet delivery available.",
+  },
+};
+
+// SEO content sections per category
+const categorySeoContent: Record<string, { heading: string; paragraphs: string[] }> = {
+  "Spa": {
+    heading: "Spa Services in Sri Lanka",
+    paragraphs: [
+      "Sri Lanka offers a wide range of spa and massage services across all major cities. From traditional Ayurvedic treatments to modern wellness centers, you'll find the perfect relaxation option on Ads SL.",
+      "Whether you're in Colombo, Kandy, Galle, or any other district, our platform connects you with verified spa service providers. Browse listings with photos, reviews, and contact details.",
+      "Post your spa service ad for free and reach thousands of potential customers across Sri Lanka. Join the growing community of wellness providers on Ads SL.",
+    ],
+  },
+  "Girls Personal": {
+    heading: "Girls Personal Ads in Sri Lanka",
+    paragraphs: [
+      "Find girls personal ads from all 25 districts of Sri Lanka. Our platform features verified listings with photos and contact details for genuine connections.",
+      "Ads SL is Sri Lanka's most trusted platform for personal classified ads. All listings are moderated for safety and authenticity.",
+    ],
+  },
+  "Boys Personal": {
+    heading: "Boys Personal Ads in Sri Lanka",
+    paragraphs: [
+      "Browse boys personal ads from across Sri Lanka. Find genuine listings from Colombo, Kandy, Galle, and all other districts.",
+      "Post your personal ad for free on Ads SL and connect with people across Sri Lanka. All ads are reviewed by our moderation team.",
+    ],
+  },
+  "Live Cam": {
+    heading: "Live Cam Ads in Sri Lanka",
+    paragraphs: [
+      "Discover live cam performers and services across Sri Lanka. Browse ads with details and contact information on Ads SL.",
+      "Post your live cam ad for free and reach an audience across all 25 districts of Sri Lanka.",
+    ],
+  },
+  "Shemale Personal": {
+    heading: "Shemale Personal Ads in Sri Lanka",
+    paragraphs: [
+      "Browse shemale personal ads from all districts in Sri Lanka. Find verified listings with photos and contact details on Ads SL.",
+      "Post your personal ad for free and connect with people across Sri Lanka's 25 districts.",
+    ],
+  },
+  "Marriage Proposals": {
+    heading: "Marriage Proposals in Sri Lanka",
+    paragraphs: [
+      "Find genuine marriage proposals from all 25 districts of Sri Lanka. Ads SL connects families and individuals looking for meaningful relationships.",
+      "Post your marriage proposal for free on Ads SL. Our moderation team ensures all listings are genuine and respectful.",
+    ],
+  },
+  "Rooms": {
+    heading: "Rooms for Rent in Sri Lanka",
+    paragraphs: [
+      "Find rooms for rent across Sri Lanka including Colombo, Kandy, Galle, Matara, and all 25 districts. Browse listings with photos, prices, and location details.",
+      "Whether you're looking for a furnished room, a shared apartment, or a studio, Ads SL has the widest selection of room rental ads in Sri Lanka.",
+      "List your room for rent for free on Ads SL and reach thousands of potential tenants across the country.",
+    ],
+  },
+  "Toys & Accessories": {
+    heading: "Adult Toys & Accessories in Sri Lanka",
+    paragraphs: [
+      "Browse adult toys and accessories available in Sri Lanka. Find products with discreet delivery options from sellers across the country.",
+      "Post your product listing for free on Ads SL and reach buyers across all 25 districts of Sri Lanka.",
+    ],
+  },
+};
+
+const topDistricts = ["Colombo", "Gampaha", "Kandy", "Galle", "Matara", "Kurunegala", "Jaffna", "Kalutara", "Badulla", "Ratnapura"];
 
 const CategoryPage = () => {
   const { category: catSlug, district: districtSlug } = useParams<{ category: string; district?: string }>();
@@ -103,19 +213,22 @@ const CategoryPage = () => {
     slug: ad.slug || undefined,
   }));
 
+  // Use unique SEO titles/descriptions
+  const seo = categorySeo[category];
   const pageTitle = district
-    ? `${category} Ads in ${district} - Free ${category} Classified Ads | Ads SL`
-    : `${category} Ads Sri Lanka - Free ${category} Classified Ads | Ads SL`;
+    ? `${category} Ads in ${district}, Sri Lanka | ads-sl.com`
+    : (seo?.title || `${category} Ads Sri Lanka | ads-sl.com`);
   const pageDesc = district
-    ? `Browse ${ads.length}+ free ${category} ads in ${district}, Sri Lanka. Find verified ${category.toLowerCase()} services in ${district}. Post free ads on Ads SL.`
-    : `Browse ${ads.length}+ free ${category} classified ads across Sri Lanka. Find the best ${category.toLowerCase()} services. Post your ad free on Ads SL.`;
+    ? `Browse ${category.toLowerCase()} ads in ${district}, Sri Lanka. Find verified ${category.toLowerCase()} services in ${district}. Post free ads on ads-sl.com.`
+    : (seo?.description || `Browse ${category.toLowerCase()} classified ads across Sri Lanka. Find the best ${category.toLowerCase()} services on ads-sl.com.`);
   const canonicalUrl = district
     ? `${SITE_URL}/${districtToSlug(district)}/${catSlug}`
     : `${SITE_URL}/${catSlug}`;
 
   const faqs = categoryFaqs[category] || [];
+  const seoContent = categorySeoContent[category];
 
-  // Structured data
+  // Structured data - ItemList
   const itemListJsonLd = {
     "@context": "https://schema.org",
     "@type": "CollectionPage",
@@ -165,6 +278,7 @@ const CategoryPage = () => {
         <meta property="og:url" content={canonicalUrl} />
         <meta property="og:type" content="website" />
         <meta property="og:site_name" content="Ads SL" />
+        <meta property="og:image" content={`${SITE_URL}/logo.png`} />
         <script type="application/ld+json">{JSON.stringify(itemListJsonLd)}</script>
         <script type="application/ld+json">{JSON.stringify(breadcrumbJsonLd)}</script>
         {faqJsonLd && <script type="application/ld+json">{JSON.stringify(faqJsonLd)}</script>}
@@ -253,6 +367,26 @@ const CategoryPage = () => {
               </div>
             )}
           </>
+        )}
+
+        {/* SEO Content Section */}
+        {seoContent && (
+          <div className="border-t border-border pt-6 mt-8">
+            <h2 className="font-semibold text-lg text-foreground mb-3">{seoContent.heading}</h2>
+            {seoContent.paragraphs.map((p, i) => (
+              <p key={i} className="text-sm text-muted-foreground mb-3 leading-relaxed">{p}</p>
+            ))}
+            <div className="mt-4">
+              <h3 className="text-sm font-semibold text-foreground mb-2">Top Districts for {category}</h3>
+              <div className="flex flex-wrap gap-2">
+                {topDistricts.map((d) => (
+                  <Link key={d} to={`/${districtToSlug(d)}/${catSlug}`} className="text-xs px-3 py-1.5 rounded-full bg-muted text-muted-foreground hover:bg-primary/10 hover:text-primary transition-colors">
+                    {d}
+                  </Link>
+                ))}
+              </div>
+            </div>
+          </div>
         )}
 
         {/* FAQ Section */}
