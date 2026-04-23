@@ -194,9 +194,10 @@ const Index = () => {
   const websiteJsonLd = {
     "@context": "https://schema.org",
     "@type": "WebSite",
-    "name": "ads-sl.com",
+    "name": "Ads SL",
+    "alternateName": ["SL Ads", "Ada SL", "Srilankan Ads", "Srilankan Spa", "Spa Ada", "SL Spa Ada", "Lanka Ads"],
     "url": SITE_URL,
-    "description": "Sri Lanka's classified ads platform",
+    "description": "Sri Lanka's #1 classified ads platform for SL ads, ada sl, spa ada, srilankan spa and srilankan ads.",
     "potentialAction": {
       "@type": "SearchAction",
       "target": `${SITE_URL}/?q={search_term_string}`,
@@ -207,8 +208,9 @@ const Index = () => {
   return (
     <div className="min-h-screen bg-background">
       <Helmet>
-        <title>Ads SL | Free Classified Ads Sri Lanka - SL Ads, Spa, Lanka Ads</title>
-        <meta name="description" content="Ads SL - Sri Lanka's #1 free classified ads platform. Post free SL ads, find spa services, personal ads, rooms & more across all 25 districts." />
+        <title>Ads SL | SL Ads, Spa Ada, Srilankan Spa & Classified Ads Sri Lanka</title>
+        <meta name="description" content="Ads SL - Sri Lanka's #1 free classified ads platform. Browse SL ads, ada sl, spa ada, srilankan spa & srilankan ads. Post free ads across all 25 districts including Colombo, Kandy & Galle." />
+        <meta name="keywords" content="sl ads, ada sl, spa ada, sl spa ada, srilankan spa, srilankan ads, spa, free classified ads sri lanka, lanka ads, ads lanka" />
         <link rel="canonical" href={`${SITE_URL}/`} />
         <script type="application/ld+json">{JSON.stringify(websiteJsonLd)}</script>
       </Helmet>
@@ -332,11 +334,15 @@ const Index = () => {
 
             {/* SEO Content */}
             <footer className="mt-12 border-t border-border pt-8 pb-4 text-muted-foreground text-xs leading-relaxed space-y-4">
-              <h2 className="text-sm font-semibold text-foreground">Ads SL - Sri Lanka's Top Free Classified Ads Platform</h2>
+              <h2 className="text-sm font-semibold text-foreground">SL Ads & Srilankan Spa Ada – Sri Lanka's #1 Free Classified Platform</h2>
               <p>
-                Welcome to Ads SL, the leading SL ads platform for browsing and posting free classified ads across all 25 districts in Sri Lanka. 
-                Whether you're looking for spa services in Colombo, Lanka ads for rooms and rentals, live cam shows, or any other service — 
+                Welcome to Ads SL (also known as <strong>Ada SL</strong>), the leading <strong>SL ads</strong> platform for browsing and posting free classified ads across all 25 districts in Sri Lanka.
+                Whether you're searching for <strong>spa ada</strong> in Colombo, <strong>srilankan spa</strong> services in Kandy or Galle, <strong>srilankan ads</strong> for rooms and rentals, live cam shows, or personal listings —
                 Ads SL connects buyers and sellers across Sri Lanka instantly.
+              </p>
+              <p>
+                Our platform features verified <strong>sl spa ada</strong> providers, genuine personal ads, and trusted marriage proposals from every district.
+                Post your free ad today and reach thousands of users browsing <strong>ada sl</strong>, <strong>srilankan ads</strong>, and <strong>spa ada</strong> listings every day.
               </p>
 
               {/* Internal links - Categories */}
@@ -363,9 +369,22 @@ const Index = () => {
                 </div>
               </div>
 
-              <p className="text-muted-foreground/60">
-                Popular searches: SL ads, spa Sri Lanka, ads Lanka, Lanka ads, live cam show Sri Lanka, classified ads Sri Lanka, free ads SL, Colombo spa, Lankan ads platform
-              </p>
+              <div>
+                <h3 className="text-xs font-semibold text-foreground mb-2">Popular Searches</h3>
+                <div className="flex flex-wrap gap-1.5">
+                  <Link to="/spa-ads" className="px-2 py-1 rounded bg-muted hover:bg-primary/10 hover:text-primary transition-colors">SL ads</Link>
+                  <Link to="/spa-ads" className="px-2 py-1 rounded bg-muted hover:bg-primary/10 hover:text-primary transition-colors">Spa ada</Link>
+                  <Link to="/spa-ads" className="px-2 py-1 rounded bg-muted hover:bg-primary/10 hover:text-primary transition-colors">SL spa ada</Link>
+                  <Link to="/spa-ads" className="px-2 py-1 rounded bg-muted hover:bg-primary/10 hover:text-primary transition-colors">Srilankan spa</Link>
+                  <Link to="/" className="px-2 py-1 rounded bg-muted hover:bg-primary/10 hover:text-primary transition-colors">Srilankan ads</Link>
+                  <Link to="/" className="px-2 py-1 rounded bg-muted hover:bg-primary/10 hover:text-primary transition-colors">Ada SL</Link>
+                  <Link to="/district/colombo" className="px-2 py-1 rounded bg-muted hover:bg-primary/10 hover:text-primary transition-colors">Colombo spa</Link>
+                  <Link to="/district/kandy" className="px-2 py-1 rounded bg-muted hover:bg-primary/10 hover:text-primary transition-colors">Kandy ads</Link>
+                  <Link to="/district/galle" className="px-2 py-1 rounded bg-muted hover:bg-primary/10 hover:text-primary transition-colors">Galle spa</Link>
+                  <Link to="/live-cam-ads" className="px-2 py-1 rounded bg-muted hover:bg-primary/10 hover:text-primary transition-colors">Live cam Sri Lanka</Link>
+                  <Link to="/rooms-ads" className="px-2 py-1 rounded bg-muted hover:bg-primary/10 hover:text-primary transition-colors">Rooms Sri Lanka</Link>
+                </div>
+              </div>
             </footer>
           </main>
         </div>
