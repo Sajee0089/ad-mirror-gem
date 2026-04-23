@@ -1,4 +1,5 @@
 import { ThumbsUp, Eye, MapPin, Trash2 } from "lucide-react";
+import { formatCount } from "@/lib/utils";
 
 export type AdType = {
   id: number | string;
@@ -86,11 +87,11 @@ const AdCard = ({ ad, onClick, isAdmin, onDelete }: { ad: AdType; onClick?: () =
               )}
               <span className="flex items-center gap-1">
                 <ThumbsUp className="w-3 h-3" />
-                {ad.likes}
+                {formatCount(ad.likes)}
               </span>
               <span className="flex items-center gap-1">
                 <Eye className="w-3 h-3" />
-                {ad.views}
+                {formatCount(ad.views)}
               </span>
             </div>
             <span>{ad.timeAgo}</span>
