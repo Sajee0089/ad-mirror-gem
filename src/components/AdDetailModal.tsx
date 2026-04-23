@@ -141,11 +141,11 @@ const AdDetailContent = ({ ad, onClose }: { ad: AdType; onClose: () => void }) =
           className="flex items-center gap-1 hover:text-primary transition-colors"
         >
           <Heart className={`w-4 h-4 ${isFavorited ? "fill-primary text-primary" : ""}`} />
-          {favCount}
+          {formatCount(favCount)}
         </button>
         <span className="flex items-center gap-1">
           <Eye className="w-4 h-4" />
-          {viewCount}
+          {formatCount(viewCount)}
         </span>
         <span className="ml-auto text-xs">{ad.timeAgo}</span>
       </div>
