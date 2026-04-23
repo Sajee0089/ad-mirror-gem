@@ -91,10 +91,17 @@ const DistrictPage = () => {
     slug: ad.slug || undefined,
   }));
 
-  const metaTitle = `${district} Classified Ads Sri Lanka | ads-sl.com`;
-  const metaDesc = `Browse classified ads in ${district}, Sri Lanka. Find spa services, personal ads, rooms for rent and more.`;
+  const topSpaDistricts = ["Colombo", "Kandy", "Galle", "Negombo", "Gampaha"];
+  const isTopSpa = topSpaDistricts.includes(district);
+  const metaTitle = isTopSpa
+    ? `Srilankan Ads in ${district} | Spa Ada ${district} & SL Ads – ads-sl.com`
+    : `Srilankan Ads in ${district} | SL Ads & Classifieds – ads-sl.com`;
+  const metaDesc = isTopSpa
+    ? `Browse srilankan ads, spa ada ${district}, srilankan spa and sl ads in ${district}, Sri Lanka. Find verified personal ads, rooms & services on Ads SL.`
+    : `Browse srilankan ads and sl ads in ${district}, Sri Lanka. Find spa services, personal ads, rooms for rent and more on Ads SL (Ada SL).`;
   const canonicalUrl = `${SITE_URL}/district/${districtSlug}`;
-  const districtDesc = districtDescriptions[district] || `Browse free classified ads in ${district}, Sri Lanka. Find services, rooms, personal ads, and more on Ads SL.`;
+  const baseDistrictDesc = districtDescriptions[district] || `Browse free classified ads in ${district}, Sri Lanka. Find services, rooms, personal ads, and more on Ads SL.`;
+  const districtDesc = `${baseDistrictDesc} Looking for srilankan spa, spa ada or ada sl listings in ${district}? Ads SL is your trusted local source.`;
 
   const categories = Object.keys(categorySlugMap);
 

@@ -22,9 +22,10 @@ function getTimeAgo(dateStr: string): string {
 
 const categoryFaqs: Record<string, { q: string; a: string }[]> = {
   "Spa": [
-    { q: "How to find spa services in Sri Lanka?", a: "Browse Ads SL's Spa category to find verified spa services across all 25 districts. Filter by your city to find nearby spas." },
-    { q: "Is it free to post spa ads on Ads SL?", a: "Yes! Posting classified ads on Ads SL is completely free. Create an account and post your spa service ad in minutes." },
-    { q: "How to verify spa service providers?", a: "Look for the 'Verified Member' badge on Ads SL. Verified members have been authenticated by our team for added trust." },
+    { q: "How to find spa ada / srilankan spa services in Sri Lanka?", a: "Browse Ads SL's Spa category to find verified spa ada and srilankan spa services across all 25 districts. Filter by your city — Colombo, Kandy, Galle or others — to find the closest sl spa ada providers." },
+    { q: "Is it free to post spa ada ads on Ads SL?", a: "Yes! Posting spa ada and srilankan spa classified ads on Ads SL is completely free. Create an account and post your sl spa ada listing in minutes." },
+    { q: "How to verify srilankan spa service providers?", a: "Look for the 'Verified Member' badge on Ads SL. Verified spa ada members have been authenticated by our team for added trust." },
+    { q: "Where can I find srilankan spa near me?", a: "Use the district filter on Ads SL to instantly find srilankan spa and spa ada listings in your area — Colombo, Gampaha, Kandy, Galle, Negombo and all 25 Sri Lankan districts are covered." },
   ],
   "Live Cam": [
     { q: "How do live cam shows work on Ads SL?", a: "Browse live cam ads on Ads SL to find performers. Contact them directly via WhatsApp or phone for details." },
@@ -56,16 +57,16 @@ const categoryFaqs: Record<string, { q: string; a: string }[]> = {
 // Unique SEO titles and descriptions per category
 const categorySeo: Record<string, { title: string; description: string }> = {
   "Spa": {
-    title: "Spa Services & Massage Ads in Sri Lanka | ads-sl.com",
-    description: "Find verified spa and massage services across Sri Lanka. Browse ads from Colombo, Kandy, Galle and all districts.",
+    title: "Spa Ada Sri Lanka | Srilankan Spa & SL Spa Ads – ads-sl.com",
+    description: "Find verified spa ada, srilankan spa & sl spa ada services across Sri Lanka. Browse spa ads from Colombo, Kandy, Galle and all 25 districts on Ads SL.",
   },
   "Girls Personal": {
-    title: "Girls Personal Ads Sri Lanka | ads-sl.com",
-    description: "Browse girls personal ads in Sri Lanka. Find local listings from all 25 districts.",
+    title: "Girls Personal Ads Sri Lanka | Srilankan Personal Ads – ads-sl.com",
+    description: "Browse girls personal ads, srilankan ads and ada sl listings from all 25 Sri Lankan districts.",
   },
   "Boys Personal": {
-    title: "Boys Personal Ads Sri Lanka | ads-sl.com",
-    description: "Browse boys personal ads in Sri Lanka. Find local listings from all 25 districts.",
+    title: "Boys Personal Ads Sri Lanka | Srilankan Personal Ads – ads-sl.com",
+    description: "Browse boys personal ads, srilankan ads and ada sl listings from all 25 Sri Lankan districts.",
   },
   "Live Cam": {
     title: "Live Cam Ads Sri Lanka | ads-sl.com",
@@ -92,24 +93,25 @@ const categorySeo: Record<string, { title: string; description: string }> = {
 // SEO content sections per category
 const categorySeoContent: Record<string, { heading: string; paragraphs: string[] }> = {
   "Spa": {
-    heading: "Spa Services in Sri Lanka",
+    heading: "Spa Ada Sri Lanka – Srilankan Spa & SL Spa Services",
     paragraphs: [
-      "Sri Lanka offers a wide range of spa and massage services across all major cities. From traditional Ayurvedic treatments to modern wellness centers, you'll find the perfect relaxation option on Ads SL.",
-      "Whether you're in Colombo, Kandy, Galle, or any other district, our platform connects you with verified spa service providers. Browse listings with photos, reviews, and contact details.",
-      "Post your spa service ad for free and reach thousands of potential customers across Sri Lanka. Join the growing community of wellness providers on Ads SL.",
+      "Sri Lanka offers a wide range of spa ada and srilankan spa services across all major cities. From traditional Ayurvedic treatments to modern wellness centers, you'll find the perfect sl spa ada option on Ads SL (also known as Ada SL).",
+      "Whether you're searching for spa ada in Colombo, srilankan spa in Kandy, or wellness services in Galle, Negombo, Matara or any other district, our platform connects you with verified spa providers. Browse listings with photos, badges and direct contact details.",
+      "Looking for srilankan spa near me? Use the district filter to instantly view sl spa ada listings in your area. Every spa ada listing on Ads SL is moderated for safety and authenticity.",
+      "Post your spa ada service ad for free and reach thousands of customers searching srilankan spa, sl ads and ada sl every day. Join Sri Lanka's largest community of spa providers on Ads SL.",
     ],
   },
   "Girls Personal": {
     heading: "Girls Personal Ads in Sri Lanka",
     paragraphs: [
-      "Find girls personal ads from all 25 districts of Sri Lanka. Our platform features verified listings with photos and contact details for genuine connections.",
-      "Ads SL is Sri Lanka's most trusted platform for personal classified ads. All listings are moderated for safety and authenticity.",
+      "Find girls personal ads, srilankan ads and ada sl listings from all 25 districts of Sri Lanka. Our platform features verified listings with photos and contact details for genuine connections.",
+      "Ads SL is Sri Lanka's most trusted platform for srilankan personal classified ads. All listings are moderated for safety and authenticity.",
     ],
   },
   "Boys Personal": {
     heading: "Boys Personal Ads in Sri Lanka",
     paragraphs: [
-      "Browse boys personal ads from across Sri Lanka. Find genuine listings from Colombo, Kandy, Galle, and all other districts.",
+      "Browse boys personal ads, srilankan ads and ada sl listings from across Sri Lanka. Find genuine listings from Colombo, Kandy, Galle, and all other districts.",
       "Post your personal ad for free on Ads SL and connect with people across Sri Lanka. All ads are reviewed by our moderation team.",
     ],
   },
