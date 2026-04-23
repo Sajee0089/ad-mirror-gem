@@ -246,9 +246,9 @@ const AdPage = () => {
             <Tag className="w-4 h-4" /> {ad.category}
           </Link>
           <button onClick={toggleFavorite} className="flex items-center gap-1 hover:text-primary">
-            <Heart className={`w-4 h-4 ${isFavorited ? "fill-primary text-primary" : ""}`} /> {favCount}
+            <Heart className={`w-4 h-4 ${isFavorited ? "fill-primary text-primary" : ""}`} /> {formatCount(favCount)}
           </button>
-          <span className="flex items-center gap-1"><Eye className="w-4 h-4" /> {viewCount}</span>
+          <span className="flex items-center gap-1"><Eye className="w-4 h-4" /> {formatCount(viewCount)}</span>
           <span className="text-xs">{getTimeAgo(ad.approved_at || ad.created_at)}</span>
         </div>
 
