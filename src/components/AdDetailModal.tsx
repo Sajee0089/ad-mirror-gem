@@ -6,6 +6,7 @@ import { useIsMobile } from "@/hooks/use-mobile";
 import type { AdType } from "@/components/AdCard";
 import { supabase } from "@/integrations/supabase/client";
 import { useEffect, useState } from "react";
+import { formatCount } from "@/lib/utils";
 
 const badgeStyles: Record<string, string> = {
   super: "bg-badge-super text-primary-foreground",
