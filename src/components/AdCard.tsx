@@ -1,4 +1,5 @@
 import { ThumbsUp, Eye, MapPin, Trash2 } from "lucide-react";
+import { formatCount } from "@/lib/utils";
 
 export type AdType = {
   id: number | string;
