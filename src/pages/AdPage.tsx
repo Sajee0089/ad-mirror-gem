@@ -6,6 +6,7 @@ import Navbar from "@/components/Navbar";
 import { Button } from "@/components/ui/button";
 import { Eye, Heart, Phone, MessageCircle, MapPin, Tag, ChevronRight } from "lucide-react";
 import { SITE_URL, getDistrictUrl, getCategoryUrl, getAdUrl, categorySlugMap, districtToSlug } from "@/lib/seo";
+import { formatCount } from "@/lib/utils";
 
 const badgeStyles: Record<string, string> = {
   super: "bg-badge-super text-primary-foreground",
