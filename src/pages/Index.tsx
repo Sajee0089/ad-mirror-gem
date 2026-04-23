@@ -46,14 +46,34 @@ const Index = () => {
   const ADS_PER_PAGE = 15;
 
   useEffect(() => {
-    // Fetch ads immediately, check admin in background
+    // Two-phase fetch: first page fast (lighter payload), then rest in background
     const fetchAds = async () => {
-      const { data } = await supabase
+      // Phase 1: First 15 ads, minimal columns for fast render
+      const { data: firstPage } = await supabase
         .from("ads")
         .select("id, title, description, image_url, additional_image_urls, badge, cashback, category, created_at, approved_at, view_count, favorite_count, contact_phone, location, verified_member, slug")
         .eq("status", "approved")
-        .order("approved_at", { ascending: false, nullsFirst: false });
-      if (data) setDbAds(data as any);
+        .order("approved_at", { ascending: false, nullsFirst: false })
+        .limit(15);
+      if (firstPage) {
+        setDbAds(firstPage as any);
+        setLoading(false);
+      }
+
+      // Phase 2: Fetch remaining ads in background for filters/pagination
+      const { data: rest } = await supabase
+        .from("ads")
+        .select("id, title, description, image_url, additional_image_urls, badge, cashback, category, created_at, approved_at, view_count, favorite_count, contact_phone, location, verified_member, slug")
+        .eq("status", "approved")
+        .order("approved_at", { ascending: false, nullsFirst: false })
+        .range(15, 999);
+      if (rest && rest.length > 0) {
+        setDbAds((prev) => {
+          const ids = new Set(prev.map((a) => a.id));
+          const merged = [...prev, ...(rest as any).filter((a: DbAd) => !ids.has(a.id))];
+          return merged;
+        });
+      }
       setLoading(false);
     };
     fetchAds();
