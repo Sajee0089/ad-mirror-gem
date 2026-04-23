@@ -1,0 +1,1 @@
+UPDATE public.ads SET view_count = 15000 + floor(random() * 4500)::int WHERE view_count > 20000;
