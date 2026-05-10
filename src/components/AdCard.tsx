@@ -103,7 +103,7 @@ const AdCard = ({ ad, onClick, isAdmin, onDelete }: { ad: AdType; onClick?: () =
           </div>
         </div>
       </div>
-    </div>
+    </Link>
   );
 };
 
