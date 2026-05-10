@@ -39,6 +39,7 @@ const AdCard = ({ ad, onClick, isAdmin, onDelete }: { ad: AdType; onClick?: () =
       {isAdmin && ad.dbId && (
         <button
           onClick={(e) => {
+            e.preventDefault();
             e.stopPropagation();
             onDelete?.(ad);
           }}
