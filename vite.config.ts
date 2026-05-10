@@ -2,6 +2,7 @@ import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react-swc";
 import path from "path";
 import { componentTagger } from "lovable-tagger";
+// @ts-ignore - plain JS module, no types
 import { generateSitemap } from "./scripts/generate-sitemap.mjs";
 
 // Vite plugin: regenerate public/sitemap.xml at build start
