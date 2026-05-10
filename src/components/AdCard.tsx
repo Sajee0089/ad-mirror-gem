@@ -1,5 +1,7 @@
 import { ThumbsUp, Eye, MapPin, Trash2 } from "lucide-react";
 import { formatCount } from "@/lib/utils";
+import { Link } from "react-router-dom";
+import { getAdUrl } from "@/lib/seo";
 
 export type AdType = {
   id: number | string;
