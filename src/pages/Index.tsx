@@ -167,12 +167,10 @@ const Index = () => {
   const navigate = useNavigate();
 
   const handleAdClick = (ad: AdType) => {
-    if (ad.slug) {
-      navigate(getAdUrl(ad.slug));
-    } else {
-      setSelectedAd(ad);
-      setModalOpen(true);
-    }
+    // If ad has a slug, the AdCard <Link> already navigates — don't push twice.
+    if (ad.slug) return;
+    setSelectedAd(ad);
+    setModalOpen(true);
   };
 
   const getPageNumbers = () => {
