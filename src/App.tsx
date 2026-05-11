@@ -26,6 +26,13 @@ const queryClient = new QueryClient();
 
 const App = () => (
   <HelmetProvider>
+    <Helmet>
+      <script
+        async
+        src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8422852428242049"
+        crossorigin="anonymous"
+      />
+    </Helmet>
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
         <Toaster />
