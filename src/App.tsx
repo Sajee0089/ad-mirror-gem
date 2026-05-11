@@ -30,7 +30,7 @@ const App = () => (
       <script
         async
         src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8422852428242049"
-        crossorigin="anonymous"
+        crossOrigin="anonymous"
       />
     </Helmet>
     <QueryClientProvider client={queryClient}>
