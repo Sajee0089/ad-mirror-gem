@@ -159,9 +159,13 @@ const Index = () => {
     }
   }, [currentPage]);
 
-  // Reset page when filters change
+  // Reset page and scroll to ad grid when filters change
   useEffect(() => {
     setCurrentPage(1);
+    if (adGridRef.current) {
+      const offset = adGridRef.current.getBoundingClientRect().top + window.scrollY - 80;
+      window.scrollTo({ top: offset, behavior: "smooth" });
+    }
   }, [selectedCategory, selectedDistrict, searchQuery]);
 
   const navigate = useNavigate();
