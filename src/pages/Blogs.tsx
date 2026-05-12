@@ -87,7 +87,7 @@ const Blogs = () => {
       let imageUrl: string | null = null;
       if (newImage) {
         const ext = newImage.name.split(".").pop();
-        const path = `blog/${Date.now()}.${ext}`;
+        const path = `${user.id}/blog-${Date.now()}.${ext}`;
         const { error: uploadError } = await supabase.storage
           .from("ad-images")
           .upload(path, newImage, { contentType: newImage.type });
