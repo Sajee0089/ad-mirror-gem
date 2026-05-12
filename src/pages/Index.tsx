@@ -193,24 +193,57 @@ const Index = () => {
     "@context": "https://schema.org",
     "@type": "WebSite",
     "name": "Ads SL",
-    "alternateName": ["SL Ads", "Ada SL", "Srilankan Ads", "Srilankan Spa", "Spa Ada", "SL Spa Ada", "Lanka Ads"],
+    "alternateName": ["SL Ads", "Lanka Ads", "Ada SL", "Srilankan Ads", "Spa Ada"],
     "url": SITE_URL,
-    "description": "Sri Lanka's #1 classified ads platform for SL ads, ada sl, spa ada, srilankan spa and srilankan ads.",
+    "description": "Sri Lanka free classified ads platform",
+    "inLanguage": "en-LK",
     "potentialAction": {
       "@type": "SearchAction",
-      "target": `${SITE_URL}/?q={search_term_string}`,
-      "query-input": "required name=search_term_string"
-    }
+      "target": { "@type": "EntryPoint", "urlTemplate": `${SITE_URL}/?q={search_term_string}` },
+      "query-input": "required name=search_term_string",
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "Ads SL",
+      "url": SITE_URL,
+      "logo": { "@type": "ImageObject", "url": `${SITE_URL}/favicon.png` },
+    },
   };
+
+  const localBusinessJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "LocalBusiness",
+    "name": "Ads SL",
+    "description": "Free classified ads platform in Sri Lanka for SL ads, spa ads, personal ads",
+    "url": SITE_URL,
+    "areaServed": { "@type": "Country", "name": "Sri Lanka" },
+    "serviceType": "Classified Advertising Platform",
+    "priceRange": "Free",
+  };
+
+  const homeTitle = "Ads SL | Free Classified Ads Sri Lanka — SL Ads, Spa Ads, Lanka Ads — Post Free";
+  const homeDesc = "Ads SL is Sri Lanka's #1 free classified ads platform. Post free SL ads, browse spa ads, personal ads, rooms for rent and marriage proposals across all 25 districts. Free. Fast. Trusted.";
 
   return (
     <div className="min-h-screen bg-background">
       <Helmet>
-        <title>Ads SL | SL Ads, Spa Ada, Srilankan Spa & Classified Ads Sri Lanka</title>
-        <meta name="description" content="Ads SL - Sri Lanka's #1 free classified ads platform. Browse SL ads, ada sl, spa ada, srilankan spa & srilankan ads. Post free ads across all 25 districts including Colombo, Kandy & Galle." />
-        <meta name="keywords" content="sl ads, ada sl, spa ada, sl spa ada, srilankan spa, srilankan ads, spa, free classified ads sri lanka, lanka ads, ads lanka" />
+        <title>{homeTitle}</title>
+        <meta name="description" content={homeDesc} />
+        <meta name="keywords" content="SL ads, ads SL, Sri Lanka classified ads, spa ads Sri Lanka, lanka ads, personal ads Sri Lanka, free ads Sri Lanka, srilankan ads, hela ads, post free ad Sri Lanka, ada sl, spa ada sri lanka, sl classified ads" />
         <link rel="canonical" href={`${SITE_URL}/`} />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content={`${SITE_URL}/`} />
+        <meta property="og:title" content="Ads SL | Free Classified Ads Sri Lanka" />
+        <meta property="og:description" content="Sri Lanka's #1 free classified ads platform. Post free SL ads, spa ads, personal ads across all 25 districts." />
+        <meta property="og:image" content={`${SITE_URL}/og-image.jpg`} />
+        <meta property="og:site_name" content="Ads SL" />
+        <meta property="og:locale" content="en_LK" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="Ads SL | Free Classified Ads Sri Lanka" />
+        <meta name="twitter:description" content="Sri Lanka's #1 free classified ads platform. Post SL ads free." />
+        <meta name="twitter:image" content={`${SITE_URL}/og-image.jpg`} />
         <script type="application/ld+json">{JSON.stringify(websiteJsonLd)}</script>
+        <script type="application/ld+json">{JSON.stringify(localBusinessJsonLd)}</script>
       </Helmet>
       <Navbar />
       <div className="max-w-7xl mx-auto px-2 sm:px-4 py-3 sm:py-4">
@@ -329,6 +362,51 @@ const Index = () => {
                 </Button>
               </div>
             )}
+
+            {/* Structured SEO footer columns */}
+            <section className="mt-12 border-t border-border pt-8 grid grid-cols-2 md:grid-cols-4 gap-6 text-xs">
+              <div>
+                <h3 className="text-sm font-semibold text-foreground mb-3">Categories</h3>
+                <ul className="space-y-1.5 text-muted-foreground">
+                  <li><Link to="/spa-ads" className="hover:text-primary">Spa Ads Sri Lanka</Link></li>
+                  <li><Link to="/girls-personal-ads" className="hover:text-primary">Girls Personal Ads</Link></li>
+                  <li><Link to="/boys-personal-ads" className="hover:text-primary">Boys Personal Ads</Link></li>
+                  <li><Link to="/marriage-proposals" className="hover:text-primary">Marriage Proposals Sri Lanka</Link></li>
+                  <li><Link to="/rooms-ads" className="hover:text-primary">Rooms for Rent Sri Lanka</Link></li>
+                  <li><Link to="/live-cam-ads" className="hover:text-primary">Live Cam Ads</Link></li>
+                  <li><Link to="/toys-accessories-ads" className="hover:text-primary">Adult Toys Sri Lanka</Link></li>
+                </ul>
+              </div>
+              <div>
+                <h3 className="text-sm font-semibold text-foreground mb-3">Top Districts</h3>
+                <ul className="space-y-1.5 text-muted-foreground">
+                  <li><Link to="/district/colombo" className="hover:text-primary">Classified Ads Colombo</Link></li>
+                  <li><Link to="/district/kandy" className="hover:text-primary">Classified Ads Kandy</Link></li>
+                  <li><Link to="/district/galle" className="hover:text-primary">Classified Ads Galle</Link></li>
+                  <li><Link to="/district/gampaha" className="hover:text-primary">Classified Ads Gampaha</Link></li>
+                  <li><Link to="/district/jaffna" className="hover:text-primary">Classified Ads Jaffna</Link></li>
+                  <li><Link to="/district/kurunegala" className="hover:text-primary">Classified Ads Kurunegala</Link></li>
+                  <li><Link to="/district/matara" className="hover:text-primary">Classified Ads Matara</Link></li>
+                </ul>
+              </div>
+              <div>
+                <h3 className="text-sm font-semibold text-foreground mb-3">Quick Links</h3>
+                <ul className="space-y-1.5 text-muted-foreground">
+                  <li><Link to="/post-ad" className="hover:text-primary">Post Free Ad</Link></li>
+                  <li><Link to="/blogs" className="hover:text-primary">Blog</Link></li>
+                  <li><Link to="/about" className="hover:text-primary">About Us</Link></li>
+                  <li><Link to="/contact" className="hover:text-primary">Contact Us</Link></li>
+                  <li><Link to="/privacy" className="hover:text-primary">Privacy Policy</Link></li>
+                  <li><Link to="/terms" className="hover:text-primary">Terms of Service</Link></li>
+                </ul>
+              </div>
+              <div>
+                <h3 className="text-sm font-semibold text-foreground mb-3">About</h3>
+                <p className="text-muted-foreground leading-relaxed">
+                  Ads SL is Sri Lanka's trusted free classified ads platform. Browse SL ads, spa ads, personal ads and more across all 25 districts.
+                </p>
+              </div>
+            </section>
 
             {/* SEO Content */}
             <footer className="mt-12 border-t border-border pt-8 pb-4 text-muted-foreground text-xs leading-relaxed space-y-4">
