@@ -198,6 +198,7 @@ const PostAd = () => {
                       <SelectValue placeholder="Select your district" />
                     </SelectTrigger>
                     <SelectContent>
+                      <SelectItem value="All">All Districts</SelectItem>
                       {districts.map((d) => (
                         <SelectItem key={d} value={d}>{d}</SelectItem>
                       ))}
