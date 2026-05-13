@@ -470,9 +470,9 @@ const AdminAds = () => {
         </Tabs>
 
         {/* Approve Dialog */}
-        <Dialog open={!!approveId} onOpenChange={(open) => { if (!open) { setApproveId(null); setApproveBadge("nra"); setApproveCashback(false); } }}>
+        <Dialog open={!!approveId} onOpenChange={(open) => { if (!open) { setApproveId(null); setApproveBadge("nra"); setApproveCashback(false); setScheduleAt(""); } }}>
           <DialogContent>
-            <DialogHeader><DialogTitle>Approve Ad</DialogTitle></DialogHeader>
+            <DialogHeader><DialogTitle>Approve or Schedule Ad</DialogTitle></DialogHeader>
             <div className="space-y-4">
               <div className="space-y-2">
                 <Label>Ad Label</Label>
@@ -495,10 +495,26 @@ const AdminAds = () => {
                 />
                 <Label htmlFor="cashback-check">Money Back Guaranteed</Label>
               </div>
+              <div className="space-y-2 pt-2 border-t border-border">
+                <Label htmlFor="schedule-at">Schedule publish time (optional)</Label>
+                <Input
+                  id="schedule-at"
+                  type="datetime-local"
+                  value={scheduleAt}
+                  onChange={(e) => setScheduleAt(e.target.value)}
+                />
+                <p className="text-xs text-muted-foreground">Leave empty to publish immediately. If set, the ad will auto-publish at the chosen time.</p>
+              </div>
             </div>
-            <DialogFooter>
+            <DialogFooter className="gap-2">
               <Button variant="outline" onClick={() => setApproveId(null)}>Cancel</Button>
-              <Button onClick={handleApprove}>Approve</Button>
+              {scheduleAt ? (
+                <Button onClick={handleSchedule}>
+                  <Clock className="w-3 h-3 mr-1" /> Schedule
+                </Button>
+              ) : (
+                <Button onClick={handleApprove}>Approve Now</Button>
+              )}
             </DialogFooter>
           </DialogContent>
         </Dialog>
