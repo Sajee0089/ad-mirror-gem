@@ -341,17 +341,24 @@ const AdminAds = () => {
                         <div className="flex-1 min-w-0">
                           <h3 className="font-semibold text-foreground">{ad.title}</h3>
                           <p className="text-sm text-muted-foreground">{ad.category} · {new Date(ad.created_at).toLocaleDateString()}</p>
+                          {ad.status === "scheduled" && (ad as any).scheduled_at && (
+                            <p className="text-xs text-primary mt-1 font-medium">
+                              ⏰ Publishes at {new Date((ad as any).scheduled_at).toLocaleString()}
+                            </p>
+                          )}
                           <p className="text-sm text-muted-foreground mt-1 line-clamp-2">{ad.description}</p>
 
                           <div className="flex flex-wrap items-center gap-2 mt-3">
-                            {ad.status === "pending" && (
+                            {(ad.status === "pending" || ad.status === "scheduled") && (
                               <>
-                                <Button size="sm" onClick={() => { setApproveId(ad.id); setApproveBadge(ad.badge || "nra"); setApproveCashback(false); }}>
-                                  <CheckCircle className="w-3 h-3 mr-1" /> Approve
+                                <Button size="sm" onClick={() => { setApproveId(ad.id); setApproveBadge(ad.badge || "nra"); setApproveCashback(false); setScheduleAt(""); }}>
+                                  <CheckCircle className="w-3 h-3 mr-1" /> {ad.status === "scheduled" ? "Approve / Reschedule" : "Approve"}
                                 </Button>
-                                <Button variant="outline" size="sm" className="text-destructive hover:text-destructive" onClick={() => setRejectId(ad.id)}>
-                                  <XCircle className="w-3 h-3 mr-1" /> Reject
-                                </Button>
+                                {ad.status === "pending" && (
+                                  <Button variant="outline" size="sm" className="text-destructive hover:text-destructive" onClick={() => setRejectId(ad.id)}>
+                                    <XCircle className="w-3 h-3 mr-1" /> Reject
+                                  </Button>
+                                )}
                               </>
                             )}
                             <Button variant="destructive" size="sm" onClick={() => handleDelete(ad.id)}>
