@@ -51,7 +51,7 @@ const AdminAds = () => {
   const [adminUserId, setAdminUserId] = useState<string>("");
   const [rejectId, setRejectId] = useState<string | null>(null);
   const [rejectReason, setRejectReason] = useState("");
-  const [filter, setFilter] = useState<"pending" | "approved" | "rejected">("pending");
+  const [filter, setFilter] = useState<"pending" | "approved" | "scheduled" | "rejected">("pending");
   const navigate = useNavigate();
 
   // Manual post form
