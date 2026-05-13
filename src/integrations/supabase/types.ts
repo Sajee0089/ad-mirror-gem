@@ -90,6 +90,7 @@ export type Database = {
           image_url: string | null
           location: string | null
           rejection_reason: string | null
+          scheduled_at: string | null
           slug: string | null
           status: string
           title: string
@@ -112,6 +113,7 @@ export type Database = {
           image_url?: string | null
           location?: string | null
           rejection_reason?: string | null
+          scheduled_at?: string | null
           slug?: string | null
           status?: string
           title: string
@@ -134,6 +136,7 @@ export type Database = {
           image_url?: string | null
           location?: string | null
           rejection_reason?: string | null
+          scheduled_at?: string | null
           slug?: string | null
           status?: string
           title?: string

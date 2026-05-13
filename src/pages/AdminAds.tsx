@@ -51,7 +51,7 @@ const AdminAds = () => {
   const [adminUserId, setAdminUserId] = useState<string>("");
   const [rejectId, setRejectId] = useState<string | null>(null);
   const [rejectReason, setRejectReason] = useState("");
-  const [filter, setFilter] = useState<"pending" | "approved" | "rejected">("pending");
+  const [filter, setFilter] = useState<"pending" | "approved" | "scheduled" | "rejected">("pending");
   const navigate = useNavigate();
 
   // Manual post form
@@ -95,9 +95,9 @@ const AdminAds = () => {
   const fetchAds = async () => {
     const { data } = await supabase
       .from("ads")
-      .select("id, title, description, category, image_url, status, badge, created_at, user_id")
+      .select("id, title, description, category, image_url, status, badge, created_at, user_id, scheduled_at")
       .order("created_at", { ascending: false });
-    if (data) setAds(data as Ad[]);
+    if (data) setAds(data as any);
   };
 
   const fetchBlocked = async () => {
@@ -132,6 +132,7 @@ const AdminAds = () => {
   const [approveId, setApproveId] = useState<string | null>(null);
   const [approveBadge, setApproveBadge] = useState<string>("nra");
   const [approveCashback, setApproveCashback] = useState(false);
+  const [scheduleAt, setScheduleAt] = useState<string>("");
 
   const handleApprove = async () => {
     if (!approveId) return;
@@ -143,7 +144,8 @@ const AdminAds = () => {
       cashback: approveCashback,
       approved_at: now,
       created_at: now,
-    }).eq("id", approveId);
+      scheduled_at: null,
+    } as any).eq("id", approveId);
     if (error) toast.error(error.message);
     else {
       setAds((prev) => prev.map((a) => a.id === approveId ? { ...a, status: "approved", badge: approveBadge } : a));
@@ -152,6 +154,33 @@ const AdminAds = () => {
     setApproveId(null);
     setApproveBadge("nra");
     setApproveCashback(false);
+    setScheduleAt("");
+  };
+
+  const handleSchedule = async () => {
+    if (!approveId) return;
+    if (!scheduleAt) { toast.error("Pick a date and time"); return; }
+    const when = new Date(scheduleAt);
+    if (isNaN(when.getTime()) || when.getTime() <= Date.now()) {
+      toast.error("Schedule time must be in the future");
+      return;
+    }
+    const { error } = await supabase.from("ads").update({
+      status: "scheduled",
+      rejection_reason: null,
+      badge: approveBadge,
+      cashback: approveCashback,
+      scheduled_at: when.toISOString(),
+    } as any).eq("id", approveId);
+    if (error) toast.error(error.message);
+    else {
+      setAds((prev) => prev.map((a) => a.id === approveId ? { ...a, status: "scheduled", badge: approveBadge } : a));
+      toast.success(`Scheduled for ${when.toLocaleString()}`);
+    }
+    setApproveId(null);
+    setApproveBadge("nra");
+    setApproveCashback(false);
+    setScheduleAt("");
   };
 
   const handleReject = async () => {
@@ -285,10 +314,11 @@ const AdminAds = () => {
           {/* TAB 1: Ads Management */}
           <TabsContent value="ads">
             <div className="flex gap-2 mb-4 flex-wrap">
-              {(["pending", "approved", "rejected"] as const).map((s) => (
+              {(["pending", "approved", "scheduled", "rejected"] as const).map((s) => (
                 <Button key={s} variant={filter === s ? "default" : "outline"} size="sm" onClick={() => setFilter(s)}>
                   {s === "pending" && <Clock className="w-3 h-3 mr-1" />}
                   {s === "approved" && <CheckCircle className="w-3 h-3 mr-1" />}
+                  {s === "scheduled" && <Clock className="w-3 h-3 mr-1" />}
                   {s === "rejected" && <XCircle className="w-3 h-3 mr-1" />}
                   {s.charAt(0).toUpperCase() + s.slice(1)} ({ads.filter((a) => a.status === s).length})
                 </Button>
@@ -311,17 +341,24 @@ const AdminAds = () => {
                         <div className="flex-1 min-w-0">
                           <h3 className="font-semibold text-foreground">{ad.title}</h3>
                           <p className="text-sm text-muted-foreground">{ad.category} · {new Date(ad.created_at).toLocaleDateString()}</p>
+                          {ad.status === "scheduled" && (ad as any).scheduled_at && (
+                            <p className="text-xs text-primary mt-1 font-medium">
+                              ⏰ Publishes at {new Date((ad as any).scheduled_at).toLocaleString()}
+                            </p>
+                          )}
                           <p className="text-sm text-muted-foreground mt-1 line-clamp-2">{ad.description}</p>
 
                           <div className="flex flex-wrap items-center gap-2 mt-3">
-                            {ad.status === "pending" && (
+                            {(ad.status === "pending" || ad.status === "scheduled") && (
                               <>
-                                <Button size="sm" onClick={() => { setApproveId(ad.id); setApproveBadge(ad.badge || "nra"); setApproveCashback(false); }}>
-                                  <CheckCircle className="w-3 h-3 mr-1" /> Approve
+                                <Button size="sm" onClick={() => { setApproveId(ad.id); setApproveBadge(ad.badge || "nra"); setApproveCashback(false); setScheduleAt(""); }}>
+                                  <CheckCircle className="w-3 h-3 mr-1" /> {ad.status === "scheduled" ? "Approve / Reschedule" : "Approve"}
                                 </Button>
-                                <Button variant="outline" size="sm" className="text-destructive hover:text-destructive" onClick={() => setRejectId(ad.id)}>
-                                  <XCircle className="w-3 h-3 mr-1" /> Reject
-                                </Button>
+                                {ad.status === "pending" && (
+                                  <Button variant="outline" size="sm" className="text-destructive hover:text-destructive" onClick={() => setRejectId(ad.id)}>
+                                    <XCircle className="w-3 h-3 mr-1" /> Reject
+                                  </Button>
+                                )}
                               </>
                             )}
                             <Button variant="destructive" size="sm" onClick={() => handleDelete(ad.id)}>
@@ -433,9 +470,9 @@ const AdminAds = () => {
         </Tabs>
 
         {/* Approve Dialog */}
-        <Dialog open={!!approveId} onOpenChange={(open) => { if (!open) { setApproveId(null); setApproveBadge("nra"); setApproveCashback(false); } }}>
+        <Dialog open={!!approveId} onOpenChange={(open) => { if (!open) { setApproveId(null); setApproveBadge("nra"); setApproveCashback(false); setScheduleAt(""); } }}>
           <DialogContent>
-            <DialogHeader><DialogTitle>Approve Ad</DialogTitle></DialogHeader>
+            <DialogHeader><DialogTitle>Approve or Schedule Ad</DialogTitle></DialogHeader>
             <div className="space-y-4">
               <div className="space-y-2">
                 <Label>Ad Label</Label>
@@ -458,10 +495,26 @@ const AdminAds = () => {
                 />
                 <Label htmlFor="cashback-check">Money Back Guaranteed</Label>
               </div>
+              <div className="space-y-2 pt-2 border-t border-border">
+                <Label htmlFor="schedule-at">Schedule publish time (optional)</Label>
+                <Input
+                  id="schedule-at"
+                  type="datetime-local"
+                  value={scheduleAt}
+                  onChange={(e) => setScheduleAt(e.target.value)}
+                />
+                <p className="text-xs text-muted-foreground">Leave empty to publish immediately. If set, the ad will auto-publish at the chosen time.</p>
+              </div>
             </div>
-            <DialogFooter>
+            <DialogFooter className="gap-2">
               <Button variant="outline" onClick={() => setApproveId(null)}>Cancel</Button>
-              <Button onClick={handleApprove}>Approve</Button>
+              {scheduleAt ? (
+                <Button onClick={handleSchedule}>
+                  <Clock className="w-3 h-3 mr-1" /> Schedule
+                </Button>
+              ) : (
+                <Button onClick={handleApprove}>Approve Now</Button>
+              )}
             </DialogFooter>
           </DialogContent>
         </Dialog>

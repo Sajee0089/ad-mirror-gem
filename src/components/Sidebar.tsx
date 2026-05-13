@@ -78,6 +78,14 @@ const Sidebar = ({ selectedCategory, onCategorySelect, selectedDistrict, onDistr
             </CollapsibleTrigger>
             <CollapsibleContent>
               <ul className="space-y-1 px-4 pb-4">
+                <li>
+                  <button
+                    onClick={() => onDistrictSelect?.(null)}
+                    className="flex items-center gap-2 text-sm w-full text-left transition-colors rounded px-2 py-1 font-semibold text-primary hover:bg-primary/10"
+                  >
+                    🌐 All Districts
+                  </button>
+                </li>
                 {districts.map((district) => (
                   <li key={district}>
                     <button
