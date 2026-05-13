@@ -95,7 +95,7 @@ const PostAd = () => {
         image_url: mainImageUrl,
         additional_image_urls: additionalUrls,
         contact_phone: contactPhone.trim() || null,
-        location,
+        location: category === "Live Cam" ? null : location,
         status: "pending",
       });
       if (error) throw error;
