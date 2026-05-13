@@ -95,7 +95,7 @@ const PostAd = () => {
         image_url: mainImageUrl,
         additional_image_urls: additionalUrls,
         contact_phone: contactPhone.trim() || null,
-        location: category === "Live Cam" ? null : location,
+        location: category === "Live Cam" ? null : (location === "All" ? null : location),
         status: "pending",
       });
       if (error) throw error;
@@ -198,6 +198,7 @@ const PostAd = () => {
                       <SelectValue placeholder="Select your district" />
                     </SelectTrigger>
                     <SelectContent>
+                      <SelectItem value="All">All Districts</SelectItem>
                       {districts.map((d) => (
                         <SelectItem key={d} value={d}>{d}</SelectItem>
                       ))}
