@@ -132,6 +132,7 @@ const AdminAds = () => {
   const [approveId, setApproveId] = useState<string | null>(null);
   const [approveBadge, setApproveBadge] = useState<string>("nra");
   const [approveCashback, setApproveCashback] = useState(false);
+  const [scheduleAt, setScheduleAt] = useState<string>("");
 
   const handleApprove = async () => {
     if (!approveId) return;
@@ -143,7 +144,8 @@ const AdminAds = () => {
       cashback: approveCashback,
       approved_at: now,
       created_at: now,
-    }).eq("id", approveId);
+      scheduled_at: null,
+    } as any).eq("id", approveId);
     if (error) toast.error(error.message);
     else {
       setAds((prev) => prev.map((a) => a.id === approveId ? { ...a, status: "approved", badge: approveBadge } : a));
@@ -152,6 +154,33 @@ const AdminAds = () => {
     setApproveId(null);
     setApproveBadge("nra");
     setApproveCashback(false);
+    setScheduleAt("");
+  };
+
+  const handleSchedule = async () => {
+    if (!approveId) return;
+    if (!scheduleAt) { toast.error("Pick a date and time"); return; }
+    const when = new Date(scheduleAt);
+    if (isNaN(when.getTime()) || when.getTime() <= Date.now()) {
+      toast.error("Schedule time must be in the future");
+      return;
+    }
+    const { error } = await supabase.from("ads").update({
+      status: "scheduled",
+      rejection_reason: null,
+      badge: approveBadge,
+      cashback: approveCashback,
+      scheduled_at: when.toISOString(),
+    } as any).eq("id", approveId);
+    if (error) toast.error(error.message);
+    else {
+      setAds((prev) => prev.map((a) => a.id === approveId ? { ...a, status: "scheduled", badge: approveBadge } : a));
+      toast.success(`Scheduled for ${when.toLocaleString()}`);
+    }
+    setApproveId(null);
+    setApproveBadge("nra");
+    setApproveCashback(false);
+    setScheduleAt("");
   };
 
   const handleReject = async () => {
