@@ -314,10 +314,11 @@ const AdminAds = () => {
           {/* TAB 1: Ads Management */}
           <TabsContent value="ads">
             <div className="flex gap-2 mb-4 flex-wrap">
-              {(["pending", "approved", "rejected"] as const).map((s) => (
+              {(["pending", "approved", "scheduled", "rejected"] as const).map((s) => (
                 <Button key={s} variant={filter === s ? "default" : "outline"} size="sm" onClick={() => setFilter(s)}>
                   {s === "pending" && <Clock className="w-3 h-3 mr-1" />}
                   {s === "approved" && <CheckCircle className="w-3 h-3 mr-1" />}
+                  {s === "scheduled" && <Clock className="w-3 h-3 mr-1" />}
                   {s === "rejected" && <XCircle className="w-3 h-3 mr-1" />}
                   {s.charAt(0).toUpperCase() + s.slice(1)} ({ads.filter((a) => a.status === s).length})
                 </Button>
