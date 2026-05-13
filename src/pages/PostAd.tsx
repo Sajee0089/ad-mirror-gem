@@ -190,19 +190,26 @@ const PostAd = () => {
                   required
                 />
               </div>
-              <div className="space-y-2">
-                <Label htmlFor="location">Location / District *</Label>
-                <Select value={location} onValueChange={setLocation}>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select your district" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {districts.map((d) => (
-                      <SelectItem key={d} value={d}>{d}</SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
+              {category !== "Live Cam" && (
+                <div className="space-y-2">
+                  <Label htmlFor="location">Location / District *</Label>
+                  <Select value={location} onValueChange={setLocation}>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select your district" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {districts.map((d) => (
+                        <SelectItem key={d} value={d}>{d}</SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+              )}
+              {category === "Live Cam" && (
+                <p className="text-xs text-muted-foreground -mt-2">
+                  📹 Live Cam ads are online services — no district required.
+                </p>
+              )}
               <MultiImageUpload
                 images={images}
                 onChange={setImages}
