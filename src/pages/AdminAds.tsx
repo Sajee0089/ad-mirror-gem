@@ -95,9 +95,9 @@ const AdminAds = () => {
   const fetchAds = async () => {
     const { data } = await supabase
       .from("ads")
-      .select("id, title, description, category, image_url, status, badge, created_at, user_id")
+      .select("id, title, description, category, image_url, status, badge, created_at, user_id, scheduled_at")
       .order("created_at", { ascending: false });
-    if (data) setAds(data as Ad[]);
+    if (data) setAds(data as any);
   };
 
   const fetchBlocked = async () => {
