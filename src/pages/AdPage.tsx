@@ -99,7 +99,7 @@ const AdPage = () => {
       setFavCount((c) => Math.max(0, c - 1));
     } else {
       const { error } = await supabase.from("ad_favorites").insert({ ad_id: ad.id, user_id: session.user.id });
-      if (!error || error.code === "23505") {
+      if (!error || (error as any).code === "23505") {
         setIsFavorited(true);
         if (!error) setFavCount((c) => c + 1);
       }
@@ -130,10 +130,12 @@ const AdPage = () => {
   const allImages = [ad.image_url, ...(ad.additional_image_urls || [])].filter(Boolean) as string[];
   const phone = ad.contact_phone || null;
   const canonicalUrl = `${SITE_URL}/ad/${ad.slug}`;
-  const metaTitle = `${ad.title}${ad.location ? ` in ${ad.location}` : ""} - ${ad.category} | Ads SL`;
+  
+  // Fixed meta title to be under 65 chars
+  const metaTitle = `${ad.title.substring(0, 40)}${ad.title.length > 40 ? '...' : ''} | Ads SL`;
   const metaDesc = ad.description.slice(0, 150) + `... Find ${ad.category} ads in ${ad.location || "Sri Lanka"} on Ads SL.`;
 
-  // Structured data
+  // Structured data with required fields
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "Product",
@@ -141,11 +143,19 @@ const AdPage = () => {
     description: ad.description.slice(0, 500),
     image: allImages[0] || `${SITE_URL}/logo.png`,
     url: canonicalUrl,
+    category: ad.category,
     brand: { "@type": "Organization", name: "Ads SL" },
+    seller: {
+      "@type": "Organization",
+      name: "Ads SL",
+      url: SITE_URL,
+    },
     offers: {
       "@type": "Offer",
       availability: "https://schema.org/InStock",
-      areaServed: { "@type": "Place", name: ad.location || "Sri Lanka" },
+      areaServed: { "@type": "Country", name: "Sri Lanka" },
+      price: "Contact seller",
+      priceCurrency: "LKR",
     },
   };
 
@@ -156,7 +166,7 @@ const AdPage = () => {
       { "@type": "ListItem", position: 1, name: "Home", item: SITE_URL },
       ...(ad.location ? [{ "@type": "ListItem", position: 2, name: ad.location, item: `${SITE_URL}/district/${districtToSlug(ad.location)}` }] : []),
       { "@type": "ListItem", position: ad.location ? 3 : 2, name: ad.category, item: `${SITE_URL}/${categorySlugMap[ad.category] || ad.category}` },
-      { "@type": "ListItem", position: ad.location ? 4 : 3, name: ad.title },
+      { "@type": "ListItem", position: ad.location ? 4 : 3, name: ad.title, item: canonicalUrl },
     ],
   };
 
@@ -303,18 +313,62 @@ const AdPage = () => {
           </div>
         </div>
 
+        {/* FAQ Section - Improves text-to-HTML ratio */}
+        <section className="border-t border-border pt-6 mb-8">
+          <h2 className="font-semibold text-lg text-foreground mb-4">Frequently Asked Questions</h2>
+          <div className="space-y-3">
+            <details className="border rounded p-4 cursor-pointer group">
+              <summary className="font-medium text-foreground group-open:text-primary">
+                How do I contact this seller?
+              </summary>
+              <p className="text-sm text-muted-foreground mt-2 leading-relaxed">
+                Use the WhatsApp or phone button above to reach the seller directly. Always verify details before making any payments or arrangements.
+              </p>
+            </details>
+
+            <details className="border rounded p-4 cursor-pointer group">
+              <summary className="font-medium text-foreground group-open:text-primary">
+                Is this ad verified on Ads SL?
+              </summary>
+              <p className="text-sm text-muted-foreground mt-2 leading-relaxed">
+                All ads on Ads SL are reviewed by our moderation team. Look for the "Verified Member" badge for additional trust and authentication.
+              </p>
+            </details>
+
+            <details className="border rounded p-4 cursor-pointer group">
+              <summary className="font-medium text-foreground group-open:text-primary">
+                How safe is buying/selling on Ads SL?
+              </summary>
+              <p className="text-sm text-muted-foreground mt-2 leading-relaxed">
+                For maximum safety: meet in public places, verify the seller's identity, and use secure payment methods. Report any suspicious activity to our support team.
+              </p>
+            </details>
+
+            <details className="border rounded p-4 cursor-pointer group">
+              <summary className="font-medium text-foreground group-open:text-primary">
+                Can I report this ad?
+              </summary>
+              <p className="text-sm text-muted-foreground mt-2 leading-relaxed">
+                Yes. Contact our support team via email or WhatsApp if you encounter fraudulent or inappropriate listings.
+              </p>
+            </details>
+          </div>
+        </section>
+
         {/* SEO Footer */}
-        <footer className="mt-12 border-t border-border pt-6 pb-4 text-muted-foreground text-xs space-y-2">
+        <footer className="mt-8 border-t border-border pt-6 pb-4 text-muted-foreground text-xs space-y-2">
           <p>
             Find the best {ad.category} ads in {ad.location || "Sri Lanka"} on Ads SL.
             Browse classified ads across all 25 districts including Colombo, Kandy, Galle, and more.
           </p>
-          <div className="flex flex-wrap gap-2 mt-2">
+          <div className="flex flex-wrap gap-2 mt-4">
             <Link to="/about" className="hover:text-primary">About Us</Link>
             <span>·</span>
             <Link to="/privacy" className="hover:text-primary">Privacy Policy</Link>
             <span>·</span>
             <Link to="/terms" className="hover:text-primary">Terms of Service</Link>
+            <span>·</span>
+            <Link to="/contact" className="hover:text-primary">Contact Support</Link>
           </div>
         </footer>
       </div>
