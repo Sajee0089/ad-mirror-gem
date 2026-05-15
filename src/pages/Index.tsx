@@ -12,7 +12,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { districts } from "@/data/districts";
 import { getDistrictUrl, getCategoryUrl, categorySlugMap, getAdUrl, SITE_URL } from "@/lib/seo";
-import { Helmet } from "react-helmet-async";
+import PageSeo from "@/components/PageSeo";
 
 type DbAd = {
   id: string;
@@ -154,7 +154,7 @@ const Index = () => {
   const adGridRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
     if (adGridRef.current) {
-      const offset = adGridRef.current.getBoundingClientRect().top + window.scrollY - 80;
+      const offset = adGridRef.current.getBoundingClientTop + window.scrollY - 80;
       window.scrollTo({ top: offset, behavior: "smooth" });
     }
   }, [currentPage]);
@@ -193,62 +193,14 @@ const Index = () => {
     return pages;
   };
 
-  const websiteJsonLd = {
-    "@context": "https://schema.org",
-    "@type": "WebSite",
-    "name": "Ads SL",
-    "alternateName": ["SL Ads", "Lanka Ads", "Ada SL", "Srilankan Ads", "Spa Ada"],
-    "url": SITE_URL,
-    "description": "Sri Lanka free classified ads platform",
-    "inLanguage": "en-LK",
-    "potentialAction": {
-      "@type": "SearchAction",
-      "target": { "@type": "EntryPoint", "urlTemplate": `${SITE_URL}/?q={search_term_string}` },
-      "query-input": "required name=search_term_string",
-    },
-    "publisher": {
-      "@type": "Organization",
-      "name": "Ads SL",
-      "url": SITE_URL,
-      "logo": { "@type": "ImageObject", "url": `${SITE_URL}/favicon.png` },
-    },
-  };
-
-  const localBusinessJsonLd = {
-    "@context": "https://schema.org",
-    "@type": "LocalBusiness",
-    "name": "Ads SL",
-    "description": "Free classified ads platform in Sri Lanka for SL ads, spa ads, personal ads",
-    "url": SITE_URL,
-    "areaServed": { "@type": "Country", "name": "Sri Lanka" },
-    "serviceType": "Classified Advertising Platform",
-    "priceRange": "Free",
-  };
-
-  const homeTitle = "Ads SL | Free Classified Ads Sri Lanka — SL Ads, Spa Ads, Lanka Ads — Post Free";
-  const homeDesc = "Ads SL is Sri Lanka's #1 free classified ads platform. Post free SL ads, browse spa ads, personal ads, rooms for rent and marriage proposals across all 25 districts. Free. Fast. Trusted.";
-
   return (
     <div className="min-h-screen bg-background">
-      <Helmet>
-        <title>{homeTitle}</title>
-        <meta name="description" content={homeDesc} />
-        <meta name="keywords" content="SL ads, ads SL, Sri Lanka classified ads, spa ads Sri Lanka, lanka ads, personal ads Sri Lanka, free ads Sri Lanka, srilankan ads, hela ads, post free ad Sri Lanka, ada sl, spa ada sri lanka, sl classified ads" />
-        <link rel="canonical" href={`${SITE_URL}/`} />
-        <meta property="og:type" content="website" />
-        <meta property="og:url" content={`${SITE_URL}/`} />
-        <meta property="og:title" content="Ads SL | Free Classified Ads Sri Lanka" />
-        <meta property="og:description" content="Sri Lanka's #1 free classified ads platform. Post free SL ads, spa ads, personal ads across all 25 districts." />
-        <meta property="og:image" content={`${SITE_URL}/og-image.jpg`} />
-        <meta property="og:site_name" content="Ads SL" />
-        <meta property="og:locale" content="en_LK" />
-        <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content="Ads SL | Free Classified Ads Sri Lanka" />
-        <meta name="twitter:description" content="Sri Lanka's #1 free classified ads platform. Post SL ads free." />
-        <meta name="twitter:image" content={`${SITE_URL}/og-image.jpg`} />
-        <script type="application/ld+json">{JSON.stringify(websiteJsonLd)}</script>
-        <script type="application/ld+json">{JSON.stringify(localBusinessJsonLd)}</script>
-      </Helmet>
+      <PageSeo
+        title="SL Ads | Free Classified Ads Sri Lanka — Personal Ads, Spa Ads"
+        description="Ads SL is Sri Lanka's free classified ads platform. Browse SL personal ads, spa ads, marriage proposals and more across all 25 districts. Post your ad free."
+        canonical="https://www.ads-sl.com/"
+      />
+
       <Navbar />
       <div className="max-w-7xl mx-auto px-2 sm:px-4 py-3 sm:py-4">
         <div className="flex flex-col md:flex-row gap-3 sm:gap-4">
@@ -296,7 +248,7 @@ const Index = () => {
               </div>
             )}
 
-            <div ref={adGridRef} className="bg-card/50 rounded-lg shadow-[0_4px_24px_-6px_hsl(354_80%_55%/0.12),0_2px_8px_-2px_hsl(0_0%_0%/0.08)]" style={{ borderImage: 'linear-gradient(135deg, hsl(0 0% 10%), hsl(354 80% 55%)) 1', borderWidth: '2px', borderStyle: 'solid' }}>
+            <div ref={adGridRef} className="bg-card/50 rounded-lg shadow-[0_4px_24px_-6px_hsl(354_80%_55%/0.12),0_2px_8px_-2px_hsl(0_0%_0%/0.08)]" style={{ borderImage: 'linear-gradient(135deg, hsl(354, 80%, 55%) 0%, hsl(280, 85%, 55%) 100%)', borderImageSlice: 1 }}>
               {totalPages > 1 && (
                 <p className="text-center text-xs text-muted-foreground pt-2">Page {currentPage} of {totalPages}</p>
               )}
@@ -417,7 +369,7 @@ const Index = () => {
               <h2 className="text-sm font-semibold text-foreground">SL Ads & Srilankan Spa Ada – Sri Lanka's #1 Free Classified Platform</h2>
               <p>
                 Welcome to Ads SL (also known as <strong>Ada SL</strong>), the leading <strong>SL ads</strong> platform for browsing and posting free classified ads across all 25 districts in Sri Lanka.
-                Whether you're searching for <strong>spa ada</strong> in Colombo, <strong>srilankan spa</strong> services in Kandy or Galle, <strong>srilankan ads</strong> for rooms and rentals, live cam shows, or personal listings —
+                Whether you're searching for <strong>spa ada</strong> in Colombo, <strong>srilankan spa</strong> services in Kandy or Galle, <strong>srilankan ads</strong> for rooms and rentals, or genuine personal ads and marriage proposals,
                 Ads SL connects buyers and sellers across Sri Lanka instantly.
               </p>
               <p>
