@@ -154,7 +154,7 @@ const Index = () => {
   const adGridRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
     if (adGridRef.current) {
-      const offset = adGridRef.current.getBoundingClientTop + window.scrollY - 80;
+      const offset = adGridRef.current.getBoundingClientRect().top + window.scrollY - 80;
       window.scrollTo({ top: offset, behavior: "smooth" });
     }
   }, [currentPage]);
