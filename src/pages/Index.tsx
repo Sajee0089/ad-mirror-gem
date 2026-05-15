@@ -158,6 +158,11 @@ const Index = () => {
   // Scroll to ad grid area when page changes
   const adGridRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
+    sessionStorage.setItem("indexCurrentPage", String(currentPage));
+    if (isInitialPageRender.current) {
+      isInitialPageRender.current = false;
+      return;
+    }
     if (adGridRef.current) {
       const offset = adGridRef.current.getBoundingClientRect().top + window.scrollY - 80;
       window.scrollTo({ top: offset, behavior: "smooth" });
@@ -165,7 +170,12 @@ const Index = () => {
   }, [currentPage]);
 
   // Reset page and scroll to ad grid when filters change
+  const isInitialFilterRender = useRef(true);
   useEffect(() => {
+    if (isInitialFilterRender.current) {
+      isInitialFilterRender.current = false;
+      return;
+    }
     setCurrentPage(1);
     if (adGridRef.current) {
       const offset = adGridRef.current.getBoundingClientRect().top + window.scrollY - 80;
