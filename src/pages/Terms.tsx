@@ -1,15 +1,15 @@
 import Navbar from "@/components/Navbar";
-import { Helmet } from "react-helmet-async";
+import PageSeo from "@/components/PageSeo";
 import { Link } from "react-router-dom";
 import { SITE_URL } from "@/lib/seo";
 
 const Terms = () => (
   <div className="min-h-screen bg-background">
-    <Helmet>
-      <title>Terms of Service - Ads SL</title>
-      <meta name="description" content="Read the Ads SL terms of service. Understand the rules and guidelines for using Sri Lanka's leading free classified ads platform." />
-      <link rel="canonical" href={`${SITE_URL}/terms`} />
-    </Helmet>
+    <PageSeo
+      title="Terms of Service - Ads SL"
+      description="Read the Ads SL terms of service. Understand the rules and guidelines for using Sri Lanka's leading free classified ads platform."
+      canonical={`${SITE_URL}/terms`}
+    />
 
     <Navbar />
 
@@ -58,7 +58,7 @@ const Terms = () => (
 
         <h2 className="text-xl font-semibold text-foreground mt-6">5. Platform Liability</h2>
         <p>
-          Ads SL acts as a platform connecting buyers and sellers. We do not participate in, verify, or guarantee any transactions between users. Users engage in transactions at their own risk. Ads SL is not responsible for any losses, damages, or disputes arising from interactions between users.
+          Ads SL acts as a platform connecting buyers and sellers. We do not participate in, verify, or guarantee any transactions between users. Users engage in transactions at their own risk. Ads SL is not responsible for disputes, fraud, or misconduct between users.
         </p>
 
         <h2 className="text-xl font-semibold text-foreground mt-6">6. Content Moderation</h2>
