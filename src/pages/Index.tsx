@@ -4,7 +4,7 @@ import Sidebar from "@/components/Sidebar";
 import AdCard from "@/components/AdCard";
 import type { AdType } from "@/components/AdCard";
 import AdDetailModal from "@/components/AdDetailModal";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { ChevronLeft, ChevronRight } from "lucide-react";
@@ -70,7 +70,7 @@ const Index = () => {
         .eq("status", "approved")
         .order("approved_at", { ascending: false, nullsFirst: false })
         .limit(15);
-      if (firstPage) {
+      if (firstPage && !cachedAds) {
         setDbAds(firstPage as any);
         setLoading(false);
       }
@@ -84,8 +84,9 @@ const Index = () => {
         .range(15, 999);
       if (rest && rest.length > 0) {
         setDbAds((prev) => {
-          const ids = new Set(prev.map((a) => a.id));
-          const merged = [...prev, ...(rest as any).filter((a: DbAd) => !ids.has(a.id))];
+          const base = cachedAds && firstPage ? ([...(firstPage as any), ...(rest as any)] as DbAd[]) : prev;
+          const ids = new Set(base.map((a) => a.id));
+          const merged = [...base, ...(rest as any).filter((a: DbAd) => !ids.has(a.id))];
           try { sessionStorage.setItem("indexAdsCache", JSON.stringify(merged.slice(0, 300))); } catch {}
           return merged;
         });
@@ -212,14 +213,14 @@ const Index = () => {
 
   // Restore scroll position once ads are rendered
   const didRestoreScroll = useRef(false);
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (didRestoreScroll.current) return;
     if (loading || dbAds.length === 0) return;
     const saved = sessionStorage.getItem("indexScrollY");
     if (saved) {
       const y = parseInt(saved, 10);
       if (!isNaN(y) && y > 0) {
-        requestAnimationFrame(() => window.scrollTo({ top: y, behavior: "auto" }));
+        window.scrollTo({ top: y, behavior: "auto" });
       }
     }
     didRestoreScroll.current = true;
