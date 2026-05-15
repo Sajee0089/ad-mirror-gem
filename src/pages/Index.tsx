@@ -86,8 +86,11 @@ const Index = () => {
         setDbAds((prev) => {
           const ids = new Set(prev.map((a) => a.id));
           const merged = [...prev, ...(rest as any).filter((a: DbAd) => !ids.has(a.id))];
+          try { sessionStorage.setItem("indexAdsCache", JSON.stringify(merged.slice(0, 300))); } catch {}
           return merged;
         });
+      } else if (firstPage) {
+        try { sessionStorage.setItem("indexAdsCache", JSON.stringify(firstPage)); } catch {}
       }
       setLoading(false);
     };
