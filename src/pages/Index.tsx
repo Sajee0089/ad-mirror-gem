@@ -34,8 +34,18 @@ type DbAd = {
 };
 
 const Index = () => {
-  const [dbAds, setDbAds] = useState<DbAd[]>([]);
-  const [loading, setLoading] = useState(true);
+  const cachedAds = (() => {
+    if (typeof window === "undefined") return null;
+    try {
+      const raw = sessionStorage.getItem("indexAdsCache");
+      if (!raw) return null;
+      const parsed = JSON.parse(raw);
+      if (Array.isArray(parsed) && parsed.length > 0) return parsed as DbAd[];
+    } catch {}
+    return null;
+  })();
+  const [dbAds, setDbAds] = useState<DbAd[]>(cachedAds || []);
+  const [loading, setLoading] = useState(!cachedAds);
   const [selectedAd, setSelectedAd] = useState<AdType | null>(null);
   const [modalOpen, setModalOpen] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
