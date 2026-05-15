@@ -1,15 +1,15 @@
 import Navbar from "@/components/Navbar";
-import { Helmet } from "react-helmet-async";
+import PageSeo from "@/components/PageSeo";
 import { Link } from "react-router-dom";
 import { SITE_URL } from "@/lib/seo";
 
 const Privacy = () => (
   <div className="min-h-screen bg-background">
-    <Helmet>
-      <title>Privacy Policy - Ads SL</title>
-      <meta name="description" content="Read the Ads SL privacy policy. Learn how we collect, use, and protect your personal information on Sri Lanka's leading classified ads platform." />
-      <link rel="canonical" href={`${SITE_URL}/privacy`} />
-    </Helmet>
+    <PageSeo
+      title="Privacy Policy - Ads SL"
+      description="Read the Ads SL privacy policy. Learn how we collect, use, and protect your personal information on Sri Lanka's leading classified ads platform."
+      canonical={`${SITE_URL}/privacy`}
+    />
 
     <Navbar />
 
@@ -20,7 +20,7 @@ const Privacy = () => (
         <p><em>Last updated: March 2026</em></p>
 
         <p>
-          At Ads SL ("we", "our", "us"), we respect your privacy and are committed to protecting your personal data. This privacy policy explains how we collect, use, and safeguard your information when you use our classified ads platform at ads-sl.com.
+          At Ads SL ("we", "our", "us"), we respect your privacy and are committed to protecting your personal data. This privacy policy explains how we collect, use, and safeguard your information when you use our platform.
         </p>
 
         <h2 className="text-xl font-semibold text-foreground mt-6">1. Information We Collect</h2>
@@ -62,7 +62,7 @@ const Privacy = () => (
 
         <h2 className="text-xl font-semibold text-foreground mt-6">6. Cookies</h2>
         <p>
-          We use essential cookies to maintain your session and preferences. We may use analytics cookies to understand how users interact with our platform. You can manage cookie preferences through your browser settings.
+          We use essential cookies to maintain your session and preferences. We may use analytics cookies to understand how users interact with our platform. You can manage cookie preferences through your browser.
         </p>
 
         <h2 className="text-xl font-semibold text-foreground mt-6">7. Contact Us</h2>
