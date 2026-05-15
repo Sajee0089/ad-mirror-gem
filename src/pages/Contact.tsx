@@ -1,5 +1,5 @@
 import Navbar from "@/components/Navbar";
-import { Helmet } from "react-helmet-async";
+import PageSeo from "@/components/PageSeo";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { MessageCircle, Mail } from "lucide-react";
@@ -15,16 +15,12 @@ const Contact = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <Helmet>
-        <title>Contact Us | Ads SL — Sri Lanka Classified Ads Support</title>
-        <meta name="description" content="Contact Ads SL support team via WhatsApp or email. We're here to help with classified ads, posting issues, and account support across Sri Lanka." />
-        <link rel="canonical" href={`${SITE_URL}/contact`} />
-        <meta property="og:title" content="Contact Ads SL" />
-        <meta property="og:description" content="Reach Ads SL support via WhatsApp or email." />
-        <meta property="og:url" content={`${SITE_URL}/contact`} />
-        <meta property="og:type" content="website" />
-        <script type="application/ld+json">{JSON.stringify(jsonLd)}</script>
-      </Helmet>
+      <PageSeo
+        title="Contact Us | Ads SL — Sri Lanka Classified Ads Support"
+        description="Contact Ads SL support team via WhatsApp or email. We're here to help with classified ads, posting issues, and account support across Sri Lanka."
+        canonical={`${SITE_URL}/contact`}
+        schema={jsonLd}
+      />
 
       <Navbar />
 
