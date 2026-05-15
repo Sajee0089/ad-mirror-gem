@@ -5,7 +5,6 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { HelmetProvider, Helmet } from "react-helmet-async";
 import { SpeedInsights } from "@vercel/speed-insights/react";
-import { useEffect } from "react";
 import Index from "./pages/Index";
 import Auth from "./pages/Auth";
 import PostAd from "./pages/PostAd";
@@ -27,15 +26,8 @@ import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
 
-const App = () => {
-  useEffect(() => {
-    if ("scrollRestoration" in window.history) {
-      window.history.scrollRestoration = "manual";
-    }
-  }, []);
-
-  return (
-    <HelmetProvider>
+const App = () => (
+  <HelmetProvider>
     <Helmet>
       <script
         async
@@ -75,8 +67,7 @@ const App = () => {
         <SpeedInsights />
       </TooltipProvider>
     </QueryClientProvider>
-    </HelmetProvider>
-  );
-};
+  </HelmetProvider>
+);
 
 export default App;
