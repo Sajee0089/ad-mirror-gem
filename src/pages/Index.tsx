@@ -34,8 +34,18 @@ type DbAd = {
 };
 
 const Index = () => {
-  const [dbAds, setDbAds] = useState<DbAd[]>([]);
-  const [loading, setLoading] = useState(true);
+  const cachedAds = (() => {
+    if (typeof window === "undefined") return null;
+    try {
+      const raw = sessionStorage.getItem("indexAdsCache");
+      if (!raw) return null;
+      const parsed = JSON.parse(raw);
+      if (Array.isArray(parsed) && parsed.length > 0) return parsed as DbAd[];
+    } catch {}
+    return null;
+  })();
+  const [dbAds, setDbAds] = useState<DbAd[]>(cachedAds || []);
+  const [loading, setLoading] = useState(!cachedAds);
   const [selectedAd, setSelectedAd] = useState<AdType | null>(null);
   const [modalOpen, setModalOpen] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
@@ -76,8 +86,11 @@ const Index = () => {
         setDbAds((prev) => {
           const ids = new Set(prev.map((a) => a.id));
           const merged = [...prev, ...(rest as any).filter((a: DbAd) => !ids.has(a.id))];
+          try { sessionStorage.setItem("indexAdsCache", JSON.stringify(merged.slice(0, 300))); } catch {}
           return merged;
         });
+      } else if (firstPage) {
+        try { sessionStorage.setItem("indexAdsCache", JSON.stringify(firstPage)); } catch {}
       }
       setLoading(false);
     };
@@ -182,6 +195,35 @@ const Index = () => {
       window.scrollTo({ top: offset, behavior: "smooth" });
     }
   }, [selectedCategory, selectedDistrict, searchQuery]);
+
+  // Save scroll position before leaving and restore on return
+  useEffect(() => {
+    const handleSave = () => {
+      sessionStorage.setItem("indexScrollY", String(window.scrollY));
+    };
+    window.addEventListener("pagehide", handleSave);
+    window.addEventListener("beforeunload", handleSave);
+    return () => {
+      handleSave();
+      window.removeEventListener("pagehide", handleSave);
+      window.removeEventListener("beforeunload", handleSave);
+    };
+  }, []);
+
+  // Restore scroll position once ads are rendered
+  const didRestoreScroll = useRef(false);
+  useEffect(() => {
+    if (didRestoreScroll.current) return;
+    if (loading || dbAds.length === 0) return;
+    const saved = sessionStorage.getItem("indexScrollY");
+    if (saved) {
+      const y = parseInt(saved, 10);
+      if (!isNaN(y) && y > 0) {
+        requestAnimationFrame(() => window.scrollTo({ top: y, behavior: "auto" }));
+      }
+    }
+    didRestoreScroll.current = true;
+  }, [loading, dbAds.length]);
 
   const navigate = useNavigate();
 
