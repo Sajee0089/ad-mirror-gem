@@ -196,6 +196,35 @@ const Index = () => {
     }
   }, [selectedCategory, selectedDistrict, searchQuery]);
 
+  // Save scroll position before leaving and restore on return
+  useEffect(() => {
+    const handleSave = () => {
+      sessionStorage.setItem("indexScrollY", String(window.scrollY));
+    };
+    window.addEventListener("pagehide", handleSave);
+    window.addEventListener("beforeunload", handleSave);
+    return () => {
+      handleSave();
+      window.removeEventListener("pagehide", handleSave);
+      window.removeEventListener("beforeunload", handleSave);
+    };
+  }, []);
+
+  // Restore scroll position once ads are rendered
+  const didRestoreScroll = useRef(false);
+  useEffect(() => {
+    if (didRestoreScroll.current) return;
+    if (loading || dbAds.length === 0) return;
+    const saved = sessionStorage.getItem("indexScrollY");
+    if (saved) {
+      const y = parseInt(saved, 10);
+      if (!isNaN(y) && y > 0) {
+        requestAnimationFrame(() => window.scrollTo({ top: y, behavior: "auto" }));
+      }
+    }
+    didRestoreScroll.current = true;
+  }, [loading, dbAds.length]);
+
   const navigate = useNavigate();
 
   const handleAdClick = (ad: AdType) => {
