@@ -1,6 +1,5 @@
 import { useParams, Link } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { Helmet } from "react-helmet-async";
 import { supabase } from "@/integrations/supabase/client";
 import Navbar from "@/components/Navbar";
 import AdCard from "@/components/AdCard";
@@ -9,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { ChevronLeft, ChevronRight, Tag, MapPin } from "lucide-react";
 import { districts } from "@/data/districts";
 import { SITE_URL, categoryFromSlug, districtFromSlug, districtToSlug, categorySlugMap, getDistrictUrl, getAdUrl } from "@/lib/seo";
+import PageSeo from "@/components/PageSeo";
 
 function getTimeAgo(dateStr: string): string {
   const diff = Date.now() - new Date(dateStr).getTime();
@@ -22,10 +22,10 @@ function getTimeAgo(dateStr: string): string {
 
 const categoryFaqs: Record<string, { q: string; a: string }[]> = {
   "Spa": [
-    { q: "How to find spa ada / srilankan spa services in Sri Lanka?", a: "Browse Ads SL's Spa category to find verified spa ada and srilankan spa services across all 25 districts. Filter by your city — Colombo, Kandy, Galle or others — to find the closest sl spa ada providers." },
+    { q: "How to find spa ada / srilankan spa services in Sri Lanka?", a: "Browse Ads SL's Spa category to find verified spa ada and srilankan spa services across all 25 districts. Filter by your location." },
     { q: "Is it free to post spa ada ads on Ads SL?", a: "Yes! Posting spa ada and srilankan spa classified ads on Ads SL is completely free. Create an account and post your sl spa ada listing in minutes." },
     { q: "How to verify srilankan spa service providers?", a: "Look for the 'Verified Member' badge on Ads SL. Verified spa ada members have been authenticated by our team for added trust." },
-    { q: "Where can I find srilankan spa near me?", a: "Use the district filter on Ads SL to instantly find srilankan spa and spa ada listings in your area — Colombo, Gampaha, Kandy, Galle, Negombo and all 25 Sri Lankan districts are covered." },
+    { q: "Where can I find srilankan spa near me?", a: "Use the district filter on Ads SL to instantly find srilankan spa and spa ada listings in your area — Colombo, Gampaha, Kandy, Galle, Negombo and more." },
   ],
   "Live Cam": [
     { q: "How do live cam shows work on Ads SL?", a: "Browse live cam ads on Ads SL to find performers. Contact them directly via WhatsApp or phone for details." },
@@ -95,8 +95,8 @@ const categorySeoContent: Record<string, { heading: string; paragraphs: string[]
   "Spa": {
     heading: "Spa Ada Sri Lanka – Srilankan Spa & SL Spa Services",
     paragraphs: [
-      "Sri Lanka offers a wide range of spa ada and srilankan spa services across all major cities. From traditional Ayurvedic treatments to modern wellness centers, you'll find the perfect sl spa ada option on Ads SL (also known as Ada SL).",
-      "Whether you're searching for spa ada in Colombo, srilankan spa in Kandy, or wellness services in Galle, Negombo, Matara or any other district, our platform connects you with verified spa providers. Browse listings with photos, badges and direct contact details.",
+      "Sri Lanka offers a wide range of spa ada and srilankan spa services across all major cities. From traditional Ayurvedic treatments to modern wellness centers, you'll find the perfect sl spa service on Ads SL.",
+      "Whether you're searching for spa ada in Colombo, srilankan spa in Kandy, or wellness services in Galle, Negombo, Matara or any other district, our platform connects you with verified spa providers.",
       "Looking for srilankan spa near me? Use the district filter to instantly view sl spa ada listings in your area. Every spa ada listing on Ads SL is moderated for safety and authenticity.",
       "Post your spa ada service ad for free and reach thousands of customers searching srilankan spa, sl ads and ada sl every day. Join Sri Lanka's largest community of spa providers on Ads SL.",
     ],
@@ -170,7 +170,7 @@ const CategoryPage = () => {
       setLoading(true);
       let query = supabase
         .from("ads")
-        .select("id, title, description, image_url, additional_image_urls, badge, cashback, category, created_at, approved_at, view_count, favorite_count, contact_phone, location, verified_member, slug") as any;
+        .select("id, title, description, image_url, additional_image_urls, badge, cashback, category, created_at, approved_at, view_count, favorite_count, contact_phone, location, verified_member, slug");
       query = query.eq("status", "approved").eq("category", category).order("approved_at", { ascending: false });
       if (district) query = query.eq("location", district);
       const { data } = await query;
@@ -271,20 +271,12 @@ const CategoryPage = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <Helmet>
-        <title>{pageTitle}</title>
-        <meta name="description" content={pageDesc} />
-        <link rel="canonical" href={canonicalUrl} />
-        <meta property="og:title" content={pageTitle} />
-        <meta property="og:description" content={pageDesc} />
-        <meta property="og:url" content={canonicalUrl} />
-        <meta property="og:type" content="website" />
-        <meta property="og:site_name" content="Ads SL" />
-        <meta property="og:image" content={`${SITE_URL}/logo.png`} />
-        <script type="application/ld+json">{JSON.stringify(itemListJsonLd)}</script>
-        <script type="application/ld+json">{JSON.stringify(breadcrumbJsonLd)}</script>
-        {faqJsonLd && <script type="application/ld+json">{JSON.stringify(faqJsonLd)}</script>}
-      </Helmet>
+      <PageSeo
+        title={pageTitle}
+        description={pageDesc}
+        canonical={canonicalUrl}
+        schema={itemListJsonLd}
+      />
 
       <Navbar />
 
