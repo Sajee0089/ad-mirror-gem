@@ -42,7 +42,12 @@ const Index = () => {
   const [selectedDistrict, setSelectedDistrict] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [isAdmin, setIsAdmin] = useState(false);
-  const [currentPage, setCurrentPage] = useState(1);
+  const [currentPage, setCurrentPage] = useState(() => {
+    if (typeof window === "undefined") return 1;
+    const saved = sessionStorage.getItem("indexCurrentPage");
+    return saved ? Math.max(1, parseInt(saved, 10) || 1) : 1;
+  });
+  const isInitialPageRender = useRef(true);
   const ADS_PER_PAGE = 15;
 
   useEffect(() => {
