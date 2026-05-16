@@ -7,6 +7,11 @@ import { Button } from "@/components/ui/button";
 import { Eye, Heart, Phone, MessageCircle, MapPin, Tag, ChevronRight } from "lucide-react";
 import { SITE_URL, getDistrictUrl, getCategoryUrl, getAdUrl, categorySlugMap, districtToSlug } from "@/lib/seo";
 import { formatCount } from "@/lib/utils";
+import {
+  generateProductSchema,
+  generateBreadcrumbSchema,
+  cleanPrice,
+} from "@/lib/structured-data";
 
 const badgeStyles: Record<string, string> = {
   super: "bg-badge-super text-primary-foreground",
@@ -28,6 +33,7 @@ type DbAd = {
   id: string;
   title: string;
   description: string;
+  price?: string | null; // May contain "Rs.", commas, or be empty
   image_url: string | null;
   additional_image_urls: string[] | null;
   badge: string | null;
@@ -57,7 +63,7 @@ const AdPage = () => {
       setLoading(true);
       const { data } = await (supabase as any)
         .from("ads")
-        .select("id, title, description, image_url, additional_image_urls, badge, cashback, category, created_at, approved_at, view_count, favorite_count, contact_phone, location, verified_member, slug")
+        .select("id, title, description, price, image_url, additional_image_urls, badge, cashback, category, created_at, approved_at, view_count, favorite_count, contact_phone, location, verified_member,[...]")
         .eq("slug", slug)
         .eq("status", "approved")
         .maybeSingle();
@@ -135,40 +141,32 @@ const AdPage = () => {
   const metaTitle = `${ad.title.substring(0, 40)}${ad.title.length > 40 ? '...' : ''} | Ads SL`;
   const metaDesc = ad.description.slice(0, 150) + `... Find ${ad.category} ads in ${ad.location || "Sri Lanka"} on Ads SL.`;
 
-  // Structured data with required fields
-  const jsonLd = {
-    "@context": "https://schema.org",
-    "@type": "Product",
-    name: ad.title,
-    description: ad.description.slice(0, 500),
-    image: allImages[0] || `${SITE_URL}/logo.png`,
-    url: canonicalUrl,
-    category: ad.category,
-    brand: { "@type": "Organization", name: "Ads SL" },
-    seller: {
-      "@type": "Organization",
-      name: "Ads SL",
-      url: SITE_URL,
+  // FIXED: Generate proper structured data with merchant listing schema
+  const jsonLd = generateProductSchema(
+    {
+      title: ad.title,
+      description: ad.description,
+      price: ad.price || "", // May contain "Rs.", commas, or be empty
+      category: ad.category,
+      images: allImages,
+      location: ad.location || "Sri Lanka",
+      id: ad.id,
+      verified_member: ad.verified_member,
+      badge: ad.badge,
+      cashback: ad.cashback,
+      approved_at: ad.approved_at,
+      created_at: ad.created_at,
     },
-    offers: {
-      "@type": "Offer",
-      availability: "https://schema.org/InStock",
-      areaServed: { "@type": "Country", name: "Sri Lanka" },
-      price: "Contact seller",
-      priceCurrency: "LKR",
-    },
-  };
+    canonicalUrl,
+    SITE_URL
+  );
 
-  const breadcrumbJsonLd = {
-    "@context": "https://schema.org",
-    "@type": "BreadcrumbList",
-    itemListElement: [
-      { "@type": "ListItem", position: 1, name: "Home", item: SITE_URL },
-      ...(ad.location ? [{ "@type": "ListItem", position: 2, name: ad.location, item: `${SITE_URL}/district/${districtToSlug(ad.location)}` }] : []),
-      { "@type": "ListItem", position: ad.location ? 3 : 2, name: ad.category, item: `${SITE_URL}/${categorySlugMap[ad.category] || ad.category}` },
-      { "@type": "ListItem", position: ad.location ? 4 : 3, name: ad.title, item: canonicalUrl },
-    ],
-  };
+  const breadcrumbJsonLd = generateBreadcrumbSchema([
+    { name: "Home", item: SITE_URL },
+    ...(ad.location ? [{ name: ad.location, item: `${SITE_URL}/district/${districtToSlug(ad.location)}` }] : []),
+    { name: ad.category, item: `${SITE_URL}/${categorySlugMap[ad.category] || ad.category}` },
+    { name: ad.title, item: canonicalUrl },
+  ]);
 
   return (
     <div className="min-h-screen bg-background">
@@ -182,6 +180,7 @@ const AdPage = () => {
         {allImages[0] && <meta property="og:image" content={allImages[0]} />}
         <meta property="og:type" content="article" />
         <meta property="og:site_name" content="Ads SL" />
+        {/* FIXED: Product schema with proper merchant listing, brand object, cleaned price, and shipping/return policies */}
         <script type="application/ld+json">{JSON.stringify(jsonLd)}</script>
         <script type="application/ld+json">{JSON.stringify(breadcrumbJsonLd)}</script>
       </Helmet>
@@ -244,6 +243,16 @@ const AdPage = () => {
         </div>
 
         <h1 className="text-2xl sm:text-3xl font-bold text-foreground mb-2">{ad.title}</h1>
+
+        {/* Price Display (if available) */}
+        {ad.price && (
+          <div className="mb-4 p-4 bg-secondary rounded-lg">
+            <p className="text-sm text-muted-foreground">Price</p>
+            <p className="text-2xl font-bold text-foreground">
+              Rs. {cleanPrice(ad.price).toLocaleString()}
+            </p>
+          </div>
+        )}
 
         {/* Meta info */}
         <div className="flex items-center gap-4 text-sm text-muted-foreground mb-4 flex-wrap">
