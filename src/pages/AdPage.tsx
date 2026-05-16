@@ -7,11 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Eye, Heart, Phone, MessageCircle, MapPin, Tag, ChevronRight } from "lucide-react";
 import { SITE_URL, getDistrictUrl, getCategoryUrl, getAdUrl, categorySlugMap, districtToSlug } from "@/lib/seo";
 import { formatCount } from "@/lib/utils";
-import {
-  generateProductSchema,
-  generateBreadcrumbSchema,
-  cleanPrice,
-} from "@/lib/structured-data";
+import { generateProductSchema, generateBreadcrumbSchema, injectMultipleSchemas } from "@/lib/structured-data";
 
 const badgeStyles: Record<string, string> = {
   super: "bg-badge-super text-primary-foreground",
@@ -33,7 +29,6 @@ type DbAd = {
   id: string;
   title: string;
   description: string;
-  price?: string | null; // May contain "Rs.", commas, or be empty
   image_url: string | null;
   additional_image_urls: string[] | null;
   badge: string | null;
@@ -47,6 +42,7 @@ type DbAd = {
   location: string | null;
   verified_member: boolean;
   slug: string | null;
+  price?: string | null;
 };
 
 const AdPage = () => {
@@ -63,7 +59,7 @@ const AdPage = () => {
       setLoading(true);
       const { data } = await (supabase as any)
         .from("ads")
-        .select("id, title, description, price, image_url, additional_image_urls, badge, cashback, category, created_at, approved_at, view_count, favorite_count, contact_phone, location, verified_member,[...]")
+        .select("id, title, description, image_url, additional_image_urls, badge, cashback, category, created_at, approved_at, view_count, favorite_count, contact_phone, location, verified_member, price, slug")
         .eq("slug", slug)
         .eq("status", "approved")
         .maybeSingle();
@@ -90,6 +86,47 @@ const AdPage = () => {
     };
     if (slug) fetchAd();
   }, [slug]);
+
+  // Inject Product and Breadcrumb schemas into document.head
+  useEffect(() => {
+    if (!ad) return;
+
+    const allImages = [ad.image_url, ...(ad.additional_image_urls || [])].filter(Boolean) as string[];
+    const canonicalUrl = `${SITE_URL}/ad/${ad.slug}`;
+
+    // Generate properly formatted schema objects
+    const productSchema = generateProductSchema(
+      {
+        id: ad.id,
+        title: ad.title,
+        description: ad.description,
+        price: ad.price || "",
+        category: ad.category,
+        images: allImages,
+        location: ad.location || "Sri Lanka",
+        verified_member: ad.verified_member,
+        badge: ad.badge,
+        cashback: ad.cashback,
+        created_at: ad.created_at,
+        approved_at: ad.approved_at,
+      },
+      canonicalUrl,
+      SITE_URL
+    );
+
+    const breadcrumbItems = [
+      { name: "Home", item: SITE_URL },
+      ...(ad.location ? [{ name: ad.location, item: `${SITE_URL}/district/${districtToSlug(ad.location)}` }] : []),
+      { name: ad.category, item: `${SITE_URL}/${categorySlugMap[ad.category] || ad.category}` },
+      { name: ad.title, item: canonicalUrl },
+    ];
+
+    const breadcrumbSchema = generateBreadcrumbSchema(breadcrumbItems);
+
+    // Inject schemas and return cleanup function
+    const cleanup = injectMultipleSchemas([productSchema, breadcrumbSchema]);
+    return cleanup;
+  }, [ad]);
 
   const toggleFavorite = async () => {
     if (!ad) return;
@@ -141,32 +178,28 @@ const AdPage = () => {
   const metaTitle = `${ad.title.substring(0, 40)}${ad.title.length > 40 ? '...' : ''} | Ads SL`;
   const metaDesc = ad.description.slice(0, 150) + `... Find ${ad.category} ads in ${ad.location || "Sri Lanka"} on Ads SL.`;
 
-  // FIXED: Generate proper structured data with merchant listing schema
-  const jsonLd = generateProductSchema(
-    {
-      title: ad.title,
-      description: ad.description,
-      price: ad.price || "", // May contain "Rs.", commas, or be empty
-      category: ad.category,
-      images: allImages,
-      location: ad.location || "Sri Lanka",
-      id: ad.id,
-      verified_member: ad.verified_member,
-      badge: ad.badge,
-      cashback: ad.cashback,
-      approved_at: ad.approved_at,
-      created_at: ad.created_at,
-    },
-    canonicalUrl,
-    SITE_URL
-  );
+  // Legacy Helmet schema (kept for OG tags)
+  const legacyJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    name: ad.title,
+    description: ad.description.slice(0, 500),
+    image: allImages[0] || `${SITE_URL}/logo.png`,
+    url: canonicalUrl,
+    category: ad.category,
+    brand: { "@type": "Organization", name: "Ads SL" },
+  };
 
-  const breadcrumbJsonLd = generateBreadcrumbSchema([
-    { name: "Home", item: SITE_URL },
-    ...(ad.location ? [{ name: ad.location, item: `${SITE_URL}/district/${districtToSlug(ad.location)}` }] : []),
-    { name: ad.category, item: `${SITE_URL}/${categorySlugMap[ad.category] || ad.category}` },
-    { name: ad.title, item: canonicalUrl },
-  ]);
+  const breadcrumbJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "Home", item: SITE_URL },
+      ...(ad.location ? [{ "@type": "ListItem", position: 2, name: ad.location, item: `${SITE_URL}/district/${districtToSlug(ad.location)}` }] : []),
+      { "@type": "ListItem", position: ad.location ? 3 : 2, name: ad.category, item: `${SITE_URL}/${categorySlugMap[ad.category] || ad.category}` },
+      { "@type": "ListItem", position: ad.location ? 4 : 3, name: ad.title, item: canonicalUrl },
+    ],
+  };
 
   return (
     <div className="min-h-screen bg-background">
@@ -180,9 +213,6 @@ const AdPage = () => {
         {allImages[0] && <meta property="og:image" content={allImages[0]} />}
         <meta property="og:type" content="article" />
         <meta property="og:site_name" content="Ads SL" />
-        {/* FIXED: Product schema with proper merchant listing, brand object, cleaned price, and shipping/return policies */}
-        <script type="application/ld+json">{JSON.stringify(jsonLd)}</script>
-        <script type="application/ld+json">{JSON.stringify(breadcrumbJsonLd)}</script>
       </Helmet>
 
       <Navbar />
@@ -244,13 +274,10 @@ const AdPage = () => {
 
         <h1 className="text-2xl sm:text-3xl font-bold text-foreground mb-2">{ad.title}</h1>
 
-        {/* Price Display (if available) */}
+        {/* Price Display */}
         {ad.price && (
-          <div className="mb-4 p-4 bg-secondary rounded-lg">
-            <p className="text-sm text-muted-foreground">Price</p>
-            <p className="text-2xl font-bold text-foreground">
-              Rs. {cleanPrice(ad.price).toLocaleString()}
-            </p>
+          <div className="text-lg font-semibold text-primary mb-2">
+            Rs. {ad.price}
           </div>
         )}
 
