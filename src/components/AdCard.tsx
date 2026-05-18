@@ -29,7 +29,8 @@ const badgeStyles: Record<string, string> = {
 };
 
 const AdCard = ({ ad, onClick, isAdmin, onDelete }: { ad: AdType; onClick?: () => void; isAdmin?: boolean; onDelete?: (ad: AdType) => void }) => {
-  const href = ad.slug ? getAdUrl(ad.slug) : `/ad/${ad.dbId || ad.id}`;
+  // Always use slug if available, otherwise fall back to dbId (UUID from database)
+  const href = ad.slug ? getAdUrl(ad.slug) : ad.dbId ? `/ad/${ad.dbId}` : '#';
   
   const handleClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
     if (onClick) {
