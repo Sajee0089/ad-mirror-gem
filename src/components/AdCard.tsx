@@ -29,7 +29,7 @@ const badgeStyles: Record<string, string> = {
 };
 
 const AdCard = ({ ad, onClick, isAdmin, onDelete }: { ad: AdType; onClick?: () => void; isAdmin?: boolean; onDelete?: (ad: AdType) => void }) => {
-  const href = ad.slug ? getAdUrl(ad.slug) : "#";
+  const href = ad.slug ? getAdUrl(ad.slug) : `/ad/${ad.dbId || ad.id}`;
   return (
     <Link
       to={href}
