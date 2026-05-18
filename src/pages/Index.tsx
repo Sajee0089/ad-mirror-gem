@@ -59,6 +59,7 @@ const Index = () => {
   });
   const isInitialPageRender = useRef(true);
   const ADS_PER_PAGE = 15;
+  const navigate = useNavigate();
 
   useEffect(() => {
     // Two-phase fetch: first page fast (lighter payload), then rest in background
@@ -226,13 +227,9 @@ const Index = () => {
     didRestoreScroll.current = true;
   }, [loading, dbAds.length]);
 
-  const navigate = useNavigate();
-
   const handleAdClick = (ad: AdType) => {
-    // If ad has a slug, the AdCard <Link> already navigates — don't push twice.
-    if (ad.slug) return;
-    setSelectedAd(ad);
-    setModalOpen(true);
+    // Navigate to ad page using database ID
+    navigate(`/ad/${ad.dbId}`);
   };
 
   const getPageNumbers = () => {
@@ -479,12 +476,6 @@ const Index = () => {
           </main>
         </div>
       </div>
-
-      <AdDetailModal
-        ad={selectedAd}
-        open={modalOpen}
-        onClose={() => setModalOpen(false)}
-      />
     </div>
   );
 };
