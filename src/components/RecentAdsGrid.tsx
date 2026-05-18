@@ -82,7 +82,7 @@ const RecentAdsGrid = () => {
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3 mb-4">
         {paginatedAds.map((ad) => (
           <div key={ad.id} className="h-48">
-            <AdCard ad={ad} onClick={() => {}} />
+            <AdCard ad={ad} />
           </div>
         ))}
       </div>

@@ -208,9 +208,7 @@ const DistrictPage = () => {
             )}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               {adCards.map((ad) => (
-                <Link key={ad.dbId} to={ad.slug ? getAdUrl(ad.slug) : "#"}>
-                  <AdCard ad={ad} />
-                </Link>
+                <AdCard key={ad.dbId} ad={ad} />
               ))}
             </div>
 

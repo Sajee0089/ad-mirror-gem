@@ -30,10 +30,18 @@ const badgeStyles: Record<string, string> = {
 
 const AdCard = ({ ad, onClick, isAdmin, onDelete }: { ad: AdType; onClick?: () => void; isAdmin?: boolean; onDelete?: (ad: AdType) => void }) => {
   const href = ad.slug ? getAdUrl(ad.slug) : `/ad/${ad.dbId || ad.id}`;
+  
+  const handleClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    if (onClick) {
+      e.preventDefault();
+      onClick();
+    }
+  };
+  
   return (
     <Link
       to={href}
-      onClick={onClick}
+      onClick={handleClick}
       className={`block bg-card rounded-lg shadow-sm overflow-hidden hover:shadow-md transition-shadow cursor-pointer group relative ${ad.verified_member ? 'border-2 border-primary' : 'border border-border'}`}
     >
       {isAdmin && ad.dbId && (
