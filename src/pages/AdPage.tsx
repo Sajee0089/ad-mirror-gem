@@ -57,12 +57,33 @@ const AdPage = () => {
   useEffect(() => {
     const fetchAd = async () => {
       setLoading(true);
-      const { data } = await (supabase as any)
-        .from("ads")
-        .select("id, title, description, image_url, additional_image_urls, badge, cashback, category, created_at, approved_at, view_count, favorite_count, contact_phone, location, verified_member, price, slug")
-        .eq("slug", slug)
-        .eq("status", "approved")
-        .maybeSingle();
+      let data = null;
+      let error = null;
+
+      // Check if slug is a UUID (database ID) or a slug
+      const isUUID = slug && /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(slug);
+
+      if (isUUID) {
+        // Look up by ID
+        const result = await (supabase as any)
+          .from("ads")
+          .select("id, title, description, image_url, additional_image_urls, badge, cashback, category, created_at, approved_at, view_count, favorite_count, contact_phone, location, verified_member, price, slug")
+          .eq("id", slug)
+          .eq("status", "approved")
+          .maybeSingle();
+        data = result.data;
+        error = result.error;
+      } else {
+        // Look up by slug
+        const result = await (supabase as any)
+          .from("ads")
+          .select("id, title, description, image_url, additional_image_urls, badge, cashback, category, created_at, approved_at, view_count, favorite_count, contact_phone, location, verified_member, price, slug")
+          .eq("slug", slug)
+          .eq("status", "approved")
+          .maybeSingle();
+        data = result.data;
+        error = result.error;
+      }
 
       if (data) {
         setAd(data as DbAd);
