@@ -320,7 +320,6 @@ const Index = () => {
                   <AdCard
                     key={`${ad.category}-${ad.id}`}
                     ad={ad}
-                    onClick={() => handleAdClick(ad)}
                     isAdmin={isAdmin}
                     onDelete={handleDeleteAd}
                   />
