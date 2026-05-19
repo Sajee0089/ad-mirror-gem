@@ -228,8 +228,9 @@ const Index = () => {
   }, [loading, dbAds.length]);
 
   const handleAdClick = (ad: AdType) => {
-    // Navigate to ad page using database ID
-    navigate(`/ad/${ad.dbId}`);
+    // Navigate to ad page using slug if available, otherwise database ID
+    const path = ad.slug ? `/ad/${ad.slug}` : `/ad/${ad.dbId}`;
+    navigate(path);
   };
 
   const getPageNumbers = () => {
