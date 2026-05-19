@@ -28,7 +28,15 @@ export default defineConfig(({ mode }) => ({
       overlay: false,
     },
   },
-  plugins: [react(), sitemapPlugin(), mode === "development" && componentTagger()].filter(Boolean),
+  build: {
+    // This increases the limit to 1000kb to resolve the chunk size warning
+    chunkSizeWarningLimit: 1000,
+  },
+  plugins: [
+    react(), 
+    sitemapPlugin(), 
+    mode === "development" && componentTagger()
+  ].filter(Boolean),
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),
