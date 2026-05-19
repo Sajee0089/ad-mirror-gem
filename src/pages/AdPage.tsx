@@ -63,6 +63,8 @@ const AdPage = () => {
       // Check if slug is a UUID (database ID) or a slug
       const isUUID = slug && /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(slug);
 
+      console.log("[v0] AdPage fetching ad with slug:", slug, "isUUID:", isUUID);
+
       if (isUUID) {
         // Look up by ID
         const result = await (supabase as any)
@@ -73,6 +75,7 @@ const AdPage = () => {
           .maybeSingle();
         data = result.data;
         error = result.error;
+        console.log("[v0] AdPage UUID lookup result:", { data, error });
       } else {
         // Look up by slug
         const result = await (supabase as any)
@@ -83,6 +86,7 @@ const AdPage = () => {
           .maybeSingle();
         data = result.data;
         error = result.error;
+        console.log("[v0] AdPage slug lookup result:", { data, error });
       }
 
       if (data) {
