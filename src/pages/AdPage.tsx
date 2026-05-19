@@ -93,6 +93,7 @@ const AdPage = () => {
       toast.error("Please login to save ads");
       return;
     }
+
     if (isFavorited) {
       await supabase.from("ad_favorites").delete().eq("ad_id", ad.id).eq("user_id", session.user.id);
       setIsFavorited(false);
@@ -130,7 +131,7 @@ const AdPage = () => {
   const allImages = [ad.image_url, ...(ad.additional_image_urls || [])].filter(Boolean) as string[];
   const phone = ad.contact_phone || null;
   const canonicalUrl = `${SITE_URL}/ad/${ad.slug}`;
-  
+
   // Fixed meta title to be under 65 chars
   const metaTitle = `${ad.title.substring(0, 40)}${ad.title.length > 40 ? '...' : ''} | Ads SL`;
   const metaDesc = ad.description.slice(0, 150) + `... Find ${ad.category} ads in ${ad.location || "Sri Lanka"} on Ads SL.`;
@@ -358,16 +359,15 @@ const AdPage = () => {
         {/* SEO Footer */}
         <footer className="mt-8 border-t border-border pt-6 pb-4 text-muted-foreground text-xs space-y-2">
           <p>
-            Find the best {ad.category} ads in {ad.location || "Sri Lanka"} on Ads SL.
-            Browse classified ads across all 25 districts including Colombo, Kandy, Galle, and more.
+            Find the best {ad.category} ads in {ad.location || "Sri Lanka"} on Ads SL. Browse classified ads across all 25 districts including Colombo, Kandy, Galle, and more.
           </p>
           <div className="flex flex-wrap gap-2 mt-4">
             <Link to="/about" className="hover:text-primary">About Us</Link>
-            <span>·</span>
+            <span>•</span>
             <Link to="/privacy" className="hover:text-primary">Privacy Policy</Link>
-            <span>·</span>
+            <span>•</span>
             <Link to="/terms" className="hover:text-primary">Terms of Service</Link>
-            <span>·</span>
+            <span>•</span>
             <Link to="/contact" className="hover:text-primary">Contact Support</Link>
           </div>
         </footer>
