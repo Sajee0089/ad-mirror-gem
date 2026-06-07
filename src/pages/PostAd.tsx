@@ -36,13 +36,13 @@ const PostAd = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
-      if (!session) navigate("/auth");
-      else setUserId(session.user.id);
-    });
     supabase.auth.getSession().then(({ data: { session } }) => {
       if (!session) navigate("/auth");
       else setUserId(session.user.id);
+    });
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+      if (event === 'SIGNED_OUT') navigate("/auth");
+      else if (session) setUserId(session.user.id);
     });
     return () => subscription.unsubscribe();
   }, [navigate]);
