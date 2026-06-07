@@ -45,14 +45,18 @@ const Navbar = () => {
   };
 
   useEffect(() => {
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_, session) => {
-      setUser(session?.user ?? null);
-      if (session?.user) checkAdmin(session.user.id);
-      else setIsAdmin(false);
-    });
     supabase.auth.getSession().then(({ data: { session } }) => {
       setUser(session?.user ?? null);
       if (session?.user) checkAdmin(session.user.id);
+    });
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+      if (event === 'SIGNED_OUT') {
+        setUser(null);
+        setIsAdmin(false);
+      } else if (session?.user) {
+        setUser(session.user);
+        checkAdmin(session.user.id);
+      }
     });
     return () => subscription.unsubscribe();
   }, []);
@@ -67,9 +71,15 @@ const Navbar = () => {
   };
 
   const handleLogout = async () => {
-    await supabase.auth.signOut();
-    toast.success("Logged out");
-    navigate("/");
+    try {
+      await supabase.auth.signOut();
+      setUser(null);
+      setIsAdmin(false);
+      toast.success("Logged out successfully");
+      navigate("/");
+    } catch (error: any) {
+      toast.error("Logout failed: " + error.message);
+    }
   };
 
   const NavButtons = () => (
