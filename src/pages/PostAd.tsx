@@ -47,7 +47,6 @@ const PostAd = () => {
     return () => subscription.unsubscribe();
   }, [navigate]);
 
-
   const uploadImage = async (file: File) => {
     const ext = file.name.split(".").pop();
     const path = `${userId}/${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`;
@@ -59,6 +58,12 @@ const PostAd = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    if (!userId) {
+      toast.error("You must be logged in");
+      return;
+    }
+
     const isLiveCam = category === "Live Cam";
     if (!title.trim() || !description.trim() || !category || !contactPhone.trim() || (!isLiveCam && !location)) {
       toast.error(isLiveCam ? "Please fill in all required fields" : "Please fill in all fields including location");
@@ -68,10 +73,6 @@ const PostAd = () => {
       toast.error("Please upload at least 1 image");
       return;
     }
-    if (!userId) {
-      toast.error("You must be logged in");
-      return;
-    }
 
     setLoading(true);
     try {
@@ -79,7 +80,6 @@ const PostAd = () => {
       const additionalUrls: string[] = [];
 
       if (images.length > 0) {
-        // Upload all images
         const urls = await Promise.all(images.map((img) => uploadImage(img.file)));
         mainImageUrl = urls[mainImageIndex];
         urls.forEach((url, i) => {
@@ -95,7 +95,7 @@ const PostAd = () => {
         image_url: mainImageUrl,
         additional_image_urls: additionalUrls,
         contact_phone: contactPhone.trim() || null,
-        location: category === "Live Cam" ? null : (location === "All" ? null : location),
+        location: isLiveCam ? "Online" : (location === "All" ? "Online" : location),
         status: "pending",
       });
       if (error) throw error;
@@ -107,8 +107,6 @@ const PostAd = () => {
       setLoading(false);
     }
   };
-
-  
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-background to-primary/10 p-4">
