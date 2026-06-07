@@ -1,1 +1,4 @@
-project_id = "vlucxspeohjhrhdxkpqb"
+project_id = "webpiillbgbwgjzkbece"
+
+[functions.boost-views]
+verify_jwt = false
