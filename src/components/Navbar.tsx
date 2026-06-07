@@ -1,18 +1,19 @@
-import { RefreshCw, LogIn, LogOut, PlusCircle, List, Shield, Menu, Users, Heart, UserCircle, Bell } from "lucide-react";
+import { RefreshCw, LogIn, LogOut, PlusCircle, Shield, Menu, Users, Heart, UserCircle, Bell } from "lucide-react";
 import logoImg from "@/assets/logo.png";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger, SheetTitle, SheetDescription } from "@/components/ui/sheet";
 import { useNavigate } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
+import { useAuthSession } from "@/hooks/useAuthSession";
 
 const Navbar = () => {
   const navigate = useNavigate();
-  const [user, setUser] = useState<any>(null);
+  const { user, isLoggedIn } = useAuthSession();
   const [isAdmin, setIsAdmin] = useState(false);
   const isMobile = useIsMobile();
   const [alertsOpen, setAlertsOpen] = useState(false);
@@ -44,19 +45,6 @@ const Navbar = () => {
     }
   };
 
-  useEffect(() => {
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_, session) => {
-      setUser(session?.user ?? null);
-      if (session?.user) checkAdmin(session.user.id);
-      else setIsAdmin(false);
-    });
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setUser(session?.user ?? null);
-      if (session?.user) checkAdmin(session.user.id);
-    });
-    return () => subscription.unsubscribe();
-  }, []);
-
   const checkAdmin = async (uid: string) => {
     const { data } = await supabase
       .from("user_roles")
@@ -66,10 +54,12 @@ const Navbar = () => {
     setIsAdmin(!!data && data.length > 0);
   };
 
+  if (user) checkAdmin(user.id);
+
   const handleLogout = async () => {
     await supabase.auth.signOut();
-    toast.success("Logged out");
-    navigate("/");
+    toast.success("Logged out successfully");
+    navigate("/", { replace: true });
   };
 
   const NavButtons = () => (
@@ -90,7 +80,7 @@ const Navbar = () => {
         <Bell className="w-4 h-4 mr-1" />
         Ad Alerts
       </Button>
-      {user ? (
+      {isLoggedIn ? (
         <>
           <Button variant="outline" size="sm" className="border-nav-foreground/30 text-nav-foreground hover:bg-nav-foreground/10 bg-transparent w-full sm:w-auto justify-start sm:justify-center" onClick={() => navigate("/my-ads")}>
             <UserCircle className="w-4 h-4 mr-1" />
