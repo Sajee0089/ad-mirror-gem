@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { Card, CardContent } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
@@ -47,9 +47,9 @@ const MyAds = () => {
 
   useEffect(() => {
     const checkAuth = async () => {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) { navigate("/auth"); return; }
-      fetchAds(user.id);
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) { navigate("/auth"); return; }
+      fetchAds(session.user.id);
     };
     checkAuth();
   }, [navigate]);
@@ -89,15 +89,11 @@ const MyAds = () => {
       title: editTitle.trim(),
       description: editDescription.trim(),
       category: editCategory,
-      status: "pending",
+      status: "pending", // re-submit for approval after edit
     }).eq("id", editAd.id);
     if (error) toast.error(error.message);
     else {
-      setAds((prev) => prev.map((a) =>
-        a.id === editAd.id
-          ? { ...a, title: editTitle.trim(), description: editDescription.trim(), category: editCategory, status: "pending", rejection_reason: null }
-          : a
-      ));
+      setAds((prev) => prev.map((a) => a.id === editAd.id ? { ...a, title: editTitle.trim(), description: editDescription.trim(), category: editCategory, status: "pending", rejection_reason: null } : a));
       toast.success("Ad updated and resubmitted for approval");
       setEditAd(null);
     }
