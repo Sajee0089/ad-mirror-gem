@@ -22,27 +22,28 @@ interface AdDetailModalProps {
 
 const AdDetailContent = ({ ad, onClose }: { ad: AdType; onClose: () => void }) => {
   const [isFavorited, setIsFavorited] = useState(false);
-  const [favCount, setFavCount] = useState(parseInt(ad.likes.replace(/[^0-9]/g, '')) || 0);
-  const [viewCount, setViewCount] = useState(parseInt(ad.views.replace(/[^0-9]/g, '')) || 0);
+  const [favCount, setFavCount] = useState(parseInt(ad.likes.replace(/[^0-9]/g, "")) || 0);
+  const [viewCount, setViewCount] = useState(parseInt(ad.views.replace(/[^0-9]/g, "")) || 0);
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
 
   const allImages = [ad.image, ...(ad.additionalImages || [])].filter(Boolean);
 
   useEffect(() => {
     if (ad.dbId) {
-      supabase.rpc('increment_view_count', { _ad_id: ad.dbId }).then(() => {
-        setViewCount(v => v + 1);
+      supabase.rpc("increment_view_count", { _ad_id: ad.dbId }).then(() => {
+        setViewCount((v) => v + 1);
       });
     }
 
     const checkFavorite = async () => {
-      const { data: { session } } = await supabase.auth.getSession();
-      if (session?.user && ad.dbId) {
+      // FIX: getUser() instead of getSession()
+      const { data: { user } } = await supabase.auth.getUser();
+      if (user && ad.dbId) {
         const { data } = await supabase
-          .from('ad_favorites')
-          .select('id')
-          .eq('ad_id', ad.dbId)
-          .eq('user_id', session.user.id)
+          .from("ad_favorites")
+          .select("id")
+          .eq("ad_id", ad.dbId)
+          .eq("user_id", user.id)
           .maybeSingle();
         setIsFavorited(!!data);
       }
@@ -54,8 +55,9 @@ const AdDetailContent = ({ ad, onClose }: { ad: AdType; onClose: () => void }) =
 
   const toggleFavorite = async () => {
     if (togglingFav) return;
-    const { data: { session } } = await supabase.auth.getSession();
-    if (!session?.user) {
+    // FIX: getUser() instead of getSession()
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) {
       const { toast } = await import("sonner");
       toast.error("Please login to save ads to your favorites");
       return;
@@ -64,16 +66,16 @@ const AdDetailContent = ({ ad, onClose }: { ad: AdType; onClose: () => void }) =
     setTogglingFav(true);
     try {
       if (isFavorited) {
-        await supabase.from('ad_favorites').delete().eq('ad_id', ad.dbId).eq('user_id', session.user.id);
+        await supabase.from("ad_favorites").delete().eq("ad_id", ad.dbId).eq("user_id", user.id);
         setIsFavorited(false);
-        setFavCount(c => Math.max(0, c - 1));
+        setFavCount((c) => Math.max(0, c - 1));
       } else {
-        const { error } = await supabase.from('ad_favorites').insert({ ad_id: ad.dbId, user_id: session.user.id });
-        if (error && error.code === '23505') {
+        const { error } = await supabase.from("ad_favorites").insert({ ad_id: ad.dbId, user_id: user.id });
+        if (error && error.code === "23505") {
           setIsFavorited(true);
         } else if (!error) {
           setIsFavorited(true);
-          setFavCount(c => c + 1);
+          setFavCount((c) => c + 1);
         }
       }
     } finally {
@@ -81,7 +83,6 @@ const AdDetailContent = ({ ad, onClose }: { ad: AdType; onClose: () => void }) =
     }
   };
 
-  // Use the ad's own contact_phone; no fallback to agent number
   const phone = ad.contact_phone || null;
 
   return (
@@ -156,14 +157,14 @@ const AdDetailContent = ({ ad, onClose }: { ad: AdType; onClose: () => void }) =
         <p className="text-sm text-muted-foreground leading-relaxed whitespace-pre-line">{ad.description}</p>
       </div>
 
-      {/* Contact - only show if ad has contact details */}
+      {/* Contact */}
       {phone ? (
         <div className="border-t border-border pt-4">
           <h3 className="font-semibold text-sm text-foreground mb-3">Contact</h3>
           <div className="flex flex-col sm:flex-row gap-2">
             <Button
               className="flex-1 gap-2"
-              onClick={() => window.open(`https://wa.me/94${phone.replace(/^0/, '')}`, '_blank')}
+              onClick={() => window.open(`https://wa.me/94${phone.replace(/^0/, "")}`, "_blank")}
             >
               <MessageCircle className="w-4 h-4" />
               WhatsApp
@@ -171,7 +172,7 @@ const AdDetailContent = ({ ad, onClose }: { ad: AdType; onClose: () => void }) =
             <Button
               variant="outline"
               className="flex-1 gap-2"
-              onClick={() => window.open(`tel:${phone}`, '_self')}
+              onClick={() => window.open(`tel:${phone}`, "_self")}
             >
               <Phone className="w-4 h-4" />
               {phone}
