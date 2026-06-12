@@ -30,16 +30,20 @@ const SavedAds = () => {
 
   useEffect(() => {
     const fetchSavedAds = async () => {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) { navigate("/auth"); return; }
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) { navigate("/auth"); return; }
 
       const { data, error } = await supabase
         .from("ad_favorites")
         .select("ad_id, ads(id, title, description, image_url, additional_image_urls, badge, cashback, category, created_at, view_count, favorite_count, contact_phone, location)")
-        .eq("user_id", user.id)
+        .eq("user_id", session.user.id)
         .order("created_at", { ascending: false });
 
-      if (error) { toast.error(error.message); setLoading(false); return; }
+      if (error) {
+        toast.error(error.message);
+        setLoading(false);
+        return;
+      }
 
       const mapped: AdType[] = (data || [])
         .filter((fav: any) => fav.ads)
@@ -70,9 +74,9 @@ const SavedAds = () => {
   }, [navigate]);
 
   const handleUnsave = async (dbId: string) => {
-    const { data: { user } } = await supabase.auth.getUser();
-    if (!user) return;
-    const { error } = await supabase.from("ad_favorites").delete().eq("ad_id", dbId).eq("user_id", user.id);
+    const { data: { session } } = await supabase.auth.getSession();
+    if (!session) return;
+    const { error } = await supabase.from("ad_favorites").delete().eq("ad_id", dbId).eq("user_id", session.user.id);
     if (error) { toast.error(error.message); return; }
     setAds((prev) => prev.filter((a) => a.dbId !== dbId));
     toast.success("Ad removed from saved");
@@ -87,6 +91,7 @@ const SavedAds = () => {
         <h1 className="text-2xl font-bold mb-6 flex items-center gap-2">
           <Heart className="w-6 h-6 text-primary" /> My Saved Ads
         </h1>
+
         {loading ? (
           <p className="text-muted-foreground">Loading...</p>
         ) : ads.length === 0 ? (
@@ -104,7 +109,11 @@ const SavedAds = () => {
                 <AdCard ad={ad} onClick={() => { setSelectedAd(ad); setModalOpen(true); }} />
                 <AlertDialog>
                   <AlertDialogTrigger asChild>
-                    <Button size="icon" variant="destructive" className="absolute top-2 right-2 w-7 h-7 rounded-full opacity-80 hover:opacity-100 z-10">
+                    <Button
+                      size="icon"
+                      variant="destructive"
+                      className="absolute top-2 right-2 w-7 h-7 rounded-full opacity-80 hover:opacity-100 z-10"
+                    >
                       <HeartOff className="w-3.5 h-3.5" />
                     </Button>
                   </AlertDialogTrigger>
@@ -124,6 +133,7 @@ const SavedAds = () => {
           </div>
         )}
       </div>
+
       <AdDetailModal ad={selectedAd} open={modalOpen} onClose={() => setModalOpen(false)} />
     </div>
   );
