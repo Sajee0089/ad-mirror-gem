@@ -13,14 +13,8 @@ import MultiImageUpload from "@/components/MultiImageUpload";
 import { districts } from "@/data/districts";
 
 const categories = [
-  "Spa",
-  "Live Cam",
-  "Girls Personal",
-  "Boys Personal",
-  "Shemale Personal",
-  "Marriage Proposals",
-  "Rooms",
-  "Toys & Accessories",
+  "Spa", "Live Cam", "Girls Personal", "Boys Personal",
+  "Shemale Personal", "Marriage Proposals", "Rooms", "Toys & Accessories",
 ];
 
 const PostAd = () => {
@@ -36,12 +30,12 @@ const PostAd = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      if (!session) navigate("/auth");
-      else setUserId(session.user.id);
+    supabase.auth.getUser().then(({ data: { user } }) => {
+      if (!user) navigate("/auth");
+      else setUserId(user.id);
     });
     const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
-      if (event === 'SIGNED_OUT') navigate("/auth");
+      if (event === "SIGNED_OUT") navigate("/auth");
       else if (session) setUserId(session.user.id);
     });
     return () => subscription.unsubscribe();
@@ -58,35 +52,22 @@ const PostAd = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
-    if (!userId) {
-      toast.error("You must be logged in");
-      return;
-    }
-
+    if (!userId) { toast.error("You must be logged in"); return; }
     const isLiveCam = category === "Live Cam";
     if (!title.trim() || !description.trim() || !category || !contactPhone.trim() || (!isLiveCam && !location)) {
       toast.error(isLiveCam ? "Please fill in all required fields" : "Please fill in all fields including location");
       return;
     }
-    if (images.length === 0) {
-      toast.error("Please upload at least 1 image");
-      return;
-    }
-
+    if (images.length === 0) { toast.error("Please upload at least 1 image"); return; }
     setLoading(true);
     try {
       let mainImageUrl: string | null = null;
       const additionalUrls: string[] = [];
-
       if (images.length > 0) {
         const urls = await Promise.all(images.map((img) => uploadImage(img.file)));
         mainImageUrl = urls[mainImageIndex];
-        urls.forEach((url, i) => {
-          if (i !== mainImageIndex) additionalUrls.push(url);
-        });
+        urls.forEach((url, i) => { if (i !== mainImageIndex) additionalUrls.push(url); });
       }
-
       const { error } = await supabase.from("ads").insert({
         user_id: userId,
         title: title.trim(),
@@ -114,18 +95,12 @@ const PostAd = () => {
         <Button variant="ghost" onClick={() => navigate("/")} className="mb-6">
           <ArrowLeft className="w-4 h-4 mr-2" /> Back to Home
         </Button>
-
         <div className="mb-4 rounded-lg border border-border bg-card p-4 flex items-center gap-3">
           <span className="text-2xl">📱</span>
           <div>
             <p className="text-sm font-medium text-foreground">Please Contact agent before posting ads</p>
             <p className="text-xs text-muted-foreground mt-0.5">කරුණාකර දැන්වීම් පළකිරීමට පෙර අපව සම්බන්ධ කරගන්න, නැතහොත් දැන්වීම පළ නොකරනු ලැබේ.</p>
-            <a
-              href="https://wa.me/94789663179"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-sm text-primary hover:underline font-semibold mt-1 inline-block"
-            >
+            <a href="https://wa.me/94789663179" target="_blank" rel="noopener noreferrer" className="text-sm text-primary hover:underline font-semibold mt-1 inline-block">
               WhatsApp: +94 78 966 3179
             </a>
           </div>
@@ -135,86 +110,47 @@ const PostAd = () => {
             <CardTitle className="text-2xl flex items-center gap-2">
               <Send className="w-5 h-5 text-primary" /> Post a New Ad
             </CardTitle>
-            <CardDescription>
-              Fill in the details to submit your ad for approval
-            </CardDescription>
+            <CardDescription>Fill in the details to submit your ad for approval</CardDescription>
           </CardHeader>
           <CardContent>
             <form onSubmit={handleSubmit} className="space-y-5">
               <div className="space-y-2">
                 <Label htmlFor="title">Title *</Label>
-                <Input
-                  id="title"
-                  placeholder="e.g. Spa Services in Colombo"
-                  value={title}
-                  onChange={(e) => setTitle(e.target.value)}
-                  maxLength={200}
-                  required
-                />
+                <Input id="title" placeholder="e.g. Spa Services in Colombo" value={title} onChange={(e) => setTitle(e.target.value)} maxLength={200} required />
               </div>
               <div className="space-y-2">
                 <Label htmlFor="category">Category *</Label>
                 <Select value={category} onValueChange={setCategory}>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select a category" />
-                  </SelectTrigger>
+                  <SelectTrigger><SelectValue placeholder="Select a category" /></SelectTrigger>
                   <SelectContent>
-                    {categories.map((cat) => (
-                      <SelectItem key={cat} value={cat}>{cat}</SelectItem>
-                    ))}
+                    {categories.map((cat) => (<SelectItem key={cat} value={cat}>{cat}</SelectItem>))}
                   </SelectContent>
                 </Select>
               </div>
               <div className="space-y-2">
                 <Label htmlFor="description">Description *</Label>
-                <Textarea
-                  id="description"
-                  placeholder="Describe your service or ad in detail..."
-                  value={description}
-                  onChange={(e) => setDescription(e.target.value)}
-                  maxLength={2000}
-                  rows={5}
-                  required
-                />
+                <Textarea id="description" placeholder="Describe your service or ad in detail..." value={description} onChange={(e) => setDescription(e.target.value)} maxLength={2000} rows={5} required />
               </div>
               <div className="space-y-2">
                 <Label htmlFor="contactPhone">Contact Phone Number *</Label>
-                <Input
-                  id="contactPhone"
-                  placeholder="e.g. 0771234567"
-                  value={contactPhone}
-                  onChange={(e) => setContactPhone(e.target.value)}
-                  maxLength={15}
-                  required
-                />
+                <Input id="contactPhone" placeholder="e.g. 0771234567" value={contactPhone} onChange={(e) => setContactPhone(e.target.value)} maxLength={15} required />
               </div>
               {category !== "Live Cam" && (
                 <div className="space-y-2">
                   <Label htmlFor="location">Location / District *</Label>
                   <Select value={location} onValueChange={setLocation}>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select your district" />
-                    </SelectTrigger>
+                    <SelectTrigger><SelectValue placeholder="Select your district" /></SelectTrigger>
                     <SelectContent>
                       <SelectItem value="All">All Districts</SelectItem>
-                      {districts.map((d) => (
-                        <SelectItem key={d} value={d}>{d}</SelectItem>
-                      ))}
+                      {districts.map((d) => (<SelectItem key={d} value={d}>{d}</SelectItem>))}
                     </SelectContent>
                   </Select>
                 </div>
               )}
               {category === "Live Cam" && (
-                <p className="text-xs text-muted-foreground -mt-2">
-                  📹 Live Cam ads are online services — no district required.
-                </p>
+                <p className="text-xs text-muted-foreground -mt-2">📹 Live Cam ads are online services — no district required.</p>
               )}
-              <MultiImageUpload
-                images={images}
-                onChange={setImages}
-                mainIndex={mainImageIndex}
-                onMainIndexChange={setMainImageIndex}
-              />
+              <MultiImageUpload images={images} onChange={setImages} mainIndex={mainImageIndex} onMainIndexChange={setMainImageIndex} />
               <Button type="submit" className="w-full" disabled={loading}>
                 {loading ? "Submitting..." : "Submit Ad for Approval"}
               </Button>
