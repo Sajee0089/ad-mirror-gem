@@ -107,15 +107,22 @@ const Index = () => {
       }
     };
 
-    fetchAds();
+    // FIX: use getUser() instead of getSession()
     const checkAdmin = async () => {
-      const { data: { session } } = await supabase.auth.getSession();
-      if (session?.user) {
-        const { data } = await supabase.from("user_roles").select("role").eq("user_id", session.user.id).eq("role", "admin");
+      const { data: { user } } = await supabase.auth.getUser();
+      if (user) {
+        const { data } = await supabase
+          .from("user_roles")
+          .select("role")
+          .eq("user_id", user.id)
+          .eq("role", "admin");
         setIsAdmin(!!(data && data.length > 0));
       }
     };
+
+    fetchAds();
     checkAdmin();
+
     const { data: { subscription } } = supabase.auth.onAuthStateChange(() => checkAdmin());
     return () => subscription.unsubscribe();
   }, []);
@@ -216,7 +223,7 @@ const Index = () => {
 
   const getPageNumbers = () => {
     const pages: (number | string)[] = [];
-    if (totalPages <= 5) { for (let i = 1; i <= totalPages; i++) pages.push(i); } 
+    if (totalPages <= 5) { for (let i = 1; i <= totalPages; i++) pages.push(i); }
     else {
       pages.push(1);
       if (currentPage > 3) pages.push("...");
