@@ -5,8 +5,9 @@ import AdCard from "@/components/AdCard";
 import type { AdType } from "@/components/AdCard";
 import AdDetailModal from "@/components/AdDetailModal";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { districts } from "@/data/districts";
@@ -94,9 +95,7 @@ const Index = () => {
 
       if (rest && rest.length > 0) {
         setDbAds((prev) => {
-          const base = cachedAds && firstPage
-            ? [...(firstPage as any), ...(rest as any)] as DbAd[]
-            : prev;
+          const base = cachedAds && firstPage ? [...(firstPage as any), ...(rest as any)] as DbAd[] : prev;
           const ids = new Set(base.map((a) => a.id));
           const merged = [...base, ...(rest as any).filter((a: DbAd) => !ids.has(a.id))];
           try { sessionStorage.setItem("indexAdsCache", JSON.stringify(merged.slice(0, 300))); } catch {}
@@ -108,21 +107,15 @@ const Index = () => {
       }
     };
 
+    fetchAds();
     const checkAdmin = async () => {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (user) {
-        const { data } = await supabase
-          .from("user_roles")
-          .select("role")
-          .eq("user_id", user.id)
-          .eq("role", "admin");
+      const { data: { session } } = await supabase.auth.getSession();
+      if (session?.user) {
+        const { data } = await supabase.from("user_roles").select("role").eq("user_id", session.user.id).eq("role", "admin");
         setIsAdmin(!!(data && data.length > 0));
       }
     };
-
-    fetchAds();
     checkAdmin();
-
     const { data: { subscription } } = supabase.auth.onAuthStateChange(() => checkAdmin());
     return () => subscription.unsubscribe();
   }, []);
@@ -160,7 +153,7 @@ const Index = () => {
     additionalImages: ad.additional_image_urls || [],
     location: ad.location || undefined,
     verified_member: ad.verified_member || false,
-    slug: ad.slug || undefined,
+    slug: ad.slug || undefined
   }));
 
   const filteredAds = dbAdCards.filter((ad) => {
@@ -219,17 +212,12 @@ const Index = () => {
     didRestoreScroll.current = true;
   }, [loading, dbAds.length]);
 
-  const handleAdClick = (ad: AdType) => {
-    if (ad.slug) return;
-    setSelectedAd(ad);
-    setModalOpen(true);
-  };
+  const handleAdClick = (ad: AdType) => { if (ad.slug) return; setSelectedAd(ad); setModalOpen(true); };
 
   const getPageNumbers = () => {
     const pages: (number | string)[] = [];
-    if (totalPages <= 5) {
-      for (let i = 1; i <= totalPages; i++) pages.push(i);
-    } else {
+    if (totalPages <= 5) { for (let i = 1; i <= totalPages; i++) pages.push(i); } 
+    else {
       pages.push(1);
       if (currentPage > 3) pages.push("...");
       for (let i = Math.max(2, currentPage - 1); i <= Math.min(totalPages - 1, currentPage + 1); i++) pages.push(i);
@@ -241,121 +229,42 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <PageSeo
-        title="SL Ads | Free Classified Ads Sri Lanka"
-        description="Ads SL is Sri Lanka's free classified ads platform."
-        canonical="https://www.ads-sl.com/"
-      />
+      <PageSeo title="SL Ads | Free Classified Ads Sri Lanka" description="Ads SL is Sri Lanka's free classified ads platform." canonical="https://www.ads-sl.com/" />
       <Navbar />
       <div className="max-w-7xl mx-auto px-2 sm:px-4 py-3 sm:py-4">
         <div className="flex flex-col md:flex-row gap-3 sm:gap-4">
-          <div className="hidden md:block">
-            <Sidebar
-              selectedCategory={selectedCategory}
-              onCategorySelect={setSelectedCategory}
-              selectedDistrict={selectedDistrict}
-              onDistrictSelect={setSelectedDistrict}
-              searchQuery={searchQuery}
-              onSearchChange={setSearchQuery}
-            />
-          </div>
+          <div className="hidden md:block"><Sidebar selectedCategory={selectedCategory} onCategorySelect={setSelectedCategory} selectedDistrict={selectedDistrict} onDistrictSelect={setSelectedDistrict} searchQuery={searchQuery} onSearchChange={setSearchQuery} /></div>
           <main className="flex-1 min-w-0">
             <HeroBanner />
-            <div className="md:hidden mb-3">
-              <Sidebar
-                selectedCategory={selectedCategory}
-                onCategorySelect={setSelectedCategory}
-                selectedDistrict={selectedDistrict}
-                onDistrictSelect={setSelectedDistrict}
-                searchQuery={searchQuery}
-                onSearchChange={setSearchQuery}
-              />
-            </div>
+            <div className="md:hidden mb-3"><Sidebar selectedCategory={selectedCategory} onCategorySelect={setSelectedCategory} selectedDistrict={selectedDistrict} onDistrictSelect={setSelectedDistrict} searchQuery={searchQuery} onSearchChange={setSearchQuery} /></div>
             {(selectedCategory || selectedDistrict) && (
               <div className="flex items-center gap-2 mb-4 flex-wrap">
-                {selectedCategory && (
-                  <span className="text-sm">Category: <span className="text-primary">{selectedCategory}</span></span>
-                )}
-                {selectedDistrict && (
-                  <span className="text-sm">District: <span className="text-primary">{selectedDistrict}</span></span>
-                )}
-                <button
-                  onClick={() => { setSelectedCategory(null); setSelectedDistrict(null); }}
-                  className="text-xs text-muted-foreground underline"
-                >
-                  Clear Filters
-                </button>
+                {selectedCategory && <span className="text-sm">Category: <span className="text-primary">{selectedCategory}</span></span>}
+                {selectedDistrict && <span className="text-sm">District: <span className="text-primary">{selectedDistrict}</span></span>}
+                <button onClick={() => { setSelectedCategory(null); setSelectedDistrict(null); }} className="text-xs text-muted-foreground underline">Clear Filters</button>
               </div>
             )}
-            <div ref={adGridRef} className="bg-card/50 rounded-lg shadow-sm" style={{ border: "1px solid #e2e8f0" }}>
+            <div ref={adGridRef} className="bg-card/50 rounded-lg shadow-sm" style={{ border: '1px solid #e2e8f0' }}>
               {loading ? (
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 p-3">
-                  {Array.from({ length: 6 }).map((_, i) => (
-                    <div key={i} className="rounded-lg bg-muted animate-pulse h-48" />
-                  ))}
-                </div>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 p-3">{Array.from({ length: 6 }).map((_, i) => <div key={i} className="rounded-lg bg-muted animate-pulse h-48" />)}</div>
               ) : (
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 p-3">
-                  {paginatedAds.map((ad) => (
-                    <AdCard
-                      key={`${ad.category}-${ad.dbId}`}
-                      ad={ad}
-                      onClick={() => handleAdClick(ad)}
-                      isAdmin={isAdmin}
-                      onDelete={handleDeleteAd}
-                    />
-                  ))}
+                  {paginatedAds.map((ad) => <AdCard key={`${ad.category}-${ad.dbId}`} ad={ad} onClick={() => handleAdClick(ad)} isAdmin={isAdmin} onDelete={handleDeleteAd} />)}
                 </div>
               )}
-              {filteredAds.length === 0 && !loading && (
-                <div className="text-center py-12">No ads found.</div>
-              )}
+              {filteredAds.length === 0 && !loading && <div className="text-center py-12">No ads found.</div>}
               {totalPages > 1 && (
                 <div className="flex justify-center gap-1.5 mt-6 pb-4">
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
-                    disabled={currentPage === 1}
-                  >
-                    Prev
-                  </Button>
-                  {getPageNumbers().map((p, i) =>
-                    typeof p === "string" ? (
-                      <span key={i} className="px-2">...</span>
-                    ) : (
-                      <Button
-                        key={p}
-                        variant={currentPage === p ? "default" : "outline"}
-                        size="sm"
-                        onClick={() => setCurrentPage(p as number)}
-                      >
-                        {p}
-                      </Button>
-                    )
-                  )}
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
-                    disabled={currentPage === totalPages}
-                  >
-                    Next
-                  </Button>
+                  <Button variant="outline" size="sm" onClick={() => setCurrentPage(p => Math.max(1, p - 1))} disabled={currentPage === 1}>Prev</Button>
+                  {getPageNumbers().map((p, i) => typeof p === "string" ? <span key={i} className="px-2">...</span> : <Button key={p} variant={currentPage === p ? "default" : "outline"} size="sm" onClick={() => setCurrentPage(p as number)}>{p}</Button>)}
+                  <Button variant="outline" size="sm" onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))} disabled={currentPage === totalPages}>Next</Button>
                 </div>
               )}
             </div>
           </main>
         </div>
       </div>
-      {/* FIX: use open={modalOpen} not isOpen={modalOpen} */}
-      {selectedAd && (
-        <AdDetailModal
-          ad={selectedAd}
-          open={modalOpen}
-          onClose={() => setModalOpen(false)}
-        />
-      )}
+      {selectedAd && <AdDetailModal isOpen={modalOpen} onClose={() => setModalOpen(false)} ad={selectedAd} />}
     </div>
   );
 };
