@@ -46,12 +46,17 @@ const MyAds = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const checkAuth = async () => {
-      const { data: { session } } = await supabase.auth.getSession();
+    let cancelled = false;
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      if (cancelled) return;
+      if (session) fetchAds(session.user.id);
+    });
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      if (cancelled) return;
       if (!session) { navigate("/auth"); return; }
       fetchAds(session.user.id);
-    };
-    checkAuth();
+    });
+    return () => { cancelled = true; subscription.unsubscribe(); };
   }, [navigate]);
 
   const fetchAds = async (uid: string) => {
