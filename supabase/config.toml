@@ -1,1 +1,10 @@
 project_id = "webpiillbgbwgjzkbece"
+
+[functions.boost-views]
+verify_jwt = false
+
+[functions.publish-scheduled]
+verify_jwt = false
+
+[functions.sitemap]
+verify_jwt = false

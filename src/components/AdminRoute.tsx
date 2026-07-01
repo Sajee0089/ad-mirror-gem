@@ -6,19 +6,21 @@ const AdminRoute = ({ children }: { children: React.ReactNode }) => {
   const [status, setStatus] = useState<"loading" | "admin" | "denied">("loading");
 
   useEffect(() => {
-    const check = async () => {
-      const { data: { session } } = await supabase.auth.getSession();
-      if (!session) { setStatus("denied"); return; }
-
+    let cancelled = false;
+    const evaluate = async (session: any) => {
+      if (!session) { if (!cancelled) setStatus("denied"); return; }
       const { data: roles } = await supabase
         .from("user_roles")
         .select("role")
         .eq("user_id", session.user.id)
         .eq("role", "admin");
-
-      setStatus(roles && roles.length > 0 ? "admin" : "denied");
+      if (!cancelled) setStatus(roles && roles.length > 0 ? "admin" : "denied");
     };
-    check();
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      if (session) evaluate(session);
+    });
+    supabase.auth.getSession().then(({ data: { session } }) => evaluate(session));
+    return () => { cancelled = true; subscription.unsubscribe(); };
   }, []);
 
   if (status === "loading") {

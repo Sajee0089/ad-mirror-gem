@@ -36,10 +36,10 @@ const PostAd = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
-      if (!session) navigate("/auth");
-      else setUserId(session.user.id);
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      setUserId(session?.user.id ?? null);
     });
+    // Only make redirect decision after getSession resolves (which waits for storage restore)
     supabase.auth.getSession().then(({ data: { session } }) => {
       if (!session) navigate("/auth");
       else setUserId(session.user.id);
