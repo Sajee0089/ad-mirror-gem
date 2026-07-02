@@ -67,9 +67,23 @@ const Navbar = () => {
   };
 
   const handleLogout = async () => {
-    await supabase.auth.signOut();
-    toast.success("Logged out");
-    navigate("/");
+    try {
+      // Clear local state immediately so UI updates even if network is slow
+      setUser(null);
+      setIsAdmin(false);
+      // Best-effort clear of any stored supabase session keys
+      try {
+        Object.keys(localStorage).forEach((k) => {
+          if (k.startsWith("sb-") && k.endsWith("-auth-token")) localStorage.removeItem(k);
+        });
+      } catch {}
+      const { error } = await supabase.auth.signOut({ scope: "local" } as any);
+      if (error) console.warn("signOut error:", error.message);
+      toast.success("Logged out");
+      navigate("/", { replace: true });
+    } catch (err: any) {
+      toast.error(err?.message || "Logout failed");
+    }
   };
 
   const NavButtons = () => (
