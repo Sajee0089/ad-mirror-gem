@@ -14,9 +14,10 @@ import { fileURLToPath } from "node:url";
 import { categorySlugMap, districts, districtToSlug } from "./generate-sitemap.mjs";
 
 const SITE_URL = "https://www.ads-sl.com";
-const SUPABASE_URL = "https://vlucxspeohjhrhdxkpqb.supabase.co";
+const SUPABASE_URL = process.env.VITE_SUPABASE_URL || "https://webpiillbgbwgjzkbece.supabase.co";
 const SUPABASE_ANON =
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZsdWN4c3Blb2hqaHJoZHhrcHFiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzIzNTc3NzQsImV4cCI6MjA4NzkzMzc3NH0.iAbynpvY4xJcagOEIj1sL43vF64HczfGOT1foiv2f6Q";
+  process.env.VITE_SUPABASE_PUBLISHABLE_KEY ||
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndlYnBpaWxsYmdid2dqemtiZWNlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA1NTI5NjQsImV4cCI6MjA5NjEyODk2NH0.yUz9IRPjWa1iTgRiMH1RP0E01h_fhvLA2xlP55_gYTs";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const DIST = resolve(__dirname, "..", "dist");
