@@ -5,20 +5,25 @@
     <meta name="viewport" 
       content="width=device-width, initial-scale=1.0" />
 
-    <!-- Google AdSense -->
-    <script async 
-      src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8422852428242049"
-      crossorigin="anonymous"></script>
-
-    <!-- Google Analytics -->
-    <script async 
-      src="https://www.googletagmanager.com/gtag/js?id=G-48L1BWJSYC">
-    </script>
+    <!-- Google AdSense (deferred to speed up initial load) -->
     <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-      gtag('config', 'G-48L1BWJSYC');
+      window.addEventListener('load', function () {
+        var s = document.createElement('script');
+        s.async = true;
+        s.crossOrigin = 'anonymous';
+        s.src = 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8422852428242049';
+        document.head.appendChild(s);
+
+        var ga = document.createElement('script');
+        ga.async = true;
+        ga.src = 'https://www.googletagmanager.com/gtag/js?id=G-48L1BWJSYC';
+        document.head.appendChild(ga);
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        window.gtag = gtag;
+        gtag('js', new Date());
+        gtag('config', 'G-48L1BWJSYC');
+      });
     </script>
 
     <!-- Favicon -->
