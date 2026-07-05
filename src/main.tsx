@@ -6,6 +6,25 @@ if ("scrollRestoration" in window.history) {
   window.history.scrollRestoration = "manual";
 }
 
+// Normalize legacy/static-host refresh URLs before React Router reads them.
+// - /index and /index.html must render the homepage, not the dynamic category route.
+// - public/404.html encodes deep links as ?p=/path on static hosts; restore them here.
+const normalizeRefreshUrl = () => {
+  const url = new URL(window.location.href);
+  const redirectedPath = url.searchParams.get("p");
+
+  if (redirectedPath?.startsWith("/") && !redirectedPath.startsWith("//")) {
+    window.history.replaceState(null, "", redirectedPath);
+    return;
+  }
+
+  if (/^\/index(?:\.html)?\/?$/.test(url.pathname)) {
+    window.history.replaceState(null, "", `/${url.search}${url.hash}`);
+  }
+};
+
+normalizeRefreshUrl();
+
 // Recover from stale cached index.html referencing missing/old JS chunks
 // after a fresh deploy (common cause of "white screen" in previously opened tabs)
 const RELOAD_KEY = "__chunk_reload_at";

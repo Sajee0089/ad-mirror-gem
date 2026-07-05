@@ -7,7 +7,7 @@ import type { AdType } from "@/components/AdCard";
 import { Button } from "@/components/ui/button";
 import { ChevronLeft, ChevronRight, Tag, MapPin } from "lucide-react";
 import { districts } from "@/data/districts";
-import { SITE_URL, categoryFromSlug, districtFromSlug, districtToSlug, categorySlugMap, getDistrictUrl, getAdUrl } from "@/lib/seo";
+import { SITE_URL, categoryFromSlug, districtFromSlug, districtToSlug, categorySlugMap, getDistrictUrl } from "@/lib/seo";
 import PageSeo from "@/components/PageSeo";
 
 function getTimeAgo(dateStr: string): string {
@@ -343,9 +343,7 @@ const CategoryPage = () => {
             )}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               {adCards.map((ad) => (
-                <Link key={ad.dbId} to={ad.slug ? getAdUrl(ad.slug) : "#"}>
-                  <AdCard ad={ad} />
-                </Link>
+                <AdCard key={ad.dbId} ad={ad} />
               ))}
             </div>
 
