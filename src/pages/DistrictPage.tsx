@@ -8,7 +8,7 @@ import type { AdType } from "@/components/AdCard";
 import { Button } from "@/components/ui/button";
 import { ChevronLeft, ChevronRight, MapPin } from "lucide-react";
 import { districts } from "@/data/districts";
-import { SITE_URL, districtFromSlug, districtToSlug, categorySlugMap, getDistrictUrl, getAdUrl } from "@/lib/seo";
+import { SITE_URL, districtFromSlug, districtToSlug, categorySlugMap, getDistrictUrl } from "@/lib/seo";
 
 function getTimeAgo(dateStr: string): string {
   const diff = Date.now() - new Date(dateStr).getTime();
@@ -208,9 +208,7 @@ const DistrictPage = () => {
             )}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               {adCards.map((ad) => (
-                <Link key={ad.dbId} to={ad.slug ? getAdUrl(ad.slug) : "#"}>
-                  <AdCard ad={ad} />
-                </Link>
+                <AdCard key={ad.dbId} ad={ad} />
               ))}
             </div>
 
