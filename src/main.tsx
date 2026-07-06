@@ -12,9 +12,20 @@ if ("scrollRestoration" in window.history) {
 const normalizeRefreshUrl = () => {
   const url = new URL(window.location.href);
   const redirectedPath = url.searchParams.get("p");
+  const cacheRefresh = url.searchParams.has("__cache_refresh");
 
   if (redirectedPath?.startsWith("/") && !redirectedPath.startsWith("//")) {
     window.history.replaceState(null, "", redirectedPath);
+    return;
+  }
+
+  if (cacheRefresh) {
+    url.searchParams.delete("__cache_refresh");
+    window.history.replaceState(
+      null,
+      "",
+      `${url.pathname}${url.search}${url.hash}`,
+    );
     return;
   }
 
@@ -38,7 +49,14 @@ const handleChunkFailure = (err: unknown) => {
     const last = Number(sessionStorage.getItem(RELOAD_KEY) || 0);
     if (Date.now() - last > 10_000) {
       sessionStorage.setItem(RELOAD_KEY, String(Date.now()));
-      window.location.reload();
+      const recover = (window as any).__ADS_SL_RECOVER_STALE_CACHE__;
+      if (typeof recover === "function") {
+        recover();
+      } else {
+        const url = new URL(window.location.href);
+        url.searchParams.set("__cache_refresh", String(Date.now()));
+        window.location.replace(url.toString());
+      }
     }
   }
 };
