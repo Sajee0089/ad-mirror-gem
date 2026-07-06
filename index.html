@@ -4,6 +4,63 @@
     <meta charset="UTF-8" />
     <meta name="viewport" 
       content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+
+    <!-- Stale browser repair: catches cached HTML pointing at old/missing chunks -->
+    <script>
+      (function () {
+        var RECOVERY_KEY = '__ads_sl_cache_recovery_at';
+        var RECOVERY_PARAM = '__cache_refresh';
+
+        function shouldRecover(message, target) {
+          var source = target && (target.src || target.href || '');
+          return /\/assets\/|\/src\/main\.tsx|\.js(?:\?|$)|\.css(?:\?|$)/i.test(source) ||
+            /Loading chunk|Failed to fetch dynamically imported module|Importing a module script failed|ChunkLoadError|MIME type|Unexpected token '<'|module script/i.test(String(message || ''));
+        }
+
+        function recoverFromStaleCache() {
+          try {
+            var last = Number(sessionStorage.getItem(RECOVERY_KEY) || 0);
+            if (Date.now() - last < 10000) return;
+            sessionStorage.setItem(RECOVERY_KEY, String(Date.now()));
+
+            var finish = function () {
+              var url = new URL(window.location.href);
+              url.searchParams.set(RECOVERY_PARAM, String(Date.now()));
+              window.location.replace(url.toString());
+            };
+
+            if ('serviceWorker' in navigator) {
+              navigator.serviceWorker.getRegistrations()
+                .then(function (regs) { return Promise.all(regs.map(function (reg) { return reg.unregister(); })); })
+                .then(function () {
+                  if (window.caches && caches.keys) {
+                    return caches.keys().then(function (keys) {
+                      return Promise.all(keys.map(function (key) { return caches.delete(key); }));
+                    });
+                  }
+                })
+                .then(finish)
+                .catch(finish);
+            } else {
+              finish();
+            }
+          } catch (e) {
+            window.location.reload();
+          }
+        }
+
+        window.__ADS_SL_RECOVER_STALE_CACHE__ = recoverFromStaleCache;
+        window.addEventListener('error', function (event) {
+          if (shouldRecover(event.message, event.target)) recoverFromStaleCache();
+        }, true);
+        window.addEventListener('unhandledrejection', function (event) {
+          if (shouldRecover(event.reason, null)) recoverFromStaleCache();
+        });
+      })();
+    </script>
 
     <!-- Google AdSense (deferred to speed up initial load) -->
     <script>
