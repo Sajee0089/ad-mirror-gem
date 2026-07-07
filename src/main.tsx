@@ -36,6 +36,27 @@ const normalizeRefreshUrl = () => {
 
 normalizeRefreshUrl();
 
+// Clear old app-only browser state after deploys so normal browsers cannot get
+// stuck with stale ad lists/pages while incognito works from a clean state.
+const APP_CACHE_VERSION = "2026-07-07-browser-ad-recovery";
+const APP_CACHE_VERSION_KEY = "__ads_sl_app_cache_version";
+const clearAppSessionState = () => {
+  try {
+    sessionStorage.removeItem("indexAdsCache");
+    sessionStorage.removeItem("indexCurrentPage");
+    sessionStorage.removeItem("indexScrollY");
+  } catch {}
+};
+
+try {
+  if (localStorage.getItem(APP_CACHE_VERSION_KEY) !== APP_CACHE_VERSION) {
+    clearAppSessionState();
+    localStorage.setItem(APP_CACHE_VERSION_KEY, APP_CACHE_VERSION);
+  }
+} catch {
+  clearAppSessionState();
+}
+
 // Recover from stale cached index.html referencing missing/old JS chunks
 // after a fresh deploy (common cause of "white screen" in previously opened tabs)
 const RELOAD_KEY = "__chunk_reload_at";
