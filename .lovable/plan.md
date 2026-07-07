@@ -1,62 +1,48 @@
+## Why your pages dropped
 
+You changed the domain **and** the URL structure. Google now sees the old URLs as 404s and the new URLs as brand-new pages with no history. Until Google re-crawls, re-verifies, and re-indexes them, they sit in "Not indexed". This is recoverable — nothing is broken in the code.
 
-## SEO Optimization Plan – Target Keywords: "sl ads", "ada sl", "sl spa ada", "spa", "srilankan ads", "srilankan spa"
+## Recovery plan (no code changes required for most steps)
 
-Your site already has strong SEO bones (sitemap, JSON-LD, canonical URLs, dynamic meta tags). The issue is **keyword targeting** — your current copy emphasizes "Ads SL" / "SL ads" / "Lanka ads" but misses high-volume Sinhala-style searches like **"ada sl"**, **"spa ada"**, **"sl spa ada"**, and **"srilankan spa / srilankan ads"** (one-word "srilankan" — a very common search variant). We'll add these naturally across titles, descriptions, headings, and structured data without keyword stuffing.
+### 1. Verify the new domain is the one indexed
+- In Search Console, confirm you have a **Domain property** for `ads-sl.com` (covers `www`, `https`, all paths). If you only added the URL-prefix property, add the Domain property too.
+- Set your **preferred canonical host** (either `www.ads-sl.com` or `ads-sl.com`) and make sure the other 301-redirects to it.
 
-### What will change
+### 2. Submit the fresh sitemap
+- Sitemaps → remove any old sitemap entries → submit `https://www.ads-sl.com/sitemap.xml`.
+- Confirm status = "Success" and "Discovered URLs" matches roughly your live ad count.
 
-**1. Homepage (`src/pages/Index.tsx` + `index.html`)**
-- Update `<title>` to include the new target terms:
-  - `Ads SL | SL Ads, Spa Ada, Srilankan Spa & Classified Ads Sri Lanka`
-- Rewrite meta description to weave in: *sl ads, ada sl, spa ada, srilankan ads, srilankan spa*.
-- Expand the `<meta name="keywords">` list (already low-impact for Google but used by other engines).
-- Update the H2/H3 footer SEO block:
-  - New H2: "SL Ads & Srilankan Spa Ada – Sri Lanka's #1 Free Classified Platform"
-  - Add a paragraph naturally using "ada sl", "spa ada", "srilankan spa", "srilankan ads".
-  - Expand the "Popular searches" line with the new terms.
-- Add an `alternateName` array to the Organization JSON-LD: `["SL Ads", "Ada SL", "Srilankan Ads", "Srilankan Spa", "Spa Ada", "Lanka Ads"]`.
+### 3. Use URL Inspection + Request Indexing on the top 10–20 pages
+- Homepage, `/spa-ads`, `/colombo/spa-ads`, top district pages, top category pages, and 5–10 popular ad detail pages.
+- For each: URL Inspection → "Test live URL" → "Request Indexing". This is the fastest signal to Googlebot.
 
-**2. Category Pages (`src/pages/CategoryPage.tsx`)**
-- Spa category gets the biggest rewrite (highest-value keyword cluster):
-  - Title: `Spa Ada Sri Lanka | Srilankan Spa & SL Spa Ads – ads-sl.com`
-  - Description includes "spa ada", "sl spa ada", "srilankan spa".
-  - Add 1-2 new SEO paragraphs and 2 new FAQ entries targeting "spa ada", "sl spa ada", "srilankan spa near me".
-- Other adult/personal categories: add "srilankan" variant phrases to descriptions and SEO paragraphs.
+### 4. Handle the old URLs (if the URL structure changed)
+- If old paths still exist somewhere → add **301 redirects** from old → new URLs so Google transfers ranking signal instead of dropping it.
+- If the old domain is still live → keep it up with a **site-wide 301** to the new domain for at least 6 months.
+- In Search Console (old property) → **Settings → Change of Address** pointing to the new domain. This is the single most important step after a domain move.
 
-**3. District Pages (`src/pages/DistrictPage.tsx`)**
-- Update titles/descriptions to include "Srilankan ads in {District}" and (for Colombo/Kandy/Galle/Negombo) "Spa ada {District}".
-- Add a sentence in the district description block mentioning "srilankan spa" and "ada sl".
+### 5. Check the "Pages" report for the real reason
+Open **Indexing → Pages** and read the exact reason under "Why pages aren't indexed":
+- *Crawled – currently not indexed* → normal after a big change; just wait + request indexing on priority pages.
+- *Discovered – currently not indexed* → Google is deprioritizing; internal linking + sitemap freshness helps.
+- *Duplicate, Google chose different canonical* → your canonical tag points somewhere else; needs a code fix.
+- *Blocked by robots.txt* → robots.txt issue; needs a code fix.
+- *Soft 404* → thin content or empty pages; needs a code fix.
+- *Redirect error / Not found (404)* → old URLs need proper 301s.
 
-**4. `index.html` (static fallback for crawlers)**
-- Update `<title>`, meta description, OG title/description, Twitter card with the new keyword set.
-- Expand keywords meta + Organization `alternateName` in the JSON-LD `@graph`.
+Tell me which of these reasons appears most often and I'll write a targeted code fix.
 
-**5. `public/robots.txt`**
-- Already correct — confirm it allows `/` and lists the sitemap. No change needed unless we add a sitemap index.
+### 6. Rebuild external signals
+- Update backlinks pointing to the old domain (social profiles, directories, WhatsApp bio, business listings).
+- Re-share top pages on Facebook groups and any Sri Lankan classified directories that accept links.
 
-**6. Sitemap (`supabase/functions/sitemap/index.ts`)**
-- Already comprehensive. We'll bump homepage `<changefreq>` priority signals — minor tweak only.
+### 7. Give it time
+After a domain + URL change, full re-indexing normally takes **2–6 weeks**. Rankings usually dip further before they recover.
 
-**7. Internal linking boost**
-- In the homepage footer "Popular searches" block, convert the plain-text list into actual `<Link>` elements pointing to `/spa-ads`, `/district/colombo`, etc. Internal anchor text using the target keywords helps ranking significantly.
+## What I'd like from you before making code changes
+Please open **Search Console → Indexing → Pages** and tell me:
+1. The exact reason(s) listed under "Why pages aren't indexed" (copy the wording).
+2. Whether the **old domain** is still live and redirecting, or fully offline.
+3. Whether you filed **Change of Address** in the old property.
 
-### Technical details
-
-- All meta changes use `react-helmet-async` (already installed and wired via `HelmetProvider` in `App.tsx`).
-- `index.html` static tags are the fallback crawlers see before JS renders — these matter for first-pass indexing.
-- JSON-LD `alternateName` tells Google these are all names for the same brand → consolidates ranking signal.
-- No schema changes, no new dependencies, no backend changes.
-- After deploy: request re-indexing in Google Search Console for `/`, `/spa-ads`, and 2-3 top district pages to accelerate pickup. Results typically appear in 2-6 weeks.
-
-### Files to edit
-1. `index.html`
-2. `src/pages/Index.tsx`
-3. `src/pages/CategoryPage.tsx`
-4. `src/pages/DistrictPage.tsx`
-
-### Out of scope (can be follow-ups)
-- Submitting sitemap to Bing Webmaster Tools.
-- Building backlinks (off-site SEO — not a code change).
-- Adding a Sinhala-language version of pages (would significantly expand reach but is a larger project).
-
+Once I know those three things I can plan the exact code fixes (redirects, canonicals, sitemap tweaks, robots.txt) needed on the Lovable side.
