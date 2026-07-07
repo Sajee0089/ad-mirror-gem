@@ -40,7 +40,17 @@ const Index = () => {
       const raw = sessionStorage.getItem("indexAdsCache");
       if (!raw) return null;
       const parsed = JSON.parse(raw);
-      if (Array.isArray(parsed) && parsed.length > 0) return parsed as DbAd[];
+      if (
+        parsed &&
+        typeof parsed === "object" &&
+        Array.isArray(parsed.ads) &&
+        parsed.ads.length > 0 &&
+        typeof parsed.savedAt === "number" &&
+        Date.now() - parsed.savedAt < 5 * 60 * 1000
+      ) {
+        return parsed.ads as DbAd[];
+      }
+      sessionStorage.removeItem("indexAdsCache");
     } catch {}
     return null;
   })();
@@ -64,14 +74,18 @@ const Index = () => {
     // Two-phase fetch: first page fast (lighter payload), then rest in background
     const fetchAds = async () => {
       // Phase 1: First 15 ads, minimal columns for fast render
-      const { data: firstPage } = await supabase
+      const { data: firstPage, error: firstPageError } = await supabase
         .from("ads")
         .select("id, title, description, image_url, additional_image_urls, badge, cashback, category, created_at, approved_at, view_count, favorite_count, contact_phone, location, verified_member, slug")
         .eq("status", "approved")
         .order("approved_at", { ascending: false, nullsFirst: false })
         .limit(15);
-      if (firstPage && !cachedAds) {
+      if (firstPage) {
         setDbAds(firstPage as any);
+        setLoading(false);
+      } else if (firstPageError) {
+        sessionStorage.removeItem("indexAdsCache");
+        setDbAds([]);
         setLoading(false);
       }
 
@@ -84,14 +98,14 @@ const Index = () => {
         .range(15, 999);
       if (rest && rest.length > 0) {
         setDbAds((prev) => {
-          const base = cachedAds && firstPage ? ([...(firstPage as any), ...(rest as any)] as DbAd[]) : prev;
+          const base = firstPage ? ([...(firstPage as any)] as DbAd[]) : prev;
           const ids = new Set(base.map((a) => a.id));
           const merged = [...base, ...(rest as any).filter((a: DbAd) => !ids.has(a.id))];
-          try { sessionStorage.setItem("indexAdsCache", JSON.stringify(merged.slice(0, 300))); } catch {}
+          try { sessionStorage.setItem("indexAdsCache", JSON.stringify({ ads: merged.slice(0, 300), savedAt: Date.now() })); } catch {}
           return merged;
         });
       } else if (firstPage) {
-        try { sessionStorage.setItem("indexAdsCache", JSON.stringify(firstPage)); } catch {}
+        try { sessionStorage.setItem("indexAdsCache", JSON.stringify({ ads: firstPage, savedAt: Date.now() })); } catch {}
       }
       setLoading(false);
     };
@@ -168,6 +182,12 @@ const Index = () => {
 
   const totalPages = Math.ceil(filteredAds.length / ADS_PER_PAGE);
   const paginatedAds = filteredAds.slice((currentPage - 1) * ADS_PER_PAGE, currentPage * ADS_PER_PAGE);
+
+  useEffect(() => {
+    if (!loading && totalPages > 0 && currentPage > totalPages) {
+      setCurrentPage(totalPages);
+    }
+  }, [loading, totalPages, currentPage]);
 
   // Scroll to ad grid area when page changes
   const adGridRef = useRef<HTMLDivElement>(null);
