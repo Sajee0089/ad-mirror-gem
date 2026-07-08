@@ -495,6 +495,13 @@ const Index = () => {
                   <Link to="/rooms-ads" className="px-2 py-1 rounded bg-muted hover:bg-primary/10 hover:text-primary transition-colors">Rooms Sri Lanka</Link>
                 </div>
               </div>
+
+              <div className="pt-4 border-t border-border flex flex-wrap items-center justify-between gap-2">
+                <span className="text-[11px] text-muted-foreground">
+                  Site not loading right? Clear your browser cache. Shortcut: Ctrl+Shift+F
+                </span>
+                <ClearCacheButton />
+              </div>
             </footer>
           </main>
         </div>
