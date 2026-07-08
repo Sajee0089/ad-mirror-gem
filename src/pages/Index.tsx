@@ -4,6 +4,7 @@ import Sidebar from "@/components/Sidebar";
 import AdCard from "@/components/AdCard";
 import type { AdType } from "@/components/AdCard";
 import AdDetailModal from "@/components/AdDetailModal";
+import ClearCacheButton from "@/components/ClearCacheButton";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
