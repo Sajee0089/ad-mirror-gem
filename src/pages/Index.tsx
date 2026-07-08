@@ -4,6 +4,7 @@ import Sidebar from "@/components/Sidebar";
 import AdCard from "@/components/AdCard";
 import type { AdType } from "@/components/AdCard";
 import AdDetailModal from "@/components/AdDetailModal";
+import ClearCacheButton from "@/components/ClearCacheButton";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -494,6 +495,13 @@ const Index = () => {
                   <Link to="/live-cam-ads" className="px-2 py-1 rounded bg-muted hover:bg-primary/10 hover:text-primary transition-colors">Live cam Sri Lanka</Link>
                   <Link to="/rooms-ads" className="px-2 py-1 rounded bg-muted hover:bg-primary/10 hover:text-primary transition-colors">Rooms Sri Lanka</Link>
                 </div>
+              </div>
+
+              <div className="pt-4 border-t border-border flex flex-wrap items-center justify-between gap-2">
+                <span className="text-[11px] text-muted-foreground">
+                  Site not loading right? Clear your browser cache. Shortcut: Ctrl+Shift+F
+                </span>
+                <ClearCacheButton />
               </div>
             </footer>
           </main>
