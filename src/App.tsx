@@ -69,6 +69,8 @@ const App = () => {
       </TooltipProvider>
     </QueryClientProvider>
   </HelmetProvider>
-);
+  </AuthErrorBoundary>
+  );
+};
 
 export default App;
