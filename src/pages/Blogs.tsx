@@ -8,6 +8,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } f
 import { BookOpen, PenLine, Calendar, ArrowLeft, Sparkles, ImagePlus, X, Trash2 } from "lucide-react";
 import { useNavigate, Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
+import { publicSupabase } from "@/lib/publicSupabase";
 import { toast } from "sonner";
 import { Helmet } from "react-helmet-async";
 import { SITE_URL } from "@/lib/seo";
@@ -44,7 +45,7 @@ const Blogs = () => {
   }, []);
 
   const fetchBlogs = async () => {
-    const { data } = await supabase
+    const { data } = await publicSupabase
       .from("blog_posts")
       .select("id, title, slug, excerpt, content, author, image_url, created_at")
       .order("created_at", { ascending: false });

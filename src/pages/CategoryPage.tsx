@@ -1,6 +1,7 @@
 import { useParams, Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
+import { publicSupabase } from "@/lib/publicSupabase";
 import Navbar from "@/components/Navbar";
 import AdCard from "@/components/AdCard";
 import type { AdType } from "@/components/AdCard";
@@ -168,7 +169,7 @@ const CategoryPage = () => {
     const fetchAds = async () => {
       if (!category) { setLoading(false); return; }
       setLoading(true);
-      let query = supabase
+      let query = publicSupabase
         .from("ads")
         .select("id, title, description, image_url, additional_image_urls, badge, cashback, category, created_at, approved_at, view_count, favorite_count, contact_phone, location, verified_member, slug");
       query = query.eq("status", "approved").eq("category", category).order("approved_at", { ascending: false });

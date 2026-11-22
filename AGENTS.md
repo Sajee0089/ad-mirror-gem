@@ -1,0 +1,1 @@
+- Public reads (ads, blog posts) use `publicSupabase` from src/lib/publicSupabase.ts, never the auth client — a stale saved login in a returning browser must not break listings with 401s.

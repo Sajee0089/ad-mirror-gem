@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
+import { publicSupabase } from "@/lib/publicSupabase";
 import AdCard from "@/components/AdCard";
 import type { AdType } from "@/components/AdCard";
 import { Button } from "@/components/ui/button";
@@ -33,7 +34,7 @@ const RecentAdsGrid = () => {
 
   useEffect(() => {
     const fetchRecentAds = async () => {
-      const { data } = await supabase
+      const { data } = await publicSupabase
         .from("ads")
         .select("id, title, description, image_url, additional_image_urls, badge, cashback, category, created_at, approved_at, view_count, favorite_count, contact_phone, location, verified_member, slug")
         .eq("status", "approved")

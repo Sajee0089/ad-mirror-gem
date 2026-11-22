@@ -2,6 +2,7 @@ import { useParams, Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { Helmet } from "react-helmet-async";
 import { supabase } from "@/integrations/supabase/client";
+import { publicSupabase } from "@/lib/publicSupabase";
 import Navbar from "@/components/Navbar";
 import AdCard from "@/components/AdCard";
 import type { AdType } from "@/components/AdCard";
@@ -44,7 +45,7 @@ const DistrictPage = () => {
     const fetchAds = async () => {
       if (!district) { setLoading(false); return; }
       setLoading(true);
-      const { data } = await (supabase
+      const { data } = await (publicSupabase
         .from("ads")
         .select("id, title, description, image_url, additional_image_urls, badge, cashback, category, created_at, approved_at, view_count, favorite_count, contact_phone, location, verified_member, slug")
         .eq("status", "approved")

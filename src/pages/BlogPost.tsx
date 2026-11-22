@@ -3,6 +3,7 @@ import { useParams, Link } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
 import Navbar from "@/components/Navbar";
 import { supabase } from "@/integrations/supabase/client";
+import { publicSupabase } from "@/lib/publicSupabase";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, Calendar, User } from "lucide-react";
 import { SITE_URL } from "@/lib/seo";
@@ -27,7 +28,7 @@ const BlogPost = () => {
   useEffect(() => {
     const fetchPost = async () => {
       if (!slug) return;
-      const { data } = await supabase
+      const { data } = await publicSupabase
         .from("blog_posts")
         .select("*")
         .eq("slug", slug)

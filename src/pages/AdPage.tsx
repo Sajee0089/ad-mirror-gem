@@ -2,6 +2,7 @@ import { useParams, Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { Helmet } from "react-helmet-async";
 import { supabase } from "@/integrations/supabase/client";
+import { publicSupabase } from "@/lib/publicSupabase";
 import Navbar from "@/components/Navbar";
 import { Button } from "@/components/ui/button";
 import { Eye, Heart, Phone, MessageCircle, MapPin, Tag, ChevronRight } from "lucide-react";
@@ -55,7 +56,7 @@ const AdPage = () => {
   useEffect(() => {
     const fetchAd = async () => {
       setLoading(true);
-      const { data } = await (supabase as any)
+      const { data } = await (publicSupabase as any)
         .from("ads")
         .select("id, title, description, image_url, additional_image_urls, badge, cashback, category, created_at, approved_at, view_count, favorite_count, contact_phone, location, verified_member, slug")
         .eq("slug", slug)

@@ -10,6 +10,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
+import { publicSupabase } from "@/lib/publicSupabase";
 import { toast } from "sonner";
 import { districts } from "@/data/districts";
 import { getDistrictUrl, getCategoryUrl, categorySlugMap, getAdUrl, SITE_URL } from "@/lib/seo";
@@ -75,7 +76,7 @@ const Index = () => {
     // Two-phase fetch: first page fast (lighter payload), then rest in background
     const fetchAds = async () => {
       // Phase 1: First 15 ads, minimal columns for fast render
-      const { data: firstPage, error: firstPageError } = await supabase
+      const { data: firstPage, error: firstPageError } = await publicSupabase
         .from("ads")
         .select("id, title, description, image_url, additional_image_urls, badge, cashback, category, created_at, approved_at, view_count, favorite_count, contact_phone, location, verified_member, slug")
         .eq("status", "approved")
@@ -91,7 +92,7 @@ const Index = () => {
       }
 
       // Phase 2: Fetch remaining ads in background for filters/pagination
-      const { data: rest } = await supabase
+      const { data: rest } = await publicSupabase
         .from("ads")
         .select("id, title, description, image_url, additional_image_urls, badge, cashback, category, created_at, approved_at, view_count, favorite_count, contact_phone, location, verified_member, slug")
         .eq("status", "approved")
@@ -131,7 +132,7 @@ const Index = () => {
   }, []);
 
   const fetchAds = async () => {
-    const { data } = await supabase
+    const { data } = await publicSupabase
       .from("ads")
       .select("id, title, description, image_url, additional_image_urls, badge, cashback, category, created_at, approved_at, view_count, favorite_count, contact_phone, location, verified_member, slug")
       .eq("status", "approved")

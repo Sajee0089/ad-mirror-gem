@@ -7,7 +7,7 @@
  */
 import { supabase } from "@/integrations/supabase/client";
 
-const APP_VERSION = "2026-07-08-session-manager-v1";
+const APP_VERSION = "2026-11-22-public-reads-v2";
 const APP_VERSION_KEY = "__ads_sl_app_version";
 
 const log = (...args: unknown[]) => {
@@ -114,12 +114,22 @@ export const validateAndRefreshSession = async () => {
     const { data, error } = await supabase.auth.getUser();
     if (error) {
       log("no valid user session:", error.message);
+      // A stored token exists but the server rejected it (expired, revoked,
+      // user deleted, or from an old backend). Drop it locally so it can't
+      // break later requests in this browser.
+      const status = (error as { status?: number }).status;
+      if (keys.some((k) => localStorage.getItem(k)) && status && status >= 400 && status < 500) {
+        warn("server rejected stored session, signing out locally");
+        await supabase.auth.signOut({ scope: "local" }).catch(() => undefined);
+        keys.forEach((k) => localStorage.removeItem(k));
+      }
       return null;
     }
     if (data.user) {
       log("session valid for", data.user.email);
-      // Best-effort refresh; ignore failures (offline, etc.)
-      supabase.auth.refreshSession().catch(() => undefined);
+      // Token refresh is handled by the client's autoRefreshToken; calling
+      // refreshSession() here in parallel could reuse the refresh token and
+      // log the user out.
     }
     return data.user;
   } catch (e) {
