@@ -1,8 +1,101 @@
 {
+  "trailingSlash": false,
+  "redirects": [
+    {
+      "source": "/:path*",
+      "has": [{ "type": "host", "value": "ads-sl.com" }],
+      "destination": "https://www.ads-sl.com/:path*",
+      "permanent": true
+    },
+    {
+      "source": "/index",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/index.html",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/privacy-policy",
+      "destination": "/privacy",
+      "permanent": true
+    },
+    {
+      "source": "/blogs",
+      "destination": "/blog",
+      "permanent": true
+    }
+  ],
   "rewrites": [
     {
-      "source": "/(.*)",
+      "source": "/sitemap.xml",
+      "destination": "/api/sitemap?type=index"
+    },
+    {
+      "source": "/sitemaps/:name.xml",
+      "destination": "/api/sitemap?type=:name"
+    },
+    {
+      "source": "/",
+      "destination": "/api/render?route=/"
+    },
+    {
+      "source": "/ad/:slug",
+      "destination": "/api/render?route=/ad/:slug"
+    },
+    {
+      "source": "/district/:slug",
+      "destination": "/api/render?route=/district/:slug"
+    },
+    {
+      "source": "/blog",
+      "destination": "/api/render?route=/blog"
+    },
+    {
+      "source": "/blog/:slug",
+      "destination": "/api/render?route=/blog/:slug"
+    },
+    {
+      "source": "/about",
+      "destination": "/api/render?route=/about"
+    },
+    {
+      "source": "/contact",
+      "destination": "/api/render?route=/contact"
+    },
+    {
+      "source": "/safety-tips",
+      "destination": "/api/render?route=/safety-tips"
+    },
+    {
+      "source": "/posting-rules",
+      "destination": "/api/render?route=/posting-rules"
+    },
+    {
+      "source": "/terms",
+      "destination": "/api/render?route=/terms"
+    },
+    {
+      "source": "/privacy",
+      "destination": "/api/render?route=/privacy"
+    },
+    {
+      "source": "/(spa-ads|live-cam-ads|girls-personal-ads|boys-personal-ads|shemale-personal-ads|marriage-proposals|rooms-ads|toys-accessories-ads)",
+      "destination": "/api/render?route=/$1"
+    },
+    {
+      "source": "/:district(colombo|gampaha|kalutara|kandy|matale|nuwara-eliya|galle|matara|hambantota|jaffna|kilinochchi|mannar|mullaitivu|vavuniya|batticaloa|ampara|trincomalee|kurunegala|puttalam|anuradhapura|polonnaruwa|badulla|monaragala|ratnapura|kegalle)/:category(spa-ads|live-cam-ads|girls-personal-ads|boys-personal-ads|shemale-personal-ads|marriage-proposals|rooms-ads|toys-accessories-ads)",
+      "destination": "/api/render?route=/:district/:category"
+    },
+    {
+      "source": "/(auth|reset-password|post-ad|my-ads|saved-ads|admin|admin/.*)",
       "destination": "/index.html"
+    },
+    {
+      "source": "/:path*",
+      "destination": "/api/render?route=/:path*"
     }
   ],
   "headers": [

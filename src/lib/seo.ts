@@ -1,15 +1,10 @@
-export const SITE_URL = "https://www.ads-sl.com";
+import { CATEGORIES, MAIN_SITE_URL, getAdultBaseUrl, isAdultCategory } from "@/config/categories";
 
-export const categorySlugMap: Record<string, string> = {
-  "Spa": "spa-ads",
-  "Live Cam": "live-cam-ads",
-  "Girls Personal": "girls-personal-ads",
-  "Boys Personal": "boys-personal-ads",
-  "Shemale Personal": "shemale-personal-ads",
-  "Marriage Proposals": "marriage-proposals",
-  "Rooms": "rooms-ads",
-  "Toys & Accessories": "toys-accessories-ads",
-};
+export const SITE_URL = MAIN_SITE_URL;
+
+export const categorySlugMap: Record<string, string> = Object.fromEntries(
+  CATEGORIES.map((c) => [c.name, c.slug]),
+);
 
 export const categoryFromSlug: Record<string, string> = Object.fromEntries(
   Object.entries(categorySlugMap).map(([k, v]) => [v, k])
@@ -28,3 +23,6 @@ export const getDistrictUrl = (district: string) => `/district/${districtToSlug(
 export const getCategoryUrl = (category: string) => `/${categorySlugMap[category] || category}`;
 export const getDistrictCategoryUrl = (district: string, category: string) =>
   `/${districtToSlug(district)}/${categorySlugMap[category] || category}`;
+
+export const getCanonicalHostForCategory = (category?: string | null) =>
+  isAdultCategory(category) ? getAdultBaseUrl() || SITE_URL : SITE_URL;

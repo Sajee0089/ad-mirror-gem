@@ -1,10 +1,18 @@
 User-agent: *
 Allow: /
-Disallow: /admin/
+Disallow: /admin
 Disallow: /auth
+Disallow: /api
 Disallow: /reset-password
 Disallow: /my-ads
 Disallow: /saved-ads
 Disallow: /post-ad
+Disallow: /*?q=
+Disallow: /*?sort=
+Disallow: /*?filter=
+Disallow: /*?search=
+Disallow: /*&q=
+Disallow: /*&sort=
+Disallow: /*&filter=
 
 Sitemap: https://www.ads-sl.com/sitemap.xml

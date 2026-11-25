@@ -2,7 +2,7 @@
 import { Helmet } from 'react-helmet-async';
 import { useHreflang } from '../hooks/useHreflang';
 
-const DEFAULT_OG_IMAGE = 'https://www.ads-sl.com/og-image-1200x630.jpg';
+const DEFAULT_OG_IMAGE = 'https://www.ads-sl.com/logo.png';
 
 export default function PageSeo({
   title,
@@ -11,7 +11,9 @@ export default function PageSeo({
   ogImage = DEFAULT_OG_IMAGE,
   ogType = 'website',
   noIndex = false,
+  isAdult = false,
   schema = null,
+  schemas = null,
 }) {
   // Normalize canonical URL
   const safeCanonical = canonical
@@ -21,6 +23,12 @@ export default function PageSeo({
 
   // Self-referencing hreflang — no group, no reciprocal needed
   const hreflangLinks = useHreflang(safeCanonical);
+
+  const schemaList = Array.isArray(schemas)
+    ? schemas.filter(Boolean)
+    : schema
+      ? [schema]
+      : [];
 
   return (
     <Helmet>
@@ -32,10 +40,11 @@ export default function PageSeo({
         name="robots"
         content={
           noIndex
-            ? 'noindex, nofollow'
+            ? 'noindex, follow'
             : 'index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1'
         }
       />
+      {isAdult && <meta name="rating" content="adult" />}
 
       {/* Hreflang — self-referencing per page, no cross-page group */}
       {hreflangLinks.map((link) => (
@@ -53,8 +62,6 @@ export default function PageSeo({
       <meta property="og:url" content={safeCanonical} />
       <meta property="og:type" content={ogType} />
       <meta property="og:image" content={ogImage} />
-      <meta property="og:image:width" content="1200" />
-      <meta property="og:image:height" content="630" />
       <meta property="og:site_name" content="Ads SL" />
       <meta property="og:locale" content="en_LK" />
       <meta property="og:locale:alternate" content="si_LK" />
@@ -65,12 +72,12 @@ export default function PageSeo({
       <meta name="twitter:description" content={description} />
       <meta name="twitter:image" content={ogImage} />
 
-      {/* JSON-LD Schema (optional) */}
-      {schema && (
-        <script type="application/ld+json">
-          {JSON.stringify(schema)}
+      {/* JSON-LD Schemas */}
+      {schemaList.map((item, idx) => (
+        <script key={idx} type="application/ld+json">
+          {JSON.stringify(item)}
         </script>
-      )}
+      ))}
     </Helmet>
   );
 }
